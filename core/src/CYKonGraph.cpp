@@ -19,7 +19,6 @@ int main()
     for (int i = 0; i < m; i++)
     {
         string left, right;
-
         cin >> left >> right;
 
         
@@ -77,10 +76,8 @@ int main()
 
     }
 
-
     vector<vector<vector<string>>> M(V, vector<vector<string>> (V));
     int flag = 1;
-
 
     //base
     for (int i = 0; i < E; i++)
