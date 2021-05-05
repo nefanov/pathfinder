@@ -2,4 +2,4 @@
 
 Responsible persons: 
 
-Arman Yeghiazaryan, DCAM MIPT student
+Arman Yeghiazaryan, DCAM MIPT student: implementation
