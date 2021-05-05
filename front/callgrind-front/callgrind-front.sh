@@ -7,5 +7,7 @@
 # produces result.dot and result.dot.png in current working directory
 
 pwd
+#produces dotfile
 python3 ../../third-party/gprof2dot/gprof2dot.py ${1} --format=callgrind -c print -o ${2}
+#produces image file
 dot ${2} -Tpng -o ${2}.png
