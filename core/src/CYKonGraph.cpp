@@ -59,10 +59,10 @@ int main()
             rules.push_back(a);
         }
     }
-
     int V, E;
     cin >> V >> E;
     vector<pair<int, pair<int, string> >  > edges;
+
     for (int i = 0; i < E; i++)
     {
         int u1, u2;
@@ -79,7 +79,7 @@ int main()
     vector<vector<vector<string> > > M(V, vector<vector<string> > (V));
     int flag = 1;
 
-    //base
+
     for (int i = 0; i < E; i++)
     {
         for (int j = 0; j < rules.size(); j++)

@@ -8,7 +8,7 @@ def labels_encode(edges, labels=[]): # this is a hash-function for edge labeling
     d = dict()
     for idx,l in enumerate(edges):
         if l.__get_attribute__('label') in labels:
-            d[l.__get_attribute__('label')] = l.get_source() + l.get_destination()
+            d[l.__get_attribute__('label')] = chr(ord('a')+idx)#l.get_source() + l.get_destination()
 
     return d
 
