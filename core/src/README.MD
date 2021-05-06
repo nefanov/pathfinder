@@ -2,7 +2,7 @@
 
 Authors: Artem Fedorov et al.
 
-### Pre-pelease notes:
+### Pre-release notes:
 
  - Current (Naive) implementation of CYK-based reachability detector
  - Not supports path highlighting, detection only
