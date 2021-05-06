@@ -7,5 +7,6 @@ CFL-R-based software analysis tool
 1) mkdir build
 2) cd build && cmake ..
 3) make
+
 It produces file build/core, which is core executable of CFL-R analysis and
 can be usable by frontend.
