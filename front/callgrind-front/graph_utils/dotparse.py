@@ -29,7 +29,7 @@ def verbose_print_edge(idx, e,lmap):
     return
 
 
-def dotparse(inp, outp=None, labels=["e1","e2","e3"], verbose=True):
+def dotparse(inp, outp=None, labels=["e1","e2","e3"], verbose=True, nodes_remap=True, edges_remap=True):
     lmap = labels_encode(labels)
     graph = pydot.graph_from_dot_file(inp)
     node_list = graph[0].get_node_list()
