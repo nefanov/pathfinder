@@ -9,4 +9,4 @@ CFL-R-based software analysis tool
 3) make
 
 It produces file build/core, which is core executable of CFL-R analysis and
-can be usable by frontend.
+can be called by frontend (see example in front/callgrind-front).
