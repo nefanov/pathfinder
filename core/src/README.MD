@@ -6,6 +6,6 @@ Authors: Artem Fedorov et al.
 
  - Current (Naive) implementation of CYK-based reachability detector
  - Not supports path highlighting, detection only
- - Now it uses unicode character coding of terminal symbols -- be carefully
+ - Now it uses unicode character coding of terminal symbols -- be carefull
 
  
