@@ -9,5 +9,10 @@
 pwd
 #produces dotfile
 python3 ../../third-party/gprof2dot/gprof2dot.py ${1} --format=callgrind -c print -o ${2}
+#parse dotfile and compose input for core algorithm (${3} is the path to your grammar file)
+#python3 ...
+#cat > ....
+#run core
+
 #produces image file
 dot ${2} -Tpng -o ${2}.png
