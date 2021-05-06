@@ -76,7 +76,7 @@ int main()
 
     }
 
-    vector<vector<vector<string>>> M(V, vector<vector<string>> (V));
+    vector<vector<vector<string> > > M(V, vector<vector<string> > (V));
     int flag = 1;
 
     //base

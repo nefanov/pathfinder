@@ -1,0 +1,4 @@
+3
+S AB
+A "_dl_sysdep_start""dl_main"
+B b "dl_main""_dl_relocate_object"

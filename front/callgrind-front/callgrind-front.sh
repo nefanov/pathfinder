@@ -6,12 +6,13 @@
 # ./callgrind-front.sh tests/callgrind.out.2322 result.dot
 # produces result.dot and result.dot.png in current working directory
 
+# whole pipeline: ./callgrind-front.sh <profile> <profile_output_dot> <grammar_file> <parsed_dot> <res_file>
 pwd
 #produces dotfile
 python3 ../../third-party/gprof2dot/gprof2dot.py ${1} --format=callgrind -c print -o ${2}
 #parse dotfile and compose input for core algorithm (${3} is the path to your grammar file)
-#python3 ...
-#cat > ....
+python3 graph_utils/dotparse.py ${2} ${4}
+cat ${3} ${4} > ${5}
 #run core
 
 #produces image file

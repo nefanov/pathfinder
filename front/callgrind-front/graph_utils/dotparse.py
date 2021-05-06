@@ -4,10 +4,11 @@ import sys
 #fmt:
 
 
-def labels_encode(labels=[]): # this is a hash-function for edge labeling, rewrite it as you need
+def labels_encode(edges, labels=[]): # this is a hash-function for edge labeling, rewrite it as you need
     d = dict()
-    for idx,l in enumerate(labels):
-        d[l] = "a" + str(l)
+    for idx,l in enumerate(edges):
+        if l.__get_attribute__('label') in labels:
+            d[l.__get_attribute__('label')] = l.get_source() + l.get_destination()
 
     return d
 
@@ -15,7 +16,7 @@ def labels_encode(labels=[]): # this is a hash-function for edge labeling, rewri
 def node_names_encode(labels=[]):
     d = dict()
     for idx,l in enumerate(labels):
-        d[l]=idx
+        d[l] = idx
 
     return d
 
@@ -29,11 +30,13 @@ def verbose_print_edge(idx, e,lmap):
     return
 
 
-def dotparse(inp, outp=None, labels=["e1","e2","e3"], verbose=True, nodes_remap=True, edges_remap=True):
-    lmap = labels_encode(labels)
+def dotparse(inp, outp=None, labels=None, verbose=True, nodes_remap=True, edges_remap=True):
     graph = pydot.graph_from_dot_file(inp)
     node_list = graph[0].get_node_list()
+    if not labels:
+        labels = [el.__get_attribute__('label') for el in graph[0].get_edges()]
     node_labels_map = node_names_encode([nl.get_name() for nl in node_list])
+    lmap = labels_encode(graph[0].get_edges(), labels)
 
     if outp:
         f = open(outp, "w")
@@ -63,9 +66,14 @@ def dotparse(inp, outp=None, labels=["e1","e2","e3"], verbose=True, nodes_remap=
     return
 
 
-if __name__=="__main__":
-    dotparse("/Users/nefanov/PycharmProjects/pathfinder/front/callgrind-front/tests/callgrind.out.2322.dot",
+if __name__ == "__main__":
+    if sys.argv[1] == 'test' or len(sys.argv) < 2:
+        dotparse("/Users/nefanov/PycharmProjects/pathfinder/front/callgrind-front/tests/callgrind.out.2322.dot",
              labels=[],
              verbose=False,
              outp="labeled_edges_list.txt")
+    else:
+        dotparse(sys.argv[1],
+                 verbose=False,
+                 outp=sys.argv[2])
 
