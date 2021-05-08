@@ -4,7 +4,10 @@ CFL-R-based software analysis tool
 1) https://www.researchgate.net/project/Modern-formal-languages-theory-based-methods-for-software-static-analysis
 # Build
 
-1) mkdir build
+You need only build a core module (another parts of project are optional):
+
+
+1) cd core && mkdir build
 2) cd build && cmake ..
 3) make
 
