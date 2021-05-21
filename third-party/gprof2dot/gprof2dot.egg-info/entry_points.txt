@@ -1,3 +1,0 @@
-[console_scripts]
-gprof2dot = gprof2dot:main
-

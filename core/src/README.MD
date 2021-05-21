@@ -1,11 +1,11 @@
 # CFL-R solver: core of the analyzer
 
-Authors: Artem Fedorov et al.
+Authors: Elya Shamber et al.
 
 ### Pre-release notes:
 
- - Current (Naive) implementation of CYK-based reachability detector
- - Not supports path highlighting, detection only
+ - Current (Semi-Naive) implementation of CYK-based reachability detector
+ - Supports path highlighting, finds one path for each pair
  - Now it uses unicode character coding of terminal symbols -- be carefull
 
  
