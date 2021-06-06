@@ -161,8 +161,8 @@ int main()
 	}
 	input_file.close();
 	std::ofstream fout;
-	mkdir("../data", 0777);
-	fout.open("../data/graph");
+	mkdir("../front/graph_utils/data", 0777);
+	fout.open("../front/graph_utils/data/graph");
 	fout << E.size() << std::endl;
 	for (int i = 0; i < V.size(); i++)
 	{
@@ -184,5 +184,5 @@ int main()
 		fout << std::endl;
 	}
 	fout.close();
-  	execl("../../../core/core", " ", NULL);
+  	execl("core", " ", NULL);
 }
