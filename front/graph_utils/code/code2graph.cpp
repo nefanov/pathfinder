@@ -184,5 +184,5 @@ int main()
 		fout << std::endl;
 	}
 	fout.close();
-  	execl("../../../core/src/CYKonGraph", " ", NULL);
+  	execl("../../../core/core", " ", NULL);
 }
