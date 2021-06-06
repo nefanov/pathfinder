@@ -112,7 +112,7 @@ std::vector<int> path_find(std::vector<std::vector<std::vector<std::string> > >&
 int main()
 {
     std::ifstream fin;
-    fin.open("../front/graph_utils/data/graph");
+    fin.open("../front/gcc-cfg-utils/data/graph");
     int tests;
     fin >> tests;
     for (int test = 0; test < tests; test++)
