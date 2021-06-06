@@ -1,3 +1,3 @@
-cd graph_utils
+cd gcc-cfg-utils
 cd code
 ./code2graph

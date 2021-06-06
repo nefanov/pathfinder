@@ -6,7 +6,7 @@ int main()
 	std::cout << "Введите название файла для анализа, предварительно скомпилируйте его командой  gcc file_name -fdump-tree-cfg-graph: ";
 	std::cin >> file;
 	graphfile = file;
-	graphfile += ".012t.cfg.dot";
+	graphfile ="../../examples/" + graphfile + ".012t.cfg.dot";
 	std::ifstream input_file(graphfile);
 	int code_descr = 0, cluster = 0, edgeline = 0, basic_block = 0, subgraph = -1;
 	std::vector <std::pair<std::string, std::pair<int, int>>> Clusters;
