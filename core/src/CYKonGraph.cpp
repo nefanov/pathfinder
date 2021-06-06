@@ -2,7 +2,7 @@
 // 4)edges: "1 2 u"
 // output: pairs of vertexes (u, v): there is a path u->v, and the word, created by the path, contains in grammar,
 // next line path
-#include "../include/header.h"
+#include "header.h"
 
 struct rule
 {
