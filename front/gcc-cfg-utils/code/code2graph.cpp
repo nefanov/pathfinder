@@ -161,8 +161,8 @@ int main()
 	}
 	input_file.close();
 	std::ofstream fout;
-	mkdir("../front/gcc-cfg-utils/data", 0777);
-	fout.open("../front/gcc-cfg-utils/data/graph");
+	mkdir("../data", 0777);
+	fout.open("../data/graph");
 	fout << E.size() << std::endl;
 	for (int i = 0; i < V.size(); i++)
 	{
