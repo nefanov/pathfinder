@@ -21,3 +21,6 @@ std::vector<int> path_find(std::vector<std::vector<std::vector<std::string> > >&
 void dfs(int i, std::vector<std::set<int> >& G, std::vector<int>& visited, int component, std::vector<int>& topsort);
 void print_results(int test, int ans, std::vector<std::vector<std::vector<int> > >& g, std::vector <std::string>& V_names, std::vector<std::vector<std::vector<std::string> > >& g_l, int initial, std::vector<std::vector<std::vector<std::pair<int, std::pair<int, int> > > > >& last);
 void find_rtdg(std::vector<std::vector<int> >& RTDG, std::vector<std::string>& nonterminals, std::vector<int>& topsort, std::vector<rule>& rules);
+void parsing(int& flag, std::vector<std::vector<std::vector<int> > >& delta,std::vector<std::vector<int> >& RTDG, std::vector<std::vector<std::vector<int> > >& g, int i, int k, std::vector<std::vector<std::vector<std::pair<int, std::pair<int, int> > > > >& last, std::vector<rule>& rules);
+void foo(int i, int& eps, std::vector<std::pair<int, std::pair<int, std::string> > >& edges, std::vector<std::vector<std::vector<int> > >& g, std::vector<std::vector<std::vector<std::string> > >& g_l, int& initial, std::vector<std::vector<std::vector<std::pair<int, std::pair<int, int> > > > >& last, std::vector<rule>& rules, int V);
+void input(int i, std::vector<std::string>& nonterminals, std::vector<rule>& rules, std::ifstream& fin, int& initial);

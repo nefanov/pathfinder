@@ -151,3 +151,59 @@ void find_rtdg(std::vector<std::vector<int> >& RTDG, std::vector<std::string>& n
             RTDG[visited1[topsort[i]] - 1].push_back(topsort[i]);
     }
 }
+
+void parsing(int& flag, std::vector<std::vector<std::vector<int> > >& delta,std::vector<std::vector<int> >& RTDG, std::vector<std::vector<std::vector<int> > >& g, int i, int k, std::vector<std::vector<std::vector<std::pair<int, std::pair<int, int> > > > >& last, std::vector<rule>& rules)
+{
+    flag = 1;
+    std::vector<std::vector<int> > delta_I;
+    delta_I = delta[i];
+    delta[i] = razn(delta[i], delta[i]);
+    for (auto h: rules)
+    {
+        if (h.type == 1 && (h.right1[0] == i || h.right1[1] == i)) {
+            std::vector<std::vector<int>> temp;
+            temp = (h.right1[0] == RTDG[k][i]) ? mult(delta_I, g[h.right1[1]], h.left, i, h.right1[1], last) : mult(g[h.right1[0]], delta_I, h.left, h.right1[0], i, last);
+            delta[h.left] = sum(delta[h.left], temp);
+            g[h.left] = sum(g[h.left], delta[h.left]);
+        }
+    }
+}
+
+void input(int i, std::vector<std::string>& nonterminals, std::vector<rule>& rules, std::ifstream& fin, int& initial)
+{
+    std::string left, right, a_2 = "", a_3 = "";
+    fin >> left >> right;
+    //! ================ strange code might be refactored ================ !
+    int num = right.size();
+    if (num != 1 && num != 2) {
+        std::cout << "right.size() != 1" << std::endl;
+        exit(-1);
+    }
+    std::vector<int> FLAG(3,0);
+    (num == 2) ? a_2 = right[0], a_3 = right[1] : a_2 = right;
+    std::vector<std::string> a = {left, a_2, a_3};
+    for (int i = 0; i < ((num == 1) ? 1 : 3); FLAG[i] = check(nonterminals, a[i], initial), i++) {
+        if (FLAG[i] == nonterminals.size())
+            nonterminals.push_back(a[i]);
+    }
+    rules.push_back({num - 1, FLAG[0], {FLAG[1], FLAG[2]}, a_2});
+    //! ================                                  ================ !
+}
+
+void foo(int i, int& eps, std::vector<std::pair<int, std::pair<int, std::string> > >& edges, std::vector<std::vector<std::vector<int> > >& g, std::vector<std::vector<std::vector<std::string> > >& g_l, int& initial, std::vector<std::vector<std::vector<std::pair<int, std::pair<int, int> > > > >& last, std::vector<rule>& rules, int V)
+{
+    std::vector<std::string> A;
+    std::vector<std::vector<int> > G_A(V, std::vector<int>(V, 0));
+    std::vector<std::vector<std::string> > G_L(V, std::vector<std::string>(V));
+    for (auto j : rules)
+        if (j.type == 0 && j.left == i)
+            (j.right0 == "0") ? eps = 1, A.push_back(j.right0) : A.push_back(j.right0);
+    for (auto j : edges)
+        for (auto u : A)
+            if (j.second.second == u)
+                G_A[j.first][j.second.first] = 1, G_L[j.first][j.second.first] = u, last[i][j.first][j.second.first] = {-2, {-2, -2}};
+    if (eps == 1)
+        for (int j = 0; j < V; j++)
+            G_A[j][j] = 1, G_L[j][j] = "0", last[i][j][j] = {-2, {-2, -2}};
+    g.push_back(G_A), g_l.push_back(G_L);
+}
