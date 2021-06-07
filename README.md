@@ -1,7 +1,7 @@
 # pathfinder
 CFL-R-based software analysis tool
 # ResearchGate:
-1) https://www.researchgate.net/project/Modern-formal-languages-theory-based-methods-for-software-static-analysis
+1) [Modern formal languages theory based methods for software static analysis](https://www.researchgate.net/project/Modern-formal-languages-theory-based-methods-for-software-static-analysis)
 # Build
 
 
@@ -29,3 +29,7 @@ When running ***bash run.sh*** it starts to work with code analysis.
 
 It produces file build/core, which is core executable of CFL-R analysis and<br>
 can be called by frontend (see example in front/callgrind-front).
+<br><br>
+If you want to run the unit-tests you need write:
+	
+	bash run.sh test

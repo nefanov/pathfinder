@@ -1,2 +1,6 @@
 cd build
-./code2graph $1
+if [[ $1 == "test" ]]; then
+    ./test
+else
+    ./code2graph $1
+fi

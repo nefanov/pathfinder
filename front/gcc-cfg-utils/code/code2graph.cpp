@@ -2,19 +2,9 @@
 
 int main(int argc, char* argv[])
 {
-	std::string inp, graphfile, code = "";
-	if (argc < 2) {
-		std::cout << "Enter the name of the file to be analyzed, pre-compiled with gcc file_name -fdump-tree-cfg-graph: ";
-		std::cin >> graphfile;
-	}
-	else
-		graphfile = argv[1];
-	graphfile += ".012t.cfg.dot";
-	std::ifstream input_file(graphfile);
-	if (!input_file.is_open()) {
-		std::cout << "file was not opened" << std::endl;
-		return -1;
-	}
+	std::string inp, code = "", path = (argc >= 2) ? argv[1] : "";
+	std::ifstream input_file;
+	process_path(argc, path, input_file);
 	int code_descr = 0, cluster = 0, edgeline = 0, basic_block = 0, subgraph = -1;
 	std::vector <std::pair<std::string, std::pair<int, int>>> Clusters;
 	std::vector <std::vector<std::string>> V, Code;

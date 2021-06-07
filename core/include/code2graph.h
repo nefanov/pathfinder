@@ -7,3 +7,5 @@
 #include <cstdlib>
 #include <sys/stat.h>
 #include <unistd.h>
+
+int process_path(int argc, std::string path, std::ifstream& input_file);

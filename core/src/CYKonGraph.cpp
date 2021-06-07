@@ -7,10 +7,10 @@
 int main()
 {
     std::ifstream fin;
-    int initial, tests, ans;
+    int initial, tests;
     fin.open("../data/graph");
     fin >> tests;
-    for (int test = 0, m, V, E; test < tests; ans = 0, test++) {
+    for (int test = 0, m, V, E; test < tests; test++) {
         std::vector<rule> rules;
         std::vector<int> topsort;
         std::vector<std::vector<std::vector<std::pair<int, std::pair<int, int> > > > > last;
@@ -45,6 +45,7 @@ int main()
                 for (auto i : RTDG[k])
                     if (not_null(delta[i]))
                         transitive_closure(flag, delta, RTDG, g, i, k, last, rules);
+        int ans = 0;
         for (auto i : g[initial])
             for (auto j : i)
                 if (j == 1)
