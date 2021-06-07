@@ -40,7 +40,7 @@ int main()
         std::vector<std::vector<std::vector<std::string> > > g_l;
 
         for (int i = 0, eps = 0; i < nonterminals.size(); i++, eps = 0)
-            foo(i, eps, edges, g, g_l, initial, last, rules , V);
+            arranging_rules_to_edges(i, eps, edges, g, g_l, initial, last, rules , V);
         std::vector<std::vector<std::vector<int> > > delta;
         delta = g;
         for (int k = RTDG.size() - 1, flag = 1; k >= 0; k--, flag = 1) //

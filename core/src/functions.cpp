@@ -190,7 +190,7 @@ void input(int i, std::vector<std::string>& nonterminals, std::vector<rule>& rul
     //! ================                                  ================ !
 }
 
-void foo(int i, int& eps, std::vector<std::pair<int, std::pair<int, std::string> > >& edges, std::vector<std::vector<std::vector<int> > >& g, std::vector<std::vector<std::vector<std::string> > >& g_l, int& initial, std::vector<std::vector<std::vector<std::pair<int, std::pair<int, int> > > > >& last, std::vector<rule>& rules, int V)
+void arranging_rules_to_edges(int i, int& eps, std::vector<std::pair<int, std::pair<int, std::string> > >& edges, std::vector<std::vector<std::vector<int> > >& g, std::vector<std::vector<std::vector<std::string> > >& g_l, int& initial, std::vector<std::vector<std::vector<std::pair<int, std::pair<int, int> > > > >& last, std::vector<rule>& rules, int V)
 {
     std::vector<std::string> A;
     std::vector<std::vector<int> > G_A(V, std::vector<int>(V, 0));
