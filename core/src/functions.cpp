@@ -92,7 +92,7 @@ std::vector<int> path_find(std::vector<std::vector<std::vector<std::string> > >&
     return res;
 }
 
-void print_results(int test, int ans, std::vector<std::vector<std::vector<int> > >& g, std::vector <std::string>& V_names, std::vector<std::vector<std::vector<std::string> > >& g_l, int initial, std::vector<std::vector<std::vector<std::pair<int, std::pair<int, int> > > > >& last)
+void print_results(int test, int ans, std::vector<std::vector<std::vector<int> > >& g, std::vector <std::string>& V_names, std::vector<std::vector<std::vector<std::string> > >& g_l, int& initial, std::vector<std::vector<std::vector<std::pair<int, std::pair<int, int> > > > >& last)
 {
     std::cout << "Graph N" << test << std::endl;
     std::cout << "Number of pairs = " << ans << std::endl;
@@ -152,7 +152,7 @@ void find_rtdg(std::vector<std::vector<int> >& RTDG, std::vector<std::string>& n
     }
 }
 
-void parsing(int& flag, std::vector<std::vector<std::vector<int> > >& delta,std::vector<std::vector<int> >& RTDG, std::vector<std::vector<std::vector<int> > >& g, int i, int k, std::vector<std::vector<std::vector<std::pair<int, std::pair<int, int> > > > >& last, std::vector<rule>& rules)
+void transitive_closure(int& flag, std::vector<std::vector<std::vector<int> > >& delta,std::vector<std::vector<int> >& RTDG, std::vector<std::vector<std::vector<int> > >& g, int i, int k, std::vector<std::vector<std::vector<std::pair<int, std::pair<int, int> > > > >& last, std::vector<rule>& rules)
 {
     flag = 1;
     std::vector<std::vector<int> > delta_I;
