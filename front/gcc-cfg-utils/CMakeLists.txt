@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.16)
+project(pathfinder)
+set(EXECUTABLE_OUTPUT_PATH build)
+include_directories(../../core/include)
+add_executable(core ../../core/src/CYKonGraph.cpp)
+add_executable(code2graph code/code2graph.cpp)
