@@ -1,13 +1,20 @@
 #include "header.h"
 
-int main()
+int main(int argc, char* argv[])
 {
-	std::string file, inp, graphfile, code = "";
-	std::cout << "Введите название файла для анализа, предварительно скомпилируйте его командой  gcc file_name -fdump-tree-cfg-graph: ";
-	std::cin >> file;
-	graphfile = file;
-	graphfile = graphfile + ".012t.cfg.dot";
+	std::string inp, graphfile, code = "";
+	if (argc < 2) {
+		std::cout << "Enter the name of the file to be analyzed, pre-compiled with gcc file_name -fdump-tree-cfg-graph: ";
+		std::cin >> graphfile;
+	}
+	else
+		graphfile = argv[1];
+	graphfile += ".012t.cfg.dot";
 	std::ifstream input_file(graphfile);
+	if (!input_file.is_open()) {
+		std::cout << "file was not opened" << std::endl;
+		return -1;
+	}
 	int code_descr = 0, cluster = 0, edgeline = 0, basic_block = 0, subgraph = -1;
 	std::vector <std::pair<std::string, std::pair<int, int>>> Clusters;
 	std::vector <std::vector<std::string>> V, Code;

@@ -8,7 +8,10 @@ CFL-R-based software analysis tool
 1) cd front/gcc-cfg-utils
 2) cmake ./
 3) make
-4) bash run.sh
+4) bash run.sh [path to file]
+
+In [path to file] you need to specify the path to the file pre-compiled with ***gcc file_name -fdump-tree-cfg-graph***<br>
+If you omit it, the program will ask you to specify it via stdin<br><br>
 
 When running ***bash run.sh*** it starts to work with code analysis.
 <br>For a test it is needed to write ***../examples/test1.c***,

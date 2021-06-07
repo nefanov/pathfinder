@@ -4,15 +4,6 @@
 // next line path
 #include "header.h"
 
-struct rule
-{
-    int type;
-    int left;
-    std::vector<int> right1;
-    std::string right0;
-};
-
-
 std::vector<rule> rules;
 std::vector<int> topsort;
 std::vector<std::vector<std::vector<std::pair<int, std::pair<int, int> > > > > last;

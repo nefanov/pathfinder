@@ -1,2 +1,2 @@
 cd build
-./code2graph
+./code2graph $1
