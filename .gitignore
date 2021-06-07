@@ -1,0 +1,5 @@
+front/gcc-cfd-utils/data/
+front/gcc-cfd-utils/CMakeCache.txt
+front/gcc-cfd-utils/Makefile
+front/gcc-cfd-utils/build/
+front/gcc-cfd-utils/cmake_install.cmake

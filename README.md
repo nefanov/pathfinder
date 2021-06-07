@@ -17,6 +17,7 @@ When running ***bash run.sh*** it starts to work with code analysis.
 <br>For a test it is needed to write ***../examples/test1.c***,
 <br>then write grammar rules (first: number of rules, then rules) 
 <br>For example:
+
 	5 
 	S AB
 	S AR
