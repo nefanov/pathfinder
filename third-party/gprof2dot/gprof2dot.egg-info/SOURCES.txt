@@ -1,0 +1,10 @@
+LICENSE.txt
+MANIFEST.in
+README.md
+gprof2dot.py
+setup.py
+gprof2dot.egg-info/PKG-INFO
+gprof2dot.egg-info/SOURCES.txt
+gprof2dot.egg-info/dependency_links.txt
+gprof2dot.egg-info/entry_points.txt
+gprof2dot.egg-info/top_level.txt
