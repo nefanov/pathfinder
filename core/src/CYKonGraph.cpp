@@ -212,7 +212,7 @@ int main()
         std::vector<int> visited1(nonterminals.size(), 0);
         for (int i = topsort.size() - 1; i >= 0; i--)
         {
-            if (visited1[topsort[i]] == 0)
+            for (int j = 0; j < V; j++)
             {
                 dfs(topsort[i], G_T, visited1, component);
                 std::vector<int> l;
@@ -303,6 +303,7 @@ int main()
                     }
                 }
             }
+
         }
         int ans = 0;
         for (int i = 0; i < g[initial].size(); i++)
@@ -329,5 +330,4 @@ int main()
         }
         std::cout << std::endl;
     }
-    fin.close();
 }
