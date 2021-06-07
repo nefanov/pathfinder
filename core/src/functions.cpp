@@ -1,4 +1,4 @@
-#include "header.h"
+#include "CYKonGraph.h"
 
 int not_null(std::vector<std::vector<int> >& A) //function for checking if A is zero
 {

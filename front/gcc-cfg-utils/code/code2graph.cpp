@@ -1,4 +1,4 @@
-#include "header.h"
+#include "code2graph.h"
 
 int main(int argc, char* argv[])
 {

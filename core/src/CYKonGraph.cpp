@@ -2,31 +2,25 @@
 // 4)edges: "1 2 u"
 // output: pairs of vertexes (u, v): there is a path u->v, and the word, created by the path, contains in grammar,
 // next line path
-#include "header.h"
+#include "CYKonGraph.h"
 
 int main()
 {
     std::vector<rule> rules;
     std::vector<int> topsort;
     std::vector<std::vector<std::vector<std::pair<int, std::pair<int, int> > > > > last;
-    int initial; //S - nonterminal
     std::ifstream fin;
+    int initial, tests;
     fin.open("../data/graph");
-    int tests;
     fin >> tests;
-    for (int test = 0; test < tests; test++)
+    for (int test = 0, m; test < tests; test++, rules.clear(), topsort.clear(), last.clear())
     {
-        rules.clear();
-        topsort.clear();
-        last.clear();
         //grammar
         std::vector<std::string> nonterminals;
-        int m; //quantity of rules
-        fin >> m;
+        fin >> m; //quantity of rules
         for (int i = 0, num; i < m; i++)
         {
             std::string left, right;
-
             fin >> left >> right;
             if (right.size() == 1 || right.size() == 2)
                 num = right.size();
@@ -37,9 +31,7 @@ int main()
                 int FLAG  = check(nonterminals, a_1, initial);
                 if (FLAG == nonterminals.size())
                     nonterminals.push_back(a_1);
-                rule a;
-                a.left = FLAG, a.right0 = a_2, a.type = 0;
-                rules.push_back(a);
+                rules.push_back({0, FLAG, {0}, a_2});
             }
             else if (num == 2)
             {
@@ -53,13 +45,7 @@ int main()
                     nonterminals.push_back(a_2);
                 if (FLAG3 == nonterminals.size())
                     nonterminals.push_back(a_3);
-
-                rule a;
-                std::vector<int> q;
-                q.push_back(FLAG2);
-                q.push_back(FLAG3);
-                a.left = FLAG1, a.right1 = q, a.type = 1;
-                rules.push_back(a);
+                rules.push_back({1, FLAG1, {FLAG2, FLAG3}});
             }
         }
         int V, E;
@@ -96,29 +82,29 @@ int main()
             std::vector<std::string> A;
             std::vector<std::vector<int> > G_A(V, std::vector<int>(V, 0));
             std::vector<std::vector<std::string> > G_L(V, std::vector<std::string>(V));
-            for (int j = 0; j < rules.size(); j++)
+            for (auto j : rules)
             {
-                if (rules[j].type == 0 && rules[j].left == i)
+                if (j.type == 0 && j.left == i)
                 {
-                    A.push_back(rules[j].right0);
-                    if (rules[j].right0 == "0")
+                    A.push_back(j.right0);
+                    if (j.right0 == "0")
                         eps = 1;
                 }
 
             }
-            for (int j = 0; j < edges.size(); j++)
+            for (auto j : edges)
             {
                 for (auto u : A)
                 {
-                    if (edges[j].second.second == u)
+                    if (j.second.second == u)
                     {
-                        G_A[edges[j].first][edges[j].second.first] = 1;
-                        G_L[edges[j].first][edges[j].second.first] = u;
+                        G_A[j.first][j.second.first] = 1;
+                        G_L[j.first][j.second.first] = u;
                         std::pair<int, std::pair<int, int> > u;
                         u.first = -2;
                         u.second.first = -2;
                         u.second.second = -2;
-                        last[i][edges[j].first][edges[j].second.first] = u;
+                        last[i][j.first][j.second.first] = u;
 
                     }
                 }
@@ -147,19 +133,19 @@ int main()
             while (flag)
             {
                 flag = 0;
-                for (int i = 0; i < RTDG[k].size(); i++)
+                for (auto i : RTDG[k])
                 {
-                    if (not_null(delta[RTDG[k][i]]))
+                    if (not_null(delta[i]))
                     {
                         flag = 1;
                         std::vector<std::vector<int> > delta_I;
-                        delta_I = delta[RTDG[k][i]];
-                        delta[RTDG[k][i]] = razn(delta[RTDG[k][i]], delta[RTDG[k][i]]);
+                        delta_I = delta[i];
+                        delta[i] = razn(delta[i], delta[i]);
                         for (auto h: rules)
                         {
-                            if (h.type == 1 && (h.right1[0] == RTDG[k][i] || h.right1[1] == RTDG[k][i])) {
+                            if (h.type == 1 && (h.right1[0] == i || h.right1[1] == i)) {
                                 std::vector<std::vector<int>> temp;
-                                temp = (h.right1[0] == RTDG[k][i]) ? mult(delta_I, g[h.right1[1]], h.left, RTDG[k][i], h.right1[1], last) : mult(g[h.right1[0]], delta_I, h.left, h.right1[0], RTDG[k][i], last);
+                                temp = (h.right1[0] == RTDG[k][i]) ? mult(delta_I, g[h.right1[1]], h.left, i, h.right1[1], last) : mult(g[h.right1[0]], delta_I, h.left, h.right1[0], i, last);
                                 delta[h.left] = sum(delta[h.left], temp);
                                 g[h.left] = sum(g[h.left], delta[h.left]);
                             }
@@ -170,9 +156,9 @@ int main()
 
         }
         int ans = 0;
-        for (int i = 0; i < g[initial].size(); i++)
-            for (int j = 0; j < g[initial].size(); j++)
-                if (g[initial][i][j] == 1)
+        for (auto i : g[initial])
+            for (auto j : i)
+                if (j == 1)
                     ans++;
         print_results(test, ans, g, V_names, g_l, initial, last);
     }
