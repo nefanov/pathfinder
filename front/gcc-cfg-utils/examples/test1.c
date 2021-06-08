@@ -1,7 +1,7 @@
 #include <stdio.h>
-int kek()
+int foo()
 {
-	printf("lol");
+	printf("printf_in_foo");
 }
 int main()
 {

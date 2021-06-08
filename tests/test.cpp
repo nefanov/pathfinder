@@ -17,8 +17,8 @@ TEST_CASE("../examples/test1.c.012t.cfg.dot") {
     std::ifstream input_file("../examples/test1.c.012t.cfg.dot");
 	std::vector <std::pair<std::string, std::pair<int, int>>> Clusters;
 	std::vector <std::vector<std::string>> V, Code;
-	std::vector <std::vector<std::vector<std::pair<int, std::string>>>> E;
-	while(std::getline(input_file, inp)) 
+    std::vector <std::vector<std::vector<std::pair<int, std::string>>>> E;
+    while(std::getline(input_file, inp)) 
 	{
 		int len = inp.size();
 		if (basic_block == 0)
@@ -26,7 +26,7 @@ TEST_CASE("../examples/test1.c.012t.cfg.dot") {
 		else
 			foo5(inp, basic_block, code, Code, subgraph);
 	}
-    REQUIRE(Clusters[0].first == "cluster_kek");
+    REQUIRE(Clusters[0].first == "cluster_foo");
     REQUIRE(Clusters[1].first == "cluster_main");
     REQUIRE(Clusters[0].second.first == 0);
     REQUIRE(Clusters[0].second.second == 1);

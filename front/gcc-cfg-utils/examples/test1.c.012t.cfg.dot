@@ -1,15 +1,15 @@
 digraph "test1.c.012t.cfg" {
 overlap=false;
-subgraph "cluster_kek" {
+subgraph "cluster_foo" {
 	style="dashed";
 	color="black";
-	label="kek ()";
+	label="foo ()";
 	fn_0_basic_block_0 [shape=Mdiamond,style=filled,fillcolor=white,label="ENTRY"];
 
 	fn_0_basic_block_1 [shape=Mdiamond,style=filled,fillcolor=white,label="EXIT"];
 
 	fn_0_basic_block_2 [shape=record,style=filled,fillcolor=lightgrey,label="{\<bb\ 2\>:\l\
-|printf\ (\"lol\");\l\
+|printf\ (\"printf_in_foo\");\l\
 |return;\l\
 }"];
 
