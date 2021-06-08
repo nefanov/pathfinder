@@ -112,11 +112,9 @@ void graph_list(std::vector <std::pair<std::string, std::pair<int, int>>>& Clust
 void foo1(int& len, size_t& found, int& cluster, int& subgraph, std::string& inp, std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector <std::vector<std::string>>& V, std::vector <std::vector<std::string>>& Code, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E)
 {
 	cluster++, subgraph++;
-	int k = found + 10;
-	while (k < len && inp[k] != '"')
-		k++;
-	std::string a = inp.substr(found + 10, k - found - 10);
-	Clusters.push_back({a, {0,0}});
+	int k;
+	for(k = found + 10; k < len && inp[k] != '"'; k++);
+	Clusters.push_back({inp.substr(found + 10, k - found - 10), {0,0}});
 	V.resize(V.size() + 1);
 	Code.resize(Code.size() + 1);
 	E.resize(E.size() + 1);
@@ -184,14 +182,14 @@ void foo4(size_t& found1, size_t& found2, std::string& inp, std::vector <std::ve
 
 void foo5(std::string& inp, int& basic_block, std::string& code, std::vector <std::vector<std::string>>& Code, int& subgraph)
 {
-	if (inp == "\"}1];")
+	if (inp == "}\"];")
 	{
 		basic_block = 0;
 		code += "}\n";
 		Code[subgraph].push_back(code);
 	}
 	else
-		code += inp +"\n";
+		code += inp + "\n";
 }
 
 void foo6(std::string& code, int& basic_block, int& cluster, int& subgraph, std::string& inp, std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector <std::vector<std::string>>& V, std::vector <std::vector<std::string>>& Code, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, int& len)

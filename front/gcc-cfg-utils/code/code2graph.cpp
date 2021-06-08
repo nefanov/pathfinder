@@ -16,15 +16,10 @@ int main(int argc, char* argv[])
 			foo6(code, basic_block, cluster, subgraph, inp, Clusters, V, Code, E, len);
 		else
 			foo5(inp, basic_block, code, Code, subgraph);
-		//std::cout << "19\n";
 	}
-	std::cout << "21\n";
 	graph_list(Clusters);
-	std::cout << "23\n";
 	vertex_list(V, E, Clusters, Code);
-	std::cout << "25\n";
 	adjacency_list(V, E);
-	std::cout << "27\n";
 	std::vector<std::vector<std::pair<std::string, std::string> > > rules(E.size());
 	input_V_E(V, E, Clusters, rules, input_file);
 	to_fifo(V, E, rules);
