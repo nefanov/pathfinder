@@ -15,28 +15,21 @@ int main()
         std::vector<int> topsort;
         std::vector<std::vector<std::vector<std::pair<int, std::pair<int, int> > > > > last;
         std::vector<std::string> nonterminals;
+        std::vector<std::vector<int> > RTDG;
+        std::vector<std::vector<std::vector<int> > > g;
+        std::vector<std::vector<std::vector<std::string> > > g_l;
         fin >> m; //quantity of rules
         for (int i = 0; i < m; i++)
-            input(i, nonterminals, rules, fin, initial);
+            input_rules(i, nonterminals, rules, fin, initial);
         fin >> V >> E;
         std::vector<std::pair<int, std::pair<int, std::string> > > edges;
         std::vector <std::string> V_names(V);
-        for (int i = 0; i < V; i++)
-            fin >> V_names[i];
-        for (int i = 0, u1, u2; i < E; i++)	{
-            std::string a;
-            fin >> u1 >> u2 >> a;
-            edges.push_back({u1, {u2, a}});
-        }
-        std::pair<int, std::pair<int, int>> y = {-1, {-1, -1}};
-        std::vector<std::vector<std::pair<int, std::pair<int, int> > > > l (V, std::vector<std::pair<int, std::pair<int, int> > > (V, y));
+        std::vector<std::vector<std::pair<int, std::pair<int, int> > > > l (V, std::vector<std::pair<int, std::pair<int, int> > > (V, {-1, {-1, -1}}));
+        input_V_names(V_names, edges, fin, V, E);
         for (int i = 0; i < nonterminals.size(); i++)
             last.push_back(l);
-        std::vector<std::vector<int> > RTDG;
         find_rtdg(RTDG, nonterminals, topsort, rules);
         // Semi-Naive CFL
-        std::vector<std::vector<std::vector<int> > > g;
-        std::vector<std::vector<std::vector<std::string> > > g_l;
         for (int i = 0, eps = 0; i < nonterminals.size(); i++, eps = 0)
             arranging_rules_to_edges(i, eps, edges, g, g_l, initial, last, rules , V);
         std::vector<std::vector<std::vector<int> > > delta = g;
@@ -45,12 +38,7 @@ int main()
                 for (auto i : RTDG[k])
                     if (not_null(delta[i]))
                         transitive_closure(flag, delta, RTDG, g, i, k, last, rules);
-        int ans = 0;
-        for (auto i : g[initial])
-            for (auto j : i)
-                if (j == 1)
-                    ans++;
-        print_results(test, ans, g, V_names, g_l, initial, last);
+        print_results(test, count_ans(g, initial), g, V_names, g_l, initial, last);
     }
     fin.close();
 }

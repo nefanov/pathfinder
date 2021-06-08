@@ -169,7 +169,7 @@ void transitive_closure(int& flag, std::vector<std::vector<std::vector<int> > >&
     }
 }
 
-void input(int i, std::vector<std::string>& nonterminals, std::vector<rule>& rules, std::ifstream& fin, int& initial)
+void input_rules(int i, std::vector<std::string>& nonterminals, std::vector<rule>& rules, std::ifstream& fin, int& initial)
 {
     std::string left, right, a_2 = "", a_3 = "";
     fin >> left >> right;
@@ -206,4 +206,25 @@ void arranging_rules_to_edges(int i, int& eps, std::vector<std::pair<int, std::p
         for (int j = 0; j < V; j++)
             G_A[j][j] = 1, G_L[j][j] = "0", last[i][j][j] = {-2, {-2, -2}};
     g.push_back(G_A), g_l.push_back(G_L);
+}
+
+void input_V_names(std::vector <std::string>& V_names, std::vector<std::pair<int, std::pair<int, std::string> > >& edges, std::ifstream& fin, int V, int E)
+{
+    for (int i = 0; i < V; i++)
+        fin >> V_names[i];
+    for (int i = 0, u1, u2; i < E; i++)	{
+        std::string a;
+        fin >> u1 >> u2 >> a;
+        edges.push_back({u1, {u2, a}});
+    }
+}
+
+int count_ans(std::vector<std::vector<std::vector<int> > >& g, int initial)
+{
+    int ans = 0;
+    for (auto i : g[initial])
+        for (auto j : i)
+            if (j == 1)
+                ans++;
+    return ans;
 }
