@@ -7,10 +7,9 @@ int process_path(int argc, std::string path, std::ifstream& input_file)
 		std::cin >> path;
 	}
 	std::string full_path = std::filesystem::current_path().string() + "/" + path + ".012t.cfg.dot";
-	std::cout << "KEKK " << full_path << std::endl;
 	input_file.open(full_path);
 	if (!input_file.is_open()) {
-		std::cout << "file was not opened" << std::endl;
+		std::cout << "file " << full_path << " was not opened" << std::endl;
 		return -1;
 	}
     return 0;
