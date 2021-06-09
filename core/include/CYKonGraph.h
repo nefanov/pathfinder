@@ -3,6 +3,7 @@
 #include <vector>
 #include <set>
 #include <fstream>
+#include <limits.h>
 
 class rule {
     public:

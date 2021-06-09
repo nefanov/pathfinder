@@ -6,15 +6,15 @@ TEST_CASE("wrong path to the file") {
     REQUIRE(process_path(2, "./", input_file) == -1);
 }
 
-TEST_CASE("path to ../examples/test1.c") {
+TEST_CASE("path to examples/test1.c") {
     std::ifstream input_file;
-    REQUIRE(process_path(2, "../examples/test1.c", input_file) == 0);
+    REQUIRE(process_path(2, "examples/test1.c", input_file) == 0);
 }
 
-TEST_CASE("../examples/test1.c.012t.cfg.dot") {
+TEST_CASE("examples/test1.c.012t.cfg.dot") {
     std::string inp, code = "";
     int code_descr = 0, cluster = 0, edgeline = 0, basic_block = 0, subgraph = -1;
-    std::ifstream input_file("../examples/test1.c.012t.cfg.dot");
+    std::ifstream input_file("examples/test1.c.012t.cfg.dot");
 	std::vector <std::pair<std::string, std::pair<int, int>>> Clusters;
 	std::vector <std::vector<std::string>> V, Code;
     std::vector <std::vector<std::vector<std::pair<int, std::string>>>> E;

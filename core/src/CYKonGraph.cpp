@@ -4,11 +4,12 @@
 // next line path
 #include "CYKonGraph.h"
 
-int main()
+int main(int argc, char* argv[])
 {
-    std::ifstream fin;
     int initial, tests;
-    fin.open("../data/graph");
+    std::ifstream fin;
+    std::string bin_path = argv[0];
+    fin.open(bin_path + "../data/graph");
     fin >> tests;
     for (int test = 0, m, V, E; test < tests; test++) {
         std::vector<rule> rules;

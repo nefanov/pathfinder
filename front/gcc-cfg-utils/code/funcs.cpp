@@ -6,8 +6,9 @@ int process_path(int argc, std::string path, std::ifstream& input_file)
 		std::cout << "Enter the name of the file to be analyzed, pre-compiled with gcc file_name -fdump-tree-cfg-graph: ";
 		std::cin >> path;
 	}
-	path += ".012t.cfg.dot";
-	input_file.open(path);
+	std::string full_path = std::filesystem::current_path().string() + "/" + path + ".012t.cfg.dot";
+	std::cout << "KEKK " << full_path << std::endl;
+	input_file.open(full_path);
 	if (!input_file.is_open()) {
 		std::cout << "file was not opened" << std::endl;
 		return -1;
@@ -15,11 +16,11 @@ int process_path(int argc, std::string path, std::ifstream& input_file)
     return 0;
 }
 
-void to_fifo(std::vector <std::vector<std::string>>& V, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, std::vector<std::vector<std::pair<std::string, std::string> > >& rules)
+void to_fifo(std::string bin_path, std::vector <std::vector<std::string>>& V, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, std::vector<std::vector<std::pair<std::string, std::string> > >& rules)
 {
 	std::ofstream fout;
-	mkdir("../data", 0777);
-	fout.open("../data/graph");
+	mkdir((bin_path + "../data").c_str(), 0777);
+	fout.open(bin_path + "../data/graph");
 	fout << E.size() << std::endl;
 	for (int i = 0; i < V.size(); i++)
 	{

@@ -1,6 +1,6 @@
-cd build
-if [[ $1 == "test" ]]; then
-    ./test
+if [[ $1 == "-test" ]]; then
+    cd ${0%run.sh}
+    build/test
 else
-    ./code2graph $1
+    ${0%run.sh}/build/code2graph $1
 fi
