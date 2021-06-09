@@ -1,6 +1,6 @@
 #include "code2graph.h"
 
-int process_path(int argc, std::string path, std::ifstream& input_file, std::ifstream& analyze_file, int file)
+int process_path(int argc, std::ifstream& input_file, std::string& path, std::string& path_to_input, std::ifstream& analyze_file, int file)
 {
 	std::string path_to_analyze = path, full_path = std::filesystem::current_path().string() + "/" + path;
     if (argc < 2) {
@@ -9,12 +9,11 @@ int process_path(int argc, std::string path, std::ifstream& input_file, std::ifs
 	}
 	if (file) {
 		input_file.open(full_path);
-		std::cout << full_path << std::endl;
+		path_to_input = full_path;
 		input_file >> path_to_analyze;
-		std::cout << path_to_analyze << std::endl;
 		full_path.erase(full_path.find_last_of("/") + 1, full_path.size()); // .../gcc-cfg-utils/input/test.in -> .../gcc-cfg-utils/input/
 		path_to_analyze = full_path + path_to_analyze + ".012t.cfg.dot";
-		input_file.close();
+		//input_file.close();
 	}
 	else
 		path_to_analyze = std::filesystem::current_path().string() + "/" + path_to_analyze + ".012t.cfg.dot";
@@ -55,17 +54,27 @@ void to_fifo(std::string bin_path, std::vector <std::vector<std::string>>& V, st
 	fout.close();
 }
 
-void input_V_E(std::vector <std::vector<std::string>>& V, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector<std::vector<std::pair<std::string, std::string> > >& rules, std::ifstream& input_file)
+void input_V_E(std::ifstream& fin, int file, std::vector <std::vector<std::string>>& V, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector<std::vector<std::pair<std::string, std::string> > >& rules, std::ifstream& input_file)
 {
 	std::cout << "Процесс установки букв на ребра и выбора грамматик для графов " << std::endl;
 	for (int i = 0, quan_of_rules; i < E.size(); i++)
 	{
 		std::cout << "Грамматика и граф для " << Clusters[i].first << std::endl;
-		std::cin >> quan_of_rules;
+		if (file == 1) {
+			fin >> quan_of_rules;
+			std::cout << quan_of_rules << std::endl;
+		}
+		else
+			std::cin >> quan_of_rules;
 		std::string left, right;
 		for (int j = 0; j < quan_of_rules; j++)
 		{
-			std::cin >> left >> right;
+			if (file == 1) {
+				fin >> left >> right;
+				std::cout << left << " " << right << std::endl;
+			}
+			else
+				std::cin >> left >> right;
 			rules[i].push_back(make_pair(left, right));
 		}
 		for (int j = 0; j < E[i].size(); j++)
@@ -73,7 +82,12 @@ void input_V_E(std::vector <std::vector<std::string>>& V, std::vector <std::vect
 			for (int q = 0; q < E[i][j].size(); q++)
 			{
 				std::cout << "Укажите букву для ребра " << V[i][j] << " -> " << V[i][E[i][j][q].first] << " :";
-				std::cin >> E[i][j][q].second;
+				if (file == 1) {
+					fin >> E[i][j][q].second;
+					std::cout <<E[i][j][q].second << std::endl;
+				}
+				else
+					std::cin >> E[i][j][q].second;
 			}
 		}
 	}
