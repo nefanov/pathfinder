@@ -33,3 +33,8 @@ can be called by frontend (see example in front/callgrind-front).
 If you want to run the unit-tests you need write:
 	
 	bash run.sh -test
+
+It is also supported file input method<br>
+To use it write:
+
+	bash run.sh -file [path to file] (For example: input/test.in)

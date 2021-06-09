@@ -1,15 +1,27 @@
 #include "code2graph.h"
 
-int process_path(int argc, std::string path, std::ifstream& input_file)
+int process_path(int argc, std::string path, std::ifstream& input_file, std::ifstream& analyze_file, int file)
 {
+	std::string path_to_analyze = path, full_path = std::filesystem::current_path().string() + "/" + path;
     if (argc < 2) {
 		std::cout << "Enter the name of the file to be analyzed, pre-compiled with gcc file_name -fdump-tree-cfg-graph: ";
-		std::cin >> path;
+		std::cin >> path_to_analyze;
 	}
-	std::string full_path = std::filesystem::current_path().string() + "/" + path + ".012t.cfg.dot";
-	input_file.open(full_path);
-	if (!input_file.is_open()) {
-		std::cout << "file " << full_path << " was not opened" << std::endl;
+	if (file) {
+		input_file.open(full_path);
+		std::cout << full_path << std::endl;
+		input_file >> path_to_analyze;
+		std::cout << path_to_analyze << std::endl;
+		full_path.erase(full_path.find_last_of("/") + 1, full_path.size()); // .../gcc-cfg-utils/input/test.in -> .../gcc-cfg-utils/input/
+		path_to_analyze = full_path + path_to_analyze + ".012t.cfg.dot";
+		input_file.close();
+	}
+	else
+		path_to_analyze = std::filesystem::current_path().string() + "/" + path_to_analyze + ".012t.cfg.dot";
+	analyze_file.open(path_to_analyze);
+	path = path_to_analyze;
+	if (!analyze_file.is_open()) {
+		std::cout << "file " << path_to_analyze << " was not opened" << std::endl;
 		return -1;
 	}
     return 0;

@@ -10,7 +10,7 @@
 #include <limits.h>
 #include <filesystem>
 
-int process_path(int argc, std::string path, std::ifstream& input_file);
+int process_path(int argc, std::string path, std::ifstream& input_file, std::ifstream& analyze_file, int file);
 void to_fifo(std::string bin_path, std::vector <std::vector<std::string>>& V, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, std::vector<std::vector<std::pair<std::string, std::string> > >& rules);
 void input_V_E(std::vector <std::vector<std::string>>& V, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector<std::vector<std::pair<std::string, std::string> > >& rules, std::ifstream& input_file);
 void adjacency_list(std::vector <std::vector<std::string>>& V, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E);

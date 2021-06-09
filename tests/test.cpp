@@ -2,23 +2,31 @@
 #include "catch.hpp"
 #include "code2graph.h"
 TEST_CASE("wrong path to the file") {
-    std::ifstream input_file;
-    REQUIRE(process_path(2, "./", input_file) == -1);
+    std::ifstream input_file, analyze_file;
+    REQUIRE(process_path(2, "./", input_file, analyze_file, 0) == -1);
+}
+
+TEST_CASE("using file input/test.in") {
+    std::ifstream input_file, analyze_file;
+    std::string path = "input/test.in", full_path = std::filesystem::current_path().string() + "/" + path;
+    full_path.erase(full_path.find_last_of("/") + 1, full_path.size()); // .../gcc-cfg-utils/input/test.in -> .../gcc-cfg-utils/input/
+    REQUIRE(process_path(3, path, input_file, analyze_file, 1) == 0);
+    //REQUIRE(path == full_path + "../examples/test1.c" + ".012t.cfg.dot");
 }
 
 TEST_CASE("path to examples/test1.c") {
-    std::ifstream input_file;
-    REQUIRE(process_path(2, "examples/test1.c", input_file) == 0);
+    std::ifstream input_file, analyze_file;
+    REQUIRE(process_path(2, "examples/test1.c", input_file, analyze_file, 0) == 0);
 }
 
 TEST_CASE("examples/test1.c.012t.cfg.dot") {
     std::string inp, code = "";
     int code_descr = 0, cluster = 0, edgeline = 0, basic_block = 0, subgraph = -1;
-    std::ifstream input_file("examples/test1.c.012t.cfg.dot");
+    std::ifstream analyze_file("examples/test1.c.012t.cfg.dot");
 	std::vector <std::pair<std::string, std::pair<int, int>>> Clusters;
 	std::vector <std::vector<std::string>> V, Code;
     std::vector <std::vector<std::vector<std::pair<int, std::string>>>> E;
-    while(std::getline(input_file, inp)) 
+    while(std::getline(analyze_file, inp)) 
 	{
 		int len = inp.size();
 		if (basic_block == 0)
