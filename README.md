@@ -37,4 +37,4 @@ If you want to run the unit-tests you need write:
 It is also supported file input method<br>
 To use it write:
 
-	bash run.sh -file [path to file] (For example: input/test.in)
+	bash run.sh -file [path to file] (For example: input/example.in)

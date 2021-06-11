@@ -10,7 +10,7 @@ TEST_CASE("wrong path to the file") {
 
 TEST_CASE("using file input/test1.in") {
     std::ifstream input_file, analyze_file;
-    std::string path_to_input = "", path = "input/test1.in", full_path = std::filesystem::current_path().string() + "/" + path;
+    std::string path_to_input = "", path = "tests/test1.in", full_path = std::filesystem::current_path().string() + "/" + path;
     REQUIRE(process_path(3, input_file, path, path_to_input, analyze_file, 1) == 0);
     REQUIRE(path_to_input == full_path);
     full_path.erase(full_path.find_last_of("/") + 1, full_path.size()); // .../gcc-cfg-utils/input/test.in -> .../gcc-cfg-utils/input/
