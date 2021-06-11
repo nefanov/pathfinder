@@ -34,9 +34,9 @@ TEST_CASE("examples/test1.c.012t.cfg.dot") {
 	{
 		int len = inp.size();
 		if (basic_block == 0)
-			foo6(code, basic_block, cluster, subgraph, inp, Clusters, V, Code, E, len);
+			blocks_handler(code, basic_block, cluster, subgraph, inp, Clusters, V, Code, E, len);
 		else
-			foo5(inp, basic_block, code, Code, subgraph);
+			code_handler(inp, basic_block, code, Code, subgraph);
 	}
     REQUIRE(Clusters[0].first == "cluster_foo");
     REQUIRE(Clusters[1].first == "cluster_main");

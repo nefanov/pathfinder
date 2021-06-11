@@ -16,10 +16,10 @@ int main(int argc, char* argv[])
 	while(std::getline(analyze_file, inp)) 
 	{
 		int len = inp.size();
-		if (basic_block == 0)
-			foo6(code, basic_block, cluster, subgraph, inp, Clusters, V, Code, E, len);
+		if (basic_block == 0) // input is not a code
+			blocks_handler(code, basic_block, cluster, subgraph, inp, Clusters, V, Code, E, len);
 		else
-			foo5(inp, basic_block, code, Code, subgraph);
+			code_handler(inp, basic_block, code, Code, subgraph);
 	}
 	graph_list(Clusters);
 	vertex_list(V, E, Clusters, Code);

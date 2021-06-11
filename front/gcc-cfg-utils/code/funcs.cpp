@@ -135,7 +135,7 @@ void graph_list(std::vector <std::pair<std::string, std::pair<int, int>>>& Clust
 	std::cout << std::endl;
 }
 
-void foo1(int& len, size_t& found, int& cluster, int& subgraph, std::string& inp, std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector <std::vector<std::string>>& V, std::vector <std::vector<std::string>>& Code, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E)
+void cluster_handler(int& len, size_t& found, int& cluster, int& subgraph, std::string& inp, std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector <std::vector<std::string>>& V, std::vector <std::vector<std::string>>& Code, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E)
 {
 	cluster++, subgraph++;
 	int k;
@@ -147,26 +147,24 @@ void foo1(int& len, size_t& found, int& cluster, int& subgraph, std::string& inp
 }
 
 
-void foo2(int& subgraph, int& k, std::string& inp, int& len, int& basic_block, std::string& code, std::vector <std::vector<std::string>>& Code)
+void entry_end_handler(int& subgraph, int& k, std::string& inp, int& len, int& basic_block, std::string& code, std::vector <std::vector<std::string>>& Code)
 {
-	if (inp[len - 1] == 92)
+	if (inp[len - 1] == '\\')
 	{
 		basic_block = 1;
-		while (k < len && inp[k] != '"')
-			k++;
+		for(k; k< len && inp[k] != '"'; k++);
 		code = inp.substr(k + 1, len - k) + "\n";
 	}
 	else
 	{
-		while (k < len && inp[k] != '"')
-			k++;
+		for(k; k< len && inp[k] != '"'; k++);
 		code = inp.substr(k + 1, len - k - 4) + "\n";
 		Code[subgraph].push_back(code);
 		code = "";
 	}
 }
 
-void foo3(std::string& code, int& basic_block, size_t& found1, int& len, std::string& inp, std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector <std::vector<std::string>>& V, std::vector <std::vector<std::string>>& Code, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, int& subgraph)
+void vertex_handler(std::string& code, int& basic_block, size_t& found1, int& len, std::string& inp, std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector <std::vector<std::string>>& V, std::vector <std::vector<std::string>>& Code, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, int& subgraph)
 {
 	int k = found1;
 	while (k < len && inp[k] != ' ')
@@ -180,10 +178,10 @@ void foo3(std::string& code, int& basic_block, size_t& found1, int& len, std::st
 	E[subgraph].resize(E[subgraph].size() + 1);
 	size_t found3 = inp.find("label=");
 	k = found3;
-	foo2(subgraph, k, inp, len, basic_block, code, Code);
+	entry_end_handler(subgraph, k, inp, len, basic_block, code, Code);
 }
 
-void foo4(size_t& found1, size_t& found2, std::string& inp, std::vector <std::vector<std::string>>& V, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, int& subgraph)
+void edges_handler(size_t& found1, size_t& found2, std::string& inp, std::vector <std::vector<std::string>>& V, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, int& subgraph)
 {
 	int k1r = found1, k1l = 0, k2l = found2, k2r;
 	while (inp[k1r] != ':')
@@ -206,7 +204,7 @@ void foo4(size_t& found1, size_t& found2, std::string& inp, std::vector <std::ve
 	E[subgraph][va].push_back({vb, ""});
 }
 
-void foo5(std::string& inp, int& basic_block, std::string& code, std::vector <std::vector<std::string>>& Code, int& subgraph)
+void code_handler(std::string& inp, int& basic_block, std::string& code, std::vector <std::vector<std::string>>& Code, int& subgraph)
 {
 	if (inp == "}\"];")
 	{
@@ -218,15 +216,15 @@ void foo5(std::string& inp, int& basic_block, std::string& code, std::vector <st
 		code += inp + "\n";
 }
 
-void foo6(std::string& code, int& basic_block, int& cluster, int& subgraph, std::string& inp, std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector <std::vector<std::string>>& V, std::vector <std::vector<std::string>>& Code, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, int& len)
+void blocks_handler(std::string& code, int& basic_block, int& cluster, int& subgraph, std::string& inp, std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector <std::vector<std::string>>& V, std::vector <std::vector<std::string>>& Code, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, int& len)
 {
 	size_t found = inp.find("subgraph"), found1 = inp.find("basic_block"), found2 = inp.find("->");
 	if (found != -1 && cluster == 0)
-		foo1(len, found, cluster, subgraph, inp, Clusters, V, Code, E);
+		cluster_handler(len, found, cluster, subgraph, inp, Clusters, V, Code, E);
 	if (inp == "}")
 		cluster = 0;
 	if (found1 != -1 && found2 == -1)
-		foo3(code, basic_block, found1, len, inp, Clusters, V, Code, E, subgraph);
+		vertex_handler(code, basic_block, found1, len, inp, Clusters, V, Code, E, subgraph);
 	else if (found1 != -1 && found2 != -1)
-		foo4(found1, found2, inp, V, E, subgraph);
+		edges_handler(found1, found2, inp, V, E, subgraph);
 }
