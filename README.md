@@ -14,7 +14,7 @@ In [path to file] you need to specify the path to the file pre-compiled with ***
 If you omit it, the program will ask you to specify it via stdin<br><br>
 
 When running ***bash run.sh*** it starts to work with code analysis.
-<br>For a test it is needed to write ***examples/test1.c*** (if you are in front/gcc-cfg-utils),
+<br>For a test it is needed to write ***examples/test1.c*** (if you are in front/gcc-cfg-utils and not using cmd args),
 <br>then write grammar rules (first: number of rules, then rules) 
 <br>For example:
 
