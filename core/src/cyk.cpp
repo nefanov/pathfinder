@@ -155,7 +155,7 @@ void transitive_closure(int& flag, std::vector<std::vector<std::vector<int> > >&
     flag = 1;
     std::vector<std::vector<int> > delta_I, temp;
     delta_I = delta[i];
-    delta[i] = razn(delta[i], delta[i]);
+    delta[i].clear();
     for (auto h: rules)
     {
         if (h.type == 1 && h.right1[0] == i) {
