@@ -73,7 +73,7 @@ TEST_CASE("examples/test1.c.012t.cfg.dot") {
 
 TEST_CASE("test_graph1") {
     int initial, tests;
-    std::ifstream fin(std::filesystem::current_path().string() + "/../../tests/test_graph1");
+    std::ifstream fin(std::filesystem::current_path().string() + "/tests/test_graph1");
     REQUIRE(fin.is_open());
     fin >> tests;
     for (int test = 0, m, V, E; test < tests; test++) {
@@ -135,7 +135,7 @@ TEST_CASE("test_graph1") {
 
 TEST_CASE("test_graph2") {
     int initial, tests;
-    std::ifstream fin(std::filesystem::current_path().string() + "/../../tests/test_graph2");
+    std::ifstream fin(std::filesystem::current_path().string() + "/tests/test_graph2");
     REQUIRE(fin.is_open());
     fin >> tests;
     for (int test = 0, m, V, E; test < tests; test++) {

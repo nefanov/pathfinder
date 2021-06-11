@@ -8,12 +8,12 @@ set(LIBRARY_OUTPUT_PATH build)
 
 include_directories(../../core/include)
 
-add_library(cyk SHARED ../../core/src/functions.cpp)
-add_library(c2g SHARED code/funcs.cpp)
+add_library(cyk SHARED ../../core/src/cyk.cpp)
+add_library(c2g SHARED code/c2g.cpp)
 
 add_executable(core ../../core/src/CYKonGraph.cpp)
 add_executable(code2graph code/code2graph.cpp)
-add_executable(test ../../tests/test.cpp)
+add_executable(test tests/test.cpp)
 
 target_link_libraries(core PRIVATE cyk)
 target_link_libraries(code2graph PRIVATE c2g)
