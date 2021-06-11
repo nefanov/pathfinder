@@ -94,7 +94,7 @@ std::vector<int> path_find(std::vector<std::vector<std::vector<std::string> > >&
 
 void print_results(int test, int ans, std::vector<std::vector<std::vector<int> > >& g, std::vector <std::string>& V_names, std::vector<std::vector<std::vector<std::string> > >& g_l, int& initial, std::vector<std::vector<std::vector<std::pair<int, std::pair<int, int> > > > >& last)
 {
-    std::cout << "Graph N" << test << std::endl;
+    std::cout << std::endl << "Graph N" << test << std::endl;
     std::cout << "Number of pairs = " << ans << std::endl;
     for (int i = 0; i < g[initial].size(); i++)
     {
@@ -103,8 +103,7 @@ void print_results(int test, int ans, std::vector<std::vector<std::vector<int> >
             if (g[initial][i][j] == 1)
             {
                 std::cout << "Path between " << V_names[i] << " " << V_names[j] << " with length ";
-                std::vector<int> way;
-                way = path_find(g_l, i, j, initial, last);
+                std::vector<int> way = path_find(g_l, i, j, initial, last);
                 std::cout << way.size() << std::endl;
                 for (int r = 0; r < way.size(); r++)
                     std::cout << V_names[way[r]] << " ";
@@ -112,7 +111,6 @@ void print_results(int test, int ans, std::vector<std::vector<std::vector<int> >
             }
         }
     }
-    std::cout << std::endl;
 }
 
 void find_rtdg(std::vector<std::vector<int> >& RTDG, std::vector<std::string>& nonterminals, std::vector<int>& topsort, std::vector<rule>& rules)
@@ -155,14 +153,20 @@ void find_rtdg(std::vector<std::vector<int> >& RTDG, std::vector<std::string>& n
 void transitive_closure(int& flag, std::vector<std::vector<std::vector<int> > >& delta,std::vector<std::vector<int> >& RTDG, std::vector<std::vector<std::vector<int> > >& g, int i, int k, std::vector<std::vector<std::vector<std::pair<int, std::pair<int, int> > > > >& last, std::vector<rule>& rules)
 {
     flag = 1;
-    std::vector<std::vector<int> > delta_I;
+    std::vector<std::vector<int> > delta_I, temp;
     delta_I = delta[i];
     delta[i] = razn(delta[i], delta[i]);
     for (auto h: rules)
     {
-        if (h.type == 1 && (h.right1[0] == i || h.right1[1] == i)) {
-            std::vector<std::vector<int>> temp;
-            temp = (h.right1[0] == RTDG[k][i]) ? mult(delta_I, g[h.right1[1]], h.left, i, h.right1[1], last) : mult(g[h.right1[0]], delta_I, h.left, h.right1[0], i, last);
+        if (h.type == 1 && h.right1[0] == i) {
+            temp = mult(delta_I, g[h.right1[1]], h.left, i, h.right1[1], last);
+            temp = razn(temp, g[h.left]);
+            delta[h.left] = sum(delta[h.left], temp);
+            g[h.left] = sum(g[h.left], delta[h.left]);
+        }
+        if (h.type == 1 && h.right1[1] == i) {
+            temp = mult(g[h.right1[0]], delta_I, h.left, h.right1[0], i, last);
+            temp = razn(temp, g[h.left]);
             delta[h.left] = sum(delta[h.left], temp);
             g[h.left] = sum(g[h.left], delta[h.left]);
         }
@@ -176,13 +180,14 @@ void input_rules(int i, std::vector<std::string>& nonterminals, std::vector<rule
     //! ================ strange code might be refactored ================ !
     int num = right.size();
     if (num != 1 && num != 2) {
-        std::cout << "right.size() != 1" << std::endl;
+        std::cout << "right.size() != (1 || 2)" << std::endl;
         exit(-1);
     }
     std::vector<int> FLAG(3,0);
-    (num == 2) ? a_2 = right[0], a_3 = right[1] : a_2 = right;
+    (num == 2) ? (a_2 = right[0], a_3 = right[1]) : a_2 = right;
     std::vector<std::string> a = {left, a_2, a_3};
-    for (int i = 0; i < ((num == 1) ? 1 : 3); FLAG[i] = check(nonterminals, a[i], initial), i++) {
+    for (int i = 0; i < ((num == 1) ? 1 : 3); i++) {
+        FLAG[i] = check(nonterminals, a[i], initial);
         if (FLAG[i] == nonterminals.size())
             nonterminals.push_back(a[i]);
     }

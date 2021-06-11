@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
             input_rules(i, nonterminals, rules, fin, initial);
         fin >> V >> E;
         std::vector<std::pair<int, std::pair<int, std::string> > > edges;
-        std::vector <std::string> V_names(V);
+        std::vector<std::string> V_names(V);
         std::vector<std::vector<std::pair<int, std::pair<int, int> > > > l (V, std::vector<std::pair<int, std::pair<int, int> > > (V, {-1, {-1, -1}}));
         input_V_names(V_names, edges, fin, V, E);
         for (int i = 0; i < nonterminals.size(); i++)
@@ -34,11 +34,11 @@ int main(int argc, char* argv[])
         for (int i = 0, eps = 0; i < nonterminals.size(); i++, eps = 0)
             arranging_rules_to_edges(i, eps, edges, g, g_l, initial, last, rules , V);
         std::vector<std::vector<std::vector<int> > > delta = g;
-        for (int k = RTDG.size() - 1, flag = 1; k >= 0; k--, flag = 1) //
-            while (flag = 0)
+        for (int k = RTDG.size() - 1, flag = 1; k >= 0; flag = 1, k--)
+            for (flag; flag; flag = 0)
                 for (auto i : RTDG[k])
                     if (not_null(delta[i]))
-                        transitive_closure(flag, delta, RTDG, g, i, k, last, rules);
+                        transitive_closure(flag, delta, RTDG, g, i, k, last, rules);     
         print_results(test, count_ans(g, initial), g, V_names, g_l, initial, last);
     }
     fin.close();

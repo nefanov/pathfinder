@@ -17,4 +17,4 @@ add_executable(test ../../tests/test.cpp)
 
 target_link_libraries(core PRIVATE cyk)
 target_link_libraries(code2graph PRIVATE c2g)
-target_link_libraries(test PRIVATE c2g)
+target_link_libraries(test PRIVATE c2g cyk)
