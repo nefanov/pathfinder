@@ -1,0 +1,6 @@
+front/gcc-cfg-utils/data/
+front/gcc-cfg-utils/CMakeCache.txt
+front/gcc-cfg-utils/CMakeFiles/
+front/gcc-cfg-utils/build/
+front/gcc-cfg-utils/Makefile
+front/gcc-cfg-utils/cmake_install.cmake

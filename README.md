@@ -1,19 +1,23 @@
 # pathfinder
 CFL-R-based software analysis tool
 # ResearchGate:
-1) https://www.researchgate.net/project/Modern-formal-languages-theory-based-methods-for-software-static-analysis
+1) [Modern formal languages theory based methods for software static analysis](https://www.researchgate.net/project/Modern-formal-languages-theory-based-methods-for-software-static-analysis)
 # Build
 
 
 1) cd front/gcc-cfg-utils
 2) cmake ./
 3) make
-4) bash run.sh
+4) bash run.sh [path to file]
+
+In [path to file] you need to specify the path to the file pre-compiled with ***gcc file_name -fdump-tree-cfg-graph***<br>
+If you omit it, the program will ask you to specify it via stdin<br><br>
 
 When running ***bash run.sh*** it starts to work with code analysis.
-<br>For a test it is needed to write ***../examples/test1.c***,
+<br>For a test it is needed to write ***examples/test1.c*** (if you are in front/gcc-cfg-utils and not using cmd args),
 <br>then write grammar rules (first: number of rules, then rules) 
 <br>For example:
+
 	5 
 	S AB
 	S AR
@@ -25,3 +29,12 @@ When running ***bash run.sh*** it starts to work with code analysis.
 
 It produces file build/core, which is core executable of CFL-R analysis and<br>
 can be called by frontend (see example in front/callgrind-front).
+<br><br>
+If you want to run the unit-tests you need write:
+	
+	bash run.sh -test
+
+It is also supported file input method<br>
+To use it write:
+
+	bash run.sh -file [path to file] (For example: input/example.in)
