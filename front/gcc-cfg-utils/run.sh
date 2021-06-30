@@ -1,3 +1,4 @@
+#!/bin/bash
 if [[ $0 == "run.sh" ]]; then
     path="./"
 else

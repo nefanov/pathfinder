@@ -49,24 +49,19 @@ TEST_CASE("examples/test1.c.012t.cfg.dot") {
     REQUIRE(V[0][1] == "fn_0_basic_block_1");
     REQUIRE(Code[0][1] == "EXIT\n");
     REQUIRE(V[0][2] == "fn_0_basic_block_2");
-    //REQUIRE(Code[0][2] == "");
     REQUIRE(V[1][0] == "fn_1_basic_block_0");
     REQUIRE(Code[0][0] == "ENTRY\n");
     REQUIRE(V[1][1] == "fn_1_basic_block_1");
     REQUIRE(Code[0][1] == "EXIT\n");
     REQUIRE(V[1][2] == "fn_1_basic_block_2");
-    //REQUIRE(Code[1][2] == "");
     REQUIRE(V[1][3] == "fn_1_basic_block_3");
-    //REQUIRE(Code[1][3] == "");
 
     REQUIRE(V[0][E[0][0][0].first] == "fn_0_basic_block_2");
     REQUIRE(V[0][E[0][0][1].first] == "fn_0_basic_block_1");
-    //REQUIRE(V[0][E[0][1][0].first] == "");
     REQUIRE(V[0][E[0][2][0].first] == "fn_0_basic_block_1");
 
     REQUIRE(V[1][E[1][0][0].first] == "fn_1_basic_block_2");
     REQUIRE(V[1][E[1][0][1].first] == "fn_1_basic_block_1");
-    //REQUIRE(V[1][E[0][1][0].first] == "");
     REQUIRE(V[1][E[1][2][0].first] == "fn_1_basic_block_3");
     REQUIRE(V[1][E[1][3][0].first] == "fn_1_basic_block_1");
 }
