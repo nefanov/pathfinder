@@ -38,8 +38,8 @@ TEST_CASE("examples/test1.c.012t.cfg.dot") {
 		else
 			code_handler(inp, basic_block, code, Code, subgraph);
 	}
-    REQUIRE(Clusters[0].first == "cluster_foo");
-    REQUIRE(Clusters[1].first == "cluster_main");
+    REQUIRE(Clusters[0].first == "foo");
+    REQUIRE(Clusters[1].first == "main");
     REQUIRE(Clusters[0].second.first == 0);
     REQUIRE(Clusters[0].second.second == 1);
     REQUIRE(Clusters[1].second.first == 0);
