@@ -27,6 +27,6 @@ int main(int argc, char* argv[])
 	std::vector<std::vector<std::pair<std::string, std::string> > > rules(E.size());
 	input_V_E(input_file, file, V, E, Clusters, rules, analyze_file);
 	to_fifo(bin_path, V, E, rules);
-  	execl((bin_path + "core").c_str(), (bin_path).c_str(), NULL);
+  	execl((bin_path + "core").c_str(), (bin_path + "core").c_str(), (bin_path).c_str(), NULL);
 	return -1;
 }
