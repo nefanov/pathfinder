@@ -11,7 +11,7 @@ int main(int argc, char* argv[])
 	std::string path_to_input = "", inp, code = "", bin_path = realpath(argv[0], bpath), path = (arg == "-file") ? argv[2] : arg;
 	std::ifstream analyze_file, input_file;
 	
-	bin_path.erase(bin_path.find_last_of("/") + 1, bin_path.size()); // .../gcc-cfg-utils/build/code2graphp -> .../gcc-cfg-utils/build/
+	bin_path.erase(bin_path.find_last_of("/") + 1, bin_path.size()); // .../gcc-cfg-utils/build/code2graph -> .../gcc-cfg-utils/build/
 	process_path(argc, input_file, path, path_to_input, analyze_file, file);
 	while(std::getline(analyze_file, inp)) 
 	{
