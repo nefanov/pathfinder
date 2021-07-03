@@ -1,7 +1,7 @@
 import sys
 import subprocess
 import os
-graph = open("data/graph_llvm", "w")
+graph = open("data/graph", "w")
 graph.write(str(len(sys.argv) - 1) + "\n") #print number of functions
 
 for file in range(1, len(sys.argv)):
@@ -38,6 +38,6 @@ for file in range(1, len(sys.argv)):
         graph.write(str(nodes.index(edges[i][0])) + " " + str(nodes.index(edges[i][1])) + " " + raw_input(str(edges[i])) + " " + "\n")
 
 #proc = subprocess.call(["ls", "-la"])
+graph.close()
 path_to = os.path.abspath(sys.argv[0])[:os.path.abspath(sys.argv[0]).find("code")]
-print(path_to)
-proc = subprocess.call([path_to + "build/core", path_to + "build/core", path_to + "build"])
+proc = subprocess.call([path_to + "build/core", path_to + "build/"])
