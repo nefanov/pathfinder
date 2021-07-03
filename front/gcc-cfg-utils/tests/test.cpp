@@ -2,6 +2,9 @@
 #include "catch.hpp"
 #include "code2graph.h"
 #include "CYKonGraph.h"
+#include <sys/wait.h>
+#include <sys/types.h>
+#include <unistd.h>
 TEST_CASE("wrong path to the file") {
     std::ifstream input_file, analyze_file;
     std::string path = "./", path_to_input = "";
@@ -179,5 +182,20 @@ TEST_CASE("test_graph2") {
             REQUIRE(V_names[way[1]] == "fn_1_basic_block_2");
             REQUIRE(V_names[way[2]] == "fn_1_basic_block_3");
         }
+    }
+}
+
+TEST_CASE("llvm") {
+    dup2(3, fileno(stdout));
+    std::string path = std::filesystem::current_path().string(), s1, s2;
+    system(("python " + path + "/code/llvm.py " + "-llvm " + "-file " + path + "/input/llvm.in " + path + "/examples/.foo.dot " + path + "/examples/.main.dot").c_str());
+    std::ifstream test_graph(path + "/tests/test_graph_llvm");
+    std::ifstream graph(path + "/data/graph");
+    REQUIRE(test_graph.is_open());
+    REQUIRE(graph.is_open());
+    for (int i = 0; i < 27; i++) {
+        test_graph >> s1;
+        graph >> s2;
+        REQUIRE(s1 == s2);
     }
 }

@@ -1,0 +1,27 @@
+2
+5
+S AB
+S AR
+R SB
+A a
+B b
+
+5 5
+Node0x24e0ed0 Node0x24e1c00 Node0x24e1dd0 Node0x24e1cb0 Node0x24e1e20 
+0 1 a
+1 2 a
+1 4 b
+2 3 a
+3 1 a
+
+5
+S AB
+S AR
+R SB
+A a
+B b
+
+2 2
+Node0x24e2460 Node0x24e2740 
+0 1 a
+1 1 b
