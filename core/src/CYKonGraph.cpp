@@ -8,7 +8,7 @@ int main(int argc, char* argv[])
 {
     int initial, tests;
     std::ifstream fin;
-    std::string bin_path = argv[0];
+    std::string bin_path = argv[1];
     fin.open(bin_path + "../data/graph");
     fin >> tests;
     for (int test = 0, m, V, E; test < tests; test++) {

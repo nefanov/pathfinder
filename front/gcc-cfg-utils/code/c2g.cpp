@@ -26,126 +26,16 @@ int process_path(int argc, std::ifstream& input_file, std::string& path, std::st
     return 0;
 }
 
-void to_fifo(std::string bin_path, std::vector <std::vector<std::string>>& V, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, std::vector<std::vector<std::pair<std::string, std::string> > >& rules)
-{
-	std::ofstream fout;
-	mkdir((bin_path + "../data").c_str(), 0777);
-	fout.open(bin_path + "../data/graph");
-	fout << E.size() << std::endl;
-	for (int i = 0; i < V.size(); i++)
-	{
-		fout << rules[i].size() << std::endl;
-		for (int j = 0; j < rules[i].size(); j++)
-			fout << rules[i][j].first << " " << rules[i][j].second << std::endl;
-		fout << std::endl;
-		int Vv = 0, Ee = 0;
-		Vv = V[i].size();
-		for (int j = 0; j < V[i].size(); j++)
-			Ee += E[i][j].size();
-		fout << Vv << " " << Ee << std::endl;
-		for (int j = 0; j < Vv; j++)
-			fout << V[i][j] << " ";
-		fout << std::endl;
-		for (int j = 0; j < V[i].size(); j++)
-			for (int q = 0; q < E[i][j].size(); q++)
-				fout << j << " " << E[i][j][q].first << " " << E[i][j][q].second << std::endl;
-		fout << std::endl;
-	}
-	fout.close();
-}
-
-void input_V_E(std::ifstream& fin, int file, std::vector <std::vector<std::string>>& V, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector<std::vector<std::pair<std::string, std::string> > >& rules, std::ifstream& input_file)
-{
-	std::cout << "Процесс установки букв на ребра и выбора грамматик для графов " << std::endl;
-	for (int i = 0, quan_of_rules; i < E.size(); i++)
-	{
-		std::cout << "Грамматика и граф для " << Clusters[i].first << std::endl;
-		if (file == 1) {
-			fin >> quan_of_rules;
-			std::cout << quan_of_rules << std::endl;
-		}
-		else
-			std::cin >> quan_of_rules;
-		std::string left, right;
-		for (int j = 0; j < quan_of_rules; j++)
-		{
-			if (file == 1) {
-				fin >> left >> right;
-				std::cout << left << " " << right << std::endl;
-			}
-			else
-				std::cin >> left >> right;
-			rules[i].push_back(make_pair(left, right));
-		}
-		for (int j = 0; j < E[i].size(); j++)
-		{
-			for (int q = 0; q < E[i][j].size(); q++)
-			{
-				std::cout << "Укажите букву для ребра " << V[i][j] << " -> " << V[i][E[i][j][q].first] << " :";
-				if (file == 1) {
-					fin >> E[i][j][q].second;
-					std::cout <<E[i][j][q].second << std::endl;
-				}
-				else
-					std::cin >> E[i][j][q].second;
-			}
-		}
-	}
-	input_file.close();
-}
-
-void adjacency_list(std::vector <std::vector<std::string>>& V, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E)
-{
-	std::cout << "Списки смежности для каждого графа" << std::endl;
-	for (int i = 0; i < E.size(); i++)
-	{
-		for (int j = 0; j < E[i].size(); j++)
-		{
-			std::cout << V[i][j] << " : ";
-			for (int q = 0; q < E[i][j].size(); q++)
-				std::cout << V[i][E[i][j][q].first] << " ";
-			std::cout << std::endl;
-		}
-		std::cout << std::endl;
-	}
-	std::cout << std::endl;
-}
-
-void vertex_list(std::vector <std::vector<std::string>>& V, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector <std::vector<std::string>>& Code)
-{
-	std::cout << "Список названий вершин каждого графа и их код" << std::endl;
-	for (int i = 0; i < V.size(); i++)
-	{
-		std::cout << Clusters[i].first << std::endl;
-		for (int j = 0; j < V[i].size(); j++)
-		{
-			std::cout << V[i][j] << std::endl;
-			std::cout << Code[i][j] << std::endl;
-		}
-		std::cout << std::endl << std::endl;
-	}
-	std::cout << std::endl;
-}
-
-void graph_list(std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters)
-{
-	std::cout << "Названия кластеров под различные графы, начальная и конечная вершины для них" << std::endl;
-	for (int i = 0; i < Clusters.size(); i++)
-		std::cout << Clusters[i].first << " " << Clusters[i].second.first << " " << Clusters[i].second.second << std::endl;
-	std::cout << std::endl;
-}
-
 void cluster_handler(int& len, size_t& found, int& cluster, int& subgraph, std::string& inp, std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector <std::vector<std::string>>& V, std::vector <std::vector<std::string>>& Code, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E)
 {
 	cluster++, subgraph++;
 	int k;
-	for(k = found + 10; k < len && inp[k] != '"'; k++);
-	Clusters.push_back({inp.substr(found + 10, k - found - 10), {0,0}});
+	for(k = found + 18; k < len && inp[k] != '"'; k++);
+	Clusters.push_back({inp.substr(found + 18, k - found - 18), {0,0}});
 	V.resize(V.size() + 1);
 	Code.resize(Code.size() + 1);
 	E.resize(E.size() + 1);
 }
-
 
 void entry_end_handler(int& subgraph, int& k, std::string& inp, int& len, int& basic_block, std::string& code, std::vector <std::vector<std::string>>& Code)
 {
@@ -204,6 +94,19 @@ void edges_handler(size_t& found1, size_t& found2, std::string& inp, std::vector
 	E[subgraph][va].push_back({vb, ""});
 }
 
+void blocks_handler(std::string& code, int& basic_block, int& cluster, int& subgraph, std::string& inp, std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector <std::vector<std::string>>& V, std::vector <std::vector<std::string>>& Code, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, int& len)
+{
+	size_t found = inp.find("subgraph"), found1 = inp.find("basic_block"), found2 = inp.find("->");
+	if (found != -1 && cluster == 0)
+		cluster_handler(len, found, cluster, subgraph, inp, Clusters, V, Code, E);
+	if (inp == "}")
+		cluster = 0;
+	if (found1 != -1 && found2 == -1)
+		vertex_handler(code, basic_block, found1, len, inp, Clusters, V, Code, E, subgraph);
+	else if (found1 != -1 && found2 != -1)
+		edges_handler(found1, found2, inp, V, E, subgraph);
+}
+
 void code_handler(std::string& inp, int& basic_block, std::string& code, std::vector <std::vector<std::string>>& Code, int& subgraph)
 {
 	if (inp == "}\"];")
@@ -216,15 +119,111 @@ void code_handler(std::string& inp, int& basic_block, std::string& code, std::ve
 		code += inp + "\n";
 }
 
-void blocks_handler(std::string& code, int& basic_block, int& cluster, int& subgraph, std::string& inp, std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector <std::vector<std::string>>& V, std::vector <std::vector<std::string>>& Code, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, int& len)
+void graph_list(std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters)
 {
-	size_t found = inp.find("subgraph"), found1 = inp.find("basic_block"), found2 = inp.find("->");
-	if (found != -1 && cluster == 0)
-		cluster_handler(len, found, cluster, subgraph, inp, Clusters, V, Code, E);
-	if (inp == "}")
-		cluster = 0;
-	if (found1 != -1 && found2 == -1)
-		vertex_handler(code, basic_block, found1, len, inp, Clusters, V, Code, E, subgraph);
-	else if (found1 != -1 && found2 != -1)
-		edges_handler(found1, found2, inp, V, E, subgraph);
+	std::cout << "Clusters names and their start and finish vertexes" << std::endl;
+	for (int i = 0; i < Clusters.size(); i++)
+		std::cout << Clusters[i].first << " " << Clusters[i].second.first << " " << Clusters[i].second.second << std::endl;
+	std::cout << std::endl;
+}
+
+void vertex_list(std::vector <std::vector<std::string>>& V, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector <std::vector<std::string>>& Code)
+{
+	std::cout << "Vertexes' names and their code" << std::endl;
+	for (int i = 0; i < V.size(); i++)
+	{
+		std::cout << Clusters[i].first << std::endl;
+		for (int j = 0; j < V[i].size(); j++)
+		{
+			std::cout << V[i][j] << std::endl;
+			std::cout << Code[i][j] << std::endl;
+		}
+		std::cout << std::endl << std::endl;
+	}
+	std::cout << std::endl;
+}
+
+void adjacency_list(std::vector <std::vector<std::string>>& V, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E)
+{
+	std::cout << "Adjacency lists for each graph" << std::endl;
+	for (int i = 0; i < E.size(); i++)
+	{
+		for (int j = 0; j < E[i].size(); j++)
+		{
+			std::cout << V[i][j] << " : ";
+			for (int q = 0; q < E[i][j].size(); q++)
+				std::cout << V[i][E[i][j][q].first] << " ";
+			std::cout << std::endl;
+		}
+		std::cout << std::endl;
+	}
+	std::cout << std::endl;
+}
+
+void input_V_E(std::ifstream& fin, int file, std::vector <std::vector<std::string>>& V, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector<std::vector<std::pair<std::string, std::string> > >& rules, std::ifstream& input_file)
+{
+	std::cout << "Letters on edjes placing process and grammars choosing " << std::endl;
+	for (int i = 0, quan_of_rules; i < E.size(); i++)
+	{
+		std::cout << "Grammar and graph for " << Clusters[i].first << std::endl;
+		if (file == 1) {
+			fin >> quan_of_rules;
+			std::cout << quan_of_rules << std::endl;
+		}
+		else
+			std::cin >> quan_of_rules;
+		std::string left, right;
+		for (int j = 0; j < quan_of_rules; j++)
+		{
+			if (file == 1) {
+				fin >> left >> right;
+				std::cout << left << " " << right << std::endl;
+			}
+			else
+				std::cin >> left >> right;
+			rules[i].push_back(make_pair(left, right));
+		}
+		for (int j = 0; j < E[i].size(); j++)
+		{
+			for (int q = 0; q < E[i][j].size(); q++)
+			{
+				std::cout << "Pick an letter for edge " << V[i][j] << " -> " << V[i][E[i][j][q].first] << " :";
+				if (file == 1) {
+					fin >> E[i][j][q].second;
+					std::cout <<E[i][j][q].second << std::endl;
+				}
+				else
+					std::cin >> E[i][j][q].second;
+			}
+		}
+	}
+	input_file.close();
+}
+
+void to_fifo(std::string bin_path, std::vector <std::vector<std::string>>& V, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, std::vector<std::vector<std::pair<std::string, std::string> > >& rules)
+{
+	std::ofstream fout;
+	mkdir((bin_path + "../data").c_str(), 0777);
+	fout.open(bin_path + "../data/graph");
+	fout << E.size() << std::endl;
+	for (int i = 0; i < V.size(); i++)
+	{
+		fout << rules[i].size() << std::endl;
+		for (int j = 0; j < rules[i].size(); j++)
+			fout << rules[i][j].first << " " << rules[i][j].second << std::endl;
+		fout << std::endl;
+		int Vv = 0, Ee = 0;
+		Vv = V[i].size();
+		for (int j = 0; j < V[i].size(); j++)
+			Ee += E[i][j].size();
+		fout << Vv << " " << Ee << std::endl;
+		for (int j = 0; j < Vv; j++)
+			fout << V[i][j] << " ";
+		fout << std::endl;
+		for (int j = 0; j < V[i].size(); j++)
+			for (int q = 0; q < E[i][j].size(); q++)
+				fout << j << " " << E[i][j][q].first << " " << E[i][j][q].second << std::endl;
+		fout << std::endl;
+	}
+	fout.close();
 }
