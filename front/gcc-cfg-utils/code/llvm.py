@@ -2,17 +2,14 @@ import sys
 import subprocess
 import os
 graph = open("data/graph", "w")
-if sys.argv[1] == "-llvm":
-    extraargs = 2
-else:
-    extraargs = 1
+extraargs = 2 if sys.argv[1] == "-llvm" else 1
 graph.write(str(len(sys.argv) - extraargs) + "\n") #print number of functions
 
-for file in range(extraargs, len(sys.argv)):
-    if file != extraargs:
+for fnumber in range(extraargs, len(sys.argv)): #analyze function with number fnumber
+    if fnumber != extraargs:
         graph.write("\n")
-    print("Analyzing file " + sys.argv[file])
-    data = open(sys.argv[file]).readlines()
+    print("Analyzing file " + sys.argv[fnumber])
+    data = open(sys.argv[fnumber]).readlines()
     nodes, edges, rules, blocks_of_code = [], [], [], {}
 
     for i in data:
@@ -41,7 +38,6 @@ for file in range(extraargs, len(sys.argv)):
     for i in range(len(edges)):
         graph.write(str(nodes.index(edges[i][0])) + " " + str(nodes.index(edges[i][1])) + " " + raw_input(str(edges[i])) + " " + "\n")
 
-#proc = subprocess.call(["ls", "-la"])
 graph.close()
 path_to = os.path.abspath(sys.argv[0])[:os.path.abspath(sys.argv[0]).find("code")]
 proc = subprocess.call([path_to + "build/core", path_to + "build/"])
