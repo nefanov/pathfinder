@@ -1,10 +1,18 @@
 import sys
 import subprocess
 import os
-graph = open("data/graph", "w")
-extraargs = 2 if sys.argv[1] == "-llvm" else 1
-graph.write(str(len(sys.argv) - extraargs) + "\n") #print number of functions
 
+graph = open("data/graph", "w")
+if sys.argv[1] == "-llvm":
+    if sys.argv[2] == "-file":
+        input_data = open(sys.argv[3]).readlines()
+        extraargs, k, is_file = 4, 0, True
+    else:
+        extraargs, k, is_file = 2, 0, False
+else: 
+    extraargs, k, is_file = 1, 0, False
+graph.write(str(len(sys.argv) - extraargs) + "\n") #print number of functions
+print(sys.argv)
 for fnumber in range(extraargs, len(sys.argv)): #analyze function with number fnumber
     if fnumber != extraargs:
         graph.write("\n")
@@ -22,13 +30,15 @@ for fnumber in range(extraargs, len(sys.argv)): #analyze function with number fn
                 b = c + 1
             edges.append((i[1:b-1], i[i.find("->") + 3:-2]))
 
-    n = int(input("Specify the number of rules: "))
+    n = int(input("Specify the number of rules: ")) if is_file == False else int(input_data[k])
     graph.write(str(n) + "\n")
+    k+=1
 
     #input rules
     for i in range(n):
-        rules.append(raw_input().split())
+        rules.append(raw_input().split()) if is_file == False else rules.append(input_data[k].split())
         graph.write(rules[i][0] + " " + rules[i][1] + "\n")
+        k+=1
     
     #output
     graph.write("\n" + str(len(edges)) + " " + str(len(edges)) + "\n") #write number of edges
@@ -36,7 +46,9 @@ for fnumber in range(extraargs, len(sys.argv)): #analyze function with number fn
         graph.write(i + " ")
     graph.write("\n")
     for i in range(len(edges)):
-        graph.write(str(nodes.index(edges[i][0])) + " " + str(nodes.index(edges[i][1])) + " " + raw_input(str(edges[i])) + " " + "\n")
+        letters = raw_input(str(edges[i])) + "\n" if is_file == False else input_data[k]
+        k += 1
+        graph.write(str(nodes.index(edges[i][0])) + " " + str(nodes.index(edges[i][1])) + " " + letters)
 
 graph.close()
 path_to = os.path.abspath(sys.argv[0])[:os.path.abspath(sys.argv[0]).find("code")]
