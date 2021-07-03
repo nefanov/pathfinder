@@ -5,6 +5,9 @@
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+
 TEST_CASE("wrong path to the file") {
     std::ifstream input_file, analyze_file;
     std::string path = "./", path_to_input = "";
@@ -186,7 +189,7 @@ TEST_CASE("test_graph2") {
 }
 
 TEST_CASE("llvm") {
-    dup2(3, fileno(stdout));
+    mkdir("data", 0777);
     std::string path = std::filesystem::current_path().string(), s1, s2;
     system(("python " + path + "/code/llvm.py " + "-llvm " + "-file " + path + "/input/llvm.in " + path + "/examples/.foo.dot " + path + "/examples/.main.dot").c_str());
     std::ifstream test_graph(path + "/tests/test_graph_llvm");
