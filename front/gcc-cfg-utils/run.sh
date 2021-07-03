@@ -12,5 +12,9 @@ if [[ $1 == "-test" ]]; then
         build/test
     fi
 else
-    $path/build/code2graph $1 $2
+    if [[ $1 == "-llvm" ]]; then
+        python $path/code/llvm.py $*
+    else
+        $path/build/code2graph $*
+    fi
 fi

@@ -52,4 +52,7 @@ To analyze LLVM IR bitcode use:
 
 	clang -S -emit-llvm [filename.c]
 	opt -dot-cfg [filename.ll]
+	---------------------------------------
 	python code/llvm.py [.function1.dot] [.function2.dot] ...
+	or
+	bash run.sh -llvm [.function1.dot] [.function2.dot] ...

@@ -2,10 +2,14 @@ import sys
 import subprocess
 import os
 graph = open("data/graph", "w")
-graph.write(str(len(sys.argv) - 1) + "\n") #print number of functions
+if sys.argv[1] == "-llvm":
+    extraargs = 2
+else:
+    extraargs = 1
+graph.write(str(len(sys.argv) - extraargs) + "\n") #print number of functions
 
-for file in range(1, len(sys.argv)):
-    if file != 1:
+for file in range(extraargs, len(sys.argv)):
+    if file != extraargs:
         graph.write("\n")
     print("Analyzing file " + sys.argv[file])
     data = open(sys.argv[file]).readlines()
