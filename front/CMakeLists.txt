@@ -6,13 +6,13 @@ set(CMAKE_CXX_COMPILER g++-9)
 set(EXECUTABLE_OUTPUT_PATH build)
 set(LIBRARY_OUTPUT_PATH build)
 
-include_directories(../../core/include)
+include_directories(../core/include)
 
-add_library(cyk SHARED ../../core/src/cyk.cpp)
-add_library(c2g SHARED code/c2g.cpp)
+add_library(cyk SHARED ../core/src/cyk.cpp)
+add_library(c2g SHARED gcc-cfg-utils/code/c2g.cpp)
 
-add_executable(core ../../core/src/CYKonGraph.cpp)
-add_executable(code2graph code/code2graph.cpp)
+add_executable(core ../core/src/CYKonGraph.cpp)
+add_executable(code2graph gcc-cfg-utils/code/code2graph.cpp)
 add_executable(test tests/test.cpp)
 
 target_link_libraries(core PRIVATE cyk)

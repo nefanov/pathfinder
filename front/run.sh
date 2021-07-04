@@ -11,10 +11,4 @@ if [[ $1 == "-test" ]]; then
         cd $path
         build/test
     fi
-else
-    if [[ $1 == "-llvm" ]]; then
-        python $path/code/llvm.py $*
-    else
-        $path/build/code2graph $*
-    fi
 fi

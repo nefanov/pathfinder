@@ -20,19 +20,19 @@ TEST_CASE("using file input/test1.in") {
     REQUIRE(process_path(3, input_file, path, path_to_input, analyze_file, 1) == 0);
     REQUIRE(path_to_input == full_path);
     full_path.erase(full_path.find_last_of("/") + 1, full_path.size()); // .../gcc-cfg-utils/input/test.in -> .../gcc-cfg-utils/input/
-    REQUIRE(path == full_path + "../examples/test1.c" + ".012t.cfg.dot");
+    REQUIRE(path == full_path + "../gcc-cfg-utils/examples/test1.c" + ".012t.cfg.dot");
 }
 
 TEST_CASE("path to examples/test1.c") {
     std::ifstream input_file, analyze_file;
-    std::string path = "examples/test1.c", path_to_input = "";
+    std::string path = "gcc-cfg-utils/examples/test1.c", path_to_input = "";
     REQUIRE(process_path(2, input_file, path, path_to_input, analyze_file, 0) == 0);
 }
 
 TEST_CASE("examples/test1.c.012t.cfg.dot") {
     std::string inp, code = "";
     int code_descr = 0, cluster = 0, edgeline = 0, basic_block = 0, subgraph = -1;
-    std::ifstream analyze_file("examples/test1.c.012t.cfg.dot");
+    std::ifstream analyze_file("gcc-cfg-utils/examples/test1.c.012t.cfg.dot");
 	std::vector <std::pair<std::string, std::pair<int, int>>> Clusters;
 	std::vector <std::vector<std::string>> V, Code;
     std::vector <std::vector<std::vector<std::pair<int, std::string>>>> E;
@@ -185,20 +185,5 @@ TEST_CASE("test_graph2") {
             REQUIRE(V_names[way[1]] == "fn_1_basic_block_2");
             REQUIRE(V_names[way[2]] == "fn_1_basic_block_3");
         }
-    }
-}
-
-TEST_CASE("llvm") {
-    mkdir("data", 0777);
-    std::string path = std::filesystem::current_path().string(), s1, s2;
-    system(("python " + path + "/code/llvm.py " + "-llvm " + "-file " + path + "/input/llvm.in " + path + "/examples/.foo.dot " + path + "/examples/.main.dot").c_str());
-    std::ifstream test_graph(path + "/tests/test_graph_llvm");
-    std::ifstream graph(path + "/data/graph");
-    REQUIRE(test_graph.is_open());
-    REQUIRE(graph.is_open());
-    for (int i = 0; i < 27; i++) {
-        test_graph >> s1;
-        graph >> s2;
-        REQUIRE(s1 == s2);
     }
 }
