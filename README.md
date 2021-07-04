@@ -49,12 +49,3 @@ Also it is supported llvm compilers<br>
 To analyze LLVM IR bitcode you should switch to LLVM branch:
 
 	git checkout llvm
-	---------------------------------------
-	clang -S -emit-llvm [filename.c]
-	opt -dot-cfg [filename.ll]
-	---------------------------------------
-	python code/llvm.py [path to 1st .dot] [path to 2nd .dot] ...
-	or
-	bash run.sh -llvm [path to 1st .dot] [path to 2nd .dot] ...
-	or 
-	bash run.sh -llvm -file [input/llvm.in] [path to 1st .dot] [path to 2nd .dot] ...
