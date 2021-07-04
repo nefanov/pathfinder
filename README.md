@@ -10,7 +10,7 @@ CFL-R-based software analysis tool
 * LLVM 10.0.0 *(only for llvm analysis)*
 * PYTHON 2.7.18 *(only for llvm analysis)*
 # Build
-	cd front/gcc-cfg-utils
+	cd front
 	cmake ./
 	make
 # Run
