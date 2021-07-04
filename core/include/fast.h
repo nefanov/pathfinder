@@ -4,6 +4,7 @@
 #include <unordered_set>
 #include <math.h>
 #include <deque>
+#include <fstream>
 #define NUMBER_OF_LETTERS_WITH_OVERFLOW 30
 class rule
 {

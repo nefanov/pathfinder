@@ -1,4 +1,4 @@
-#include "../include/fast.h"
+#include "fast.h"
 int initial, P, V;
 
 std::vector<unsigned int> new_fastset()
@@ -73,16 +73,21 @@ int triple_hash(int a1, int a2, int a3, int len1, int len2, int len3)
 }
 std::vector<rule> rules;
 
-int main() {
+int main(int argc, char* argv[]) {
     //grammar
+    int m, number, E; //quantity of rules
     std::vector <std::string> nonterminals;
-    int m; //quantity of rules
-    std::cin >> m;
-    std::vector <rule> eps_rules;
     std::vector <std::vector<int>> lol(NUMBER_OF_LETTERS_WITH_OVERFLOW);
+    std::vector <rule> eps_rules;
+    std::string bin_path = argv[1], str;
+    std::ifstream fin(bin_path + "../data/graph");
+    if (!fin.is_open()) {
+        std::cout << bin_path + "../data/graph" << " was not opened\n";
+    }
+    fin >> number >> m;
     for (int i = 0, num = 0; i < m; i++) {
         std::string left, right;
-        std::cin >> left >> right;
+        fin >> left >> right;
         if (right.size() == 2)
             num = 2;
         else if (right.size() == 1)
@@ -119,15 +124,15 @@ int main() {
             left_rules[u].push_back(i), right_rules[v].push_back(i);
         }
     }
-
-    int E;
-    std::cin >> V >> E;
+    fin >> V >> E;
+    for (int i = 0; i < V; i++)
+        fin >> str; //skip nodes' names
     P = ceil(log10(V));
     if (P == 0)
         P += 1;
     if (P > V)
         P = V;
-    std::vector < std::pair < int, std::pair < int, std::string > > > edges;
+    std::vector <std::pair <int, std::pair <int, std::string> > > edges;
     std::deque <std::vector<int>> W;
     std::vector<unsigned int> a = new_fastset();
     std::vector <std::vector <std::vector <unsigned int> > > H1(nonterminals.size(), std::vector<std::vector <unsigned int > > (V, a)), H2(nonterminals.size(), std::vector<std::vector <unsigned int> > (V, a));
@@ -135,12 +140,11 @@ int main() {
     for (int i = 0; i < E; i++)
     {
         int u1, u2, s = 0;
-        std::string a;
-        std::cin >> u1 >> u2 >> a;
-        if (a != "0")
-            s = a[0] - 'a' + 1;
+        fin >> u1 >> u2 >> str;
+        if (str != "0")
+            s = str[0] - 'a' + 1;
         for (auto j: lol[s]) {
-            //std::vector<int> z = {u1, j, u2};
+            std::vector<int> z = {u1, j, u2};
             W.push_back({u1, j, u2});
             add_value(H1[j][u1], u2), add_value(H2[j][u2], u1);
         }
@@ -150,7 +154,7 @@ int main() {
     {
         for (int j = 0; j < V; j++)
         {
-            //std::vector<int> z = {i.left, j, i.left};
+            std::vector<int> z = {i.left, j, i.left};
             W.push_back({i.left, j, i.left});
             add_value(H1[j][i.left], i.left), add_value(H2[j][i.left], i.left);
         }
@@ -208,4 +212,5 @@ int main() {
         }
     }
     std::cout << counter << std::endl;
+    fin.close();
 }
