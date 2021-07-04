@@ -10,13 +10,9 @@ CFL-R-based software analysis tool
 * LLVM 10.0.0 *(only for llvm analysis)*
 * PYTHON 2.7.18 *(only for llvm analysis)*
 # Build
-
-
-	cd front/gcc-cfg-utils
+	cd front
 	cmake ./
 	make
-	bash run.sh [path to file]
-
 # Run
 In [path to file] you need to specify the path to the file pre-compiled<br>with `gcc file_name -fdump-tree-cfg-graph`<br>
 If you omit it, the program will ask you to specify it via stdin<br><br>
@@ -47,14 +43,9 @@ To use it write:
 
 	bash run.sh -file [path to file] (For example: input/example.in)
 
-Also it is supported llvm compilers<br>
-To analyze LLVM IR bitcode use:
+# LLVM IR
 
-	clang -S -emit-llvm [filename.c]
-	opt -dot-cfg [filename.ll]
-	---------------------------------------
-	python code/llvm.py [.function1.dot] [.function2.dot] ...
-	or
-	bash run.sh -llvm [.function1.dot] [.function2.dot] ...
-	or 
-	bash run.sh -llvm -file [input/llvm.in] [.function1.dot] [.function2.dot] ...
+Also it is supported llvm compilers<br>
+To analyze LLVM IR bitcode you should switch to LLVM branch:
+
+	git checkout llvm

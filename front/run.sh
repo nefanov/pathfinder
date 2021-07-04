@@ -1,14 +1,11 @@
 #!/bin/bash
-if [[ $0 == "run.sh" ]]; then
-    path="./"
-else
-    path=${0%run.sh}
-fi
+absolute_path=`readlink -e "$0"`
+absolute_path=`dirname "$absolute_path"`
+absolute_path=${absolute_path%/gcc-cfg-utils}
+echo $absolute_path
 if [[ $1 == "-test" ]]; then
-    if [[ $0 == "run.sh" ]]; then
-        build/test
-    else
-        cd $path
-        build/test
-    fi
+    cd $absolute_path
+    build/test
+else
+    $absolute_path/build/code2graph $@
 fi
