@@ -11,6 +11,4 @@ if [[ $1 == "-test" ]]; then
         cd $path
         build/test
     fi
-else
-    $path/build/code2graph $1 $2
 fi

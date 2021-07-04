@@ -1,0 +1,14 @@
+digraph "CFG for 'foo' function" {
+	label="CFG for 'foo' function";
+
+	Node0x24e0ed0 [shape=record,label="{%0:\l  %1 = alloca i32, align 4\l  %2 = alloca i32, align 4\l  %3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([14 x i8], [14\l... x i8]* @.str, i64 0, i64 0))\l  store i32 0, i32* %1, align 4\l  store i32 0, i32* %2, align 4\l  br label %4\l}"];
+	Node0x24e0ed0 -> Node0x24e1c00;
+	Node0x24e1c00 [shape=record,label="{%4:\l4:                                                \l  %5 = load i32, i32* %2, align 4\l  %6 = icmp slt i32 %5, 10\l  br i1 %6, label %7, label %13\l|{<s0>T|<s1>F}}"];
+	Node0x24e1c00:s0 -> Node0x24e1dd0;
+	Node0x24e1c00:s1 -> Node0x24e1e20;
+	Node0x24e1dd0 [shape=record,label="{%7:\l7:                                                \l  %8 = load i32, i32* %1, align 4\l  %9 = add nsw i32 %8, 2\l  store i32 %9, i32* %1, align 4\l  br label %10\l}"];
+	Node0x24e1dd0 -> Node0x24e1cb0;
+	Node0x24e1cb0 [shape=record,label="{%10:\l10:                                               \l  %11 = load i32, i32* %2, align 4\l  %12 = add nsw i32 %11, 1\l  store i32 %12, i32* %2, align 4\l  br label %4\l}"];
+	Node0x24e1cb0 -> Node0x24e1c00;
+	Node0x24e1e20 [shape=record,label="{%13:\l13:                                               \l  %14 = load i32, i32* %1, align 4\l  ret i32 %14\l}"];
+}

@@ -15,11 +15,11 @@ jobs:
         uses: actions/checkout@v1
 
       - name: Build
-        working-directory: front/gcc-cfg-utils
+        working-directory: front
         run: |
           cmake ./
           make
 
       - name: Unit tests
-        working-directory: front/gcc-cfg-utils
+        working-directory: front
         run: build/test
