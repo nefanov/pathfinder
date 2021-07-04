@@ -4,16 +4,16 @@ Firstly, create a dot file for analyzed code:
 
     gcc -fdump-tree-cfg [filename]
 
-Then, run analyzer:<br>(specify path to `run.sh` correctly if you run it not from here)
+Then, run analyzer:<br>(you can specify path to `start.sh` or to `run.sh` if you want)
 
-    bash ../run.sh
+    bash start.sh
     or
-    bash ../run.sh [path to .dot file]
+    bash start.sh [path to .dot file]
     or
-    bash ../run.sh -file [path to input file] (e.g input/example.in)
+    bash start.sh -file [path to input file] (e.g input/example.in)
 
 You can run unit-tests by
 
-    bash ../run.sh -test
+    bash start.sh -test
 
 # Description
