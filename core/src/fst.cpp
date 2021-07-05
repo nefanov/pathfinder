@@ -148,3 +148,27 @@ int filling_edge_matrices(int P, std::ifstream& fin, std::vector <std::vector<in
     }
     return 0;
 }
+
+int baseline_cfl(int flag, int i2, int i3, std::vector <std::vector <std::vector <unsigned int> > >& Hi, std::vector<std::vector<int>> side_rules, int B, int P, int V, std::vector <rule>& rules, std::vector<std::vector<std::vector<std::vector<int>> > >& prev, std::deque <std::vector<int>>& W, std::vector <std::vector <std::vector <unsigned int> > >& H1, std::vector <std::vector <std::vector <unsigned int> > >& H2)
+{
+    //flag: 0 1
+    //Hi H2 H1
+    //i2 u v
+    //i3 v u
+    //i4 v d
+    //i5 d u
+    for (auto i:side_rules[B]) {
+        int C = rules[i].right1[flag], A = rules[i].left, i4, i5;
+        std::vector<unsigned int> w1 = Hi[C][i2], w2 = Hi[A][i3], w3 = difference(P, V, w1, w2);
+        std::vector<int> l = not_null(P, w3);
+        for (auto d: l)
+        {
+            (flag) ? (i4 = d, i5 = i3) : (i4 = i3, i5 = d);
+            add_value(H2[A][i4], i5, P), add_value(H1[A][i5], i4, P);
+            W.push_back({i5, A, i4});
+            if (prev[i5][A][i4][0] == -1)
+                prev[i5][A][i4][0] = i2, prev[i5][A][i4][1] = C, prev[i5][A][i4][2] = B;
+        }
+    }
+    return 0;
+}
