@@ -1,13 +1,11 @@
 #include "fast.h"
 
-
-
 int main(int argc, char* argv[]) {
     int m, number, E, initial, P, V;
     std::vector <std::string> nonterminals;
     std::vector <std::vector<int>> lol(NUMBER_OF_LETTERS_WITH_OVERFLOW);
     std::vector <rule> eps_rules, rules;
-    std::string bin_path = argv[1], str;
+    std::string bin_path = argv[1];
     std::ifstream fin(bin_path + "../data/graph");
     if (!fin.is_open()) {
         std::cout << bin_path + "../data/graph" << " was not opened" << std::endl;
@@ -22,40 +20,24 @@ int main(int argc, char* argv[]) {
         if (rules[i].type == 1)
             left_rules[rules[i].right1[0]].push_back(i), right_rules[rules[i].right1[1]].push_back(i);
     
-    fin >> V >> E;
+    fin >> V >> E; //input number of vertexes and edges
+    std::vector<std::string> nodes_names(V);
     for (int i = 0; i < V; i++)
-        fin >> str; //skip nodes' names
+        fin >> nodes_names[i];
         
-    P = ceil(log10(V));
-    if (P == 0)
-        P += 1;
-    if (P > V)
-        P = V;
+    P = (V != 1) ? ceil(log10(V)): 1; //defining the length of binary number
+
     std::vector <std::pair <int, std::pair <int, std::string> > > edges;
     std::deque <std::vector<int>> W;
     std::vector<unsigned int> a = new_fastset(P, V);
     std::vector <std::vector <std::vector <unsigned int> > > H1(nonterminals.size(), std::vector<std::vector <unsigned int > > (V, a)), H2(nonterminals.size(), std::vector<std::vector <unsigned int> > (V, a));
     std::vector<std::vector<std::vector<std::vector<int>> > > prev(V, std::vector<std::vector<std::vector<int > > > (nonterminals.size(), std::vector<std::vector<int>>  (V, {-1, -1, -1})));
     for (int i = 0; i < E; i++)
-    {
-        int u1, u2, s = 0;
-        fin >> u1 >> u2 >> str;
-        if (str != "0")
-            s = str[0] - 'a';
-        for (auto j: lol[s]) {
-            W.push_back({u1, j, u2});
-            add_value(H1[j][u1], u2, P), add_value(H2[j][u2], u1, P);
-        }
-    }
+        filling_edge_matrices(P, fin, lol, W, H1, H2);
 
     for (auto i: eps_rules)
-    {
         for (int j = 0; j < V; j++)
-        {
-            W.push_back({i.left, j, i.left});
-            add_value(H1[j][i.left], i.left, P), add_value(H2[j][i.left], i.left, P);
-        }
-    }
+            filling_loops(j, P, i, W, H1, H2); //if word is empty
 
     while (!W.empty())
     {

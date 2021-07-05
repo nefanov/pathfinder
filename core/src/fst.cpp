@@ -127,3 +127,24 @@ int input_rules(int& initial, std::vector <rule>& eps_rules, std::vector <std::v
     }
     return 0;
 }
+
+int filling_loops(int j, int P, rule& i, std::deque <std::vector<int>>& W, std::vector <std::vector <std::vector <unsigned int> > >& H1, std::vector <std::vector <std::vector <unsigned int> > >& H2)
+{
+    W.push_back({i.left, j, i.left});
+    add_value(H1[j][i.left], i.left, P), add_value(H2[j][i.left], i.left, P);
+    return 0;
+}
+
+int filling_edge_matrices(int P, std::ifstream& fin, std::vector <std::vector<int>>& lol, std::deque <std::vector<int>>& W, std::vector <std::vector <std::vector <unsigned int> > >& H1, std::vector <std::vector <std::vector <unsigned int> > >& H2)
+{
+    int u1, u2, s = 0;
+    std::string str;
+    fin >> u1 >> u2 >> str;
+    if (str != "0")
+        s = str[0] - 'a';
+    for (auto j: lol[s]) {
+        W.push_back({u1, j, u2});
+        add_value(H1[j][u1], u2, P), add_value(H2[j][u2], u1, P);
+    }
+    return 0;
+}

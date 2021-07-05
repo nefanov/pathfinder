@@ -24,3 +24,5 @@ int check(int& initial, std::vector<std::string>& a, std::string b);
 int triple_hash(int a1, int a2, int a3, int len1, int len2, int len3);
 int input_rules(int& initial, std::vector <rule>& eps_rules, std::vector <std::vector<int>>& lol, std::ifstream& fin, std::vector <std::string>& nonterminals, std::vector <rule>& rules);
 int output(int P, int V, int initial, std::vector<std::vector<std::vector<std::vector<int>> > >& prev, std::vector <std::vector <std::vector <unsigned int> > >& H1);
+int filling_loops(int j, int P, rule& i, std::deque <std::vector<int>>& W, std::vector <std::vector <std::vector <unsigned int> > >& H1, std::vector <std::vector <std::vector <unsigned int> > >& H2);
+int filling_edge_matrices(int P, std::ifstream& fin, std::vector <std::vector<int>>& lol, std::deque <std::vector<int>>& W, std::vector <std::vector <std::vector <unsigned int> > >& H1, std::vector <std::vector <std::vector <unsigned int> > >& H2);
