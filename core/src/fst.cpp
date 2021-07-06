@@ -2,14 +2,14 @@
 
 std::vector<unsigned int> new_fastset(int P, int V)
 {
-    int k = (V % P == 0)? (V / P): (V / P) + 1;
+    int k = (V % P == 0) ? (V / P): (V / P) + 1;
     std::vector<unsigned int> fset(k, 0);
     return fset;
 }
 void add_value(std::vector<unsigned int> &kek, int a, int P)
 {
     kek[a / P] |= (1 << (a % P));
-}       
+}
 
 std::vector<unsigned int> difference(int P, int V, std::vector<unsigned int> &kek1, std::vector<unsigned int> &kek2)
 {
@@ -22,6 +22,7 @@ std::vector<unsigned int> difference(int P, int V, std::vector<unsigned int> &ke
     }
     return ans;
 }
+
 std::vector<int> not_null(int P, std::vector<unsigned int> &kek)
 {
     std::vector<int> ans;
@@ -37,6 +38,7 @@ std::vector<int> not_null(int P, std::vector<unsigned int> &kek)
     }
     return ans;
 }
+
 std::vector<int> path_find(int i, int j, int nonterm, std::vector<std::vector<std::vector<std::vector<int> > > >& prev)
 {
     std::vector<int> u = prev[i][nonterm][j];
@@ -51,6 +53,7 @@ std::vector<int> path_find(int i, int j, int nonterm, std::vector<std::vector<st
         way.push_back(k);
     return way;
 }
+
 int check(int& initial, std::vector<std::string>& a, std::string b)
 {
     for (int i = 0; i < a.size(); i++)
@@ -66,11 +69,6 @@ int check(int& initial, std::vector<std::string>& a, std::string b)
         initial = a.size();
     return a.size();
 }
-int triple_hash(int a1, int a2, int a3, int len1, int len2, int len3)
-{
-    return a3 + len3 * a2 + len3 * len2 * a1;
-}
-
 
 int output(int P, int V, int initial, std::vector<std::vector<std::vector<std::vector<int>> > >& prev, std::vector <std::vector <std::vector <unsigned int> > >& H1)
 {
