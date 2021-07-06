@@ -12,7 +12,7 @@ add_library(fst SHARED ../core/src/fst.cpp)
 add_library(c2g SHARED gcc-cfg-utils/code/c2g.cpp)
 
 
-add_executable(core ../core/src/fast1.cpp)
+add_executable(core ../core/src/fast.cpp)
 add_executable(code2graph gcc-cfg-utils/code/code2graph.cpp)
 add_executable(test tests/test.cpp)
 
