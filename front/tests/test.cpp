@@ -1,7 +1,7 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 #include "code2graph.h"
-#include "CYKonGraph.h"
+#include "fast.h"
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -29,161 +29,83 @@ TEST_CASE("path to examples/test1.c") {
     REQUIRE(process_path(2, input_file, path, path_to_input, analyze_file, 0) == 0);
 }
 
-TEST_CASE("examples/test1.c.012t.cfg.dot") {
-    std::string inp, code = "";
-    int code_descr = 0, cluster = 0, edgeline = 0, basic_block = 0, subgraph = -1;
-    std::ifstream analyze_file("gcc-cfg-utils/examples/test1.c.012t.cfg.dot");
-	std::vector <std::pair<std::string, std::pair<int, int>>> Clusters;
-	std::vector <std::vector<std::string>> V, Code;
-    std::vector <std::vector<std::vector<std::pair<int, std::string>>>> E;
-    while(std::getline(analyze_file, inp)) 
-	{
-		int len = inp.size();
-		if (basic_block == 0)
-			blocks_handler(code, basic_block, cluster, subgraph, inp, Clusters, V, Code, E, len);
-		else
-			code_handler(inp, basic_block, code, Code, subgraph);
-	}
-    REQUIRE(Clusters[0].first == "foo");
-    REQUIRE(Clusters[1].first == "main");
-    REQUIRE(Clusters[0].second.first == 0);
-    REQUIRE(Clusters[0].second.second == 1);
-    REQUIRE(Clusters[1].second.first == 0);
-    REQUIRE(Clusters[1].second.second == 1);
-    REQUIRE(V[0][0] == "fn_0_basic_block_0");
-    REQUIRE(Code[0][0] == "ENTRY\n");
-    REQUIRE(V[0][1] == "fn_0_basic_block_1");
-    REQUIRE(Code[0][1] == "EXIT\n");
-    REQUIRE(V[0][2] == "fn_0_basic_block_2");
-    REQUIRE(V[1][0] == "fn_1_basic_block_0");
-    REQUIRE(Code[0][0] == "ENTRY\n");
-    REQUIRE(V[1][1] == "fn_1_basic_block_1");
-    REQUIRE(Code[0][1] == "EXIT\n");
-    REQUIRE(V[1][2] == "fn_1_basic_block_2");
-    REQUIRE(V[1][3] == "fn_1_basic_block_3");
-
-    REQUIRE(V[0][E[0][0][0].first] == "fn_0_basic_block_2");
-    REQUIRE(V[0][E[0][0][1].first] == "fn_0_basic_block_1");
-    REQUIRE(V[0][E[0][2][0].first] == "fn_0_basic_block_1");
-
-    REQUIRE(V[1][E[1][0][0].first] == "fn_1_basic_block_2");
-    REQUIRE(V[1][E[1][0][1].first] == "fn_1_basic_block_1");
-    REQUIRE(V[1][E[1][2][0].first] == "fn_1_basic_block_3");
-    REQUIRE(V[1][E[1][3][0].first] == "fn_1_basic_block_1");
+TEST_CASE("new_fastset") {
+    std::vector<unsigned int> check1(4, 0), check2(3, 0);
+    REQUIRE(check1 == new_fastset(3, 10));
+    REQUIRE(check2 == new_fastset(4, 12));
 }
 
-TEST_CASE("test_graph1") {
-    int initial, tests;
-    std::ifstream fin(std::filesystem::current_path().string() + "/tests/test_graph1");
-    REQUIRE(fin.is_open());
-    fin >> tests;
-    for (int test = 0, m, V, E; test < tests; test++) {
-        std::vector<rule> rules;
-        std::vector<int> topsort, way;
-        std::vector<std::vector<std::vector<std::pair<int, std::pair<int, int> > > > > last;
-        std::vector<std::string> nonterminals;
-        std::vector<std::vector<int> > RTDG;
-        std::vector<std::vector<std::vector<int> > > g;
-        std::vector<std::vector<std::vector<std::string> > > g_l;
-        fin >> m; //quantity of rules
-        for (int i = 0; i < m; i++)
-            input_rules(i, nonterminals, rules, fin, initial);
-        fin >> V >> E;
-        std::vector<std::pair<int, std::pair<int, std::string> > > edges;
-        std::vector <std::string> V_names(V);
-        std::vector<std::vector<std::pair<int, std::pair<int, int> > > > l (V, std::vector<std::pair<int, std::pair<int, int> > > (V, {-1, {-1, -1}}));
-        input_V_names(V_names, edges, fin, V, E);
-        for (int i = 0; i < nonterminals.size(); i++)
-            last.push_back(l);
-        find_rtdg(RTDG, nonterminals, topsort, rules);
-        // Semi-Naive CFL
-        for (int i = 0, eps = 0; i < nonterminals.size(); i++, eps = 0)
-            arranging_rules_to_edges(i, eps, edges, g, g_l, initial, last, rules , V);
-        std::vector<std::vector<std::vector<int> > > delta = g;
-        for (int k = RTDG.size() - 1, flag = 1; k >= 0; k--, flag = 1) //
-            for (flag; flag; flag = 0)
-                for (auto i : RTDG[k])
-                    if (not_null(delta[i]))
-                        transitive_closure(flag, delta, RTDG, g, i, k, last, rules);
-        if (test == 0) {
-            REQUIRE(count_ans(g, initial) == 2);
-            REQUIRE(g[initial][0][1] == 1);
-            way = path_find(g_l, 0, 1, initial, last);
-            REQUIRE(way.size() == 2);
-            REQUIRE(V_names[way[0]] == "fn_0_basic_block_0");
-            REQUIRE(V_names[way[1]] == "fn_0_basic_block_1");
-            REQUIRE(g[initial][0][2] == 1);
-            way = path_find(g_l, 0, 2, initial, last);
-            REQUIRE(way.size() == 2);
-            REQUIRE(V_names[way[0]] == "fn_0_basic_block_0");
-            REQUIRE(V_names[way[1]] == "fn_0_basic_block_2");
-        }
-        else {
-            REQUIRE(count_ans(g, initial) == 2);
-            REQUIRE(g[initial][2][3] == 1);
-            REQUIRE(g[initial][3][1] == 1);
-            way = path_find(g_l, 2, 3, initial, last);
-            REQUIRE(way.size() == 2);
-            REQUIRE(V_names[way[0]] == "fn_1_basic_block_2");
-            REQUIRE(V_names[way[1]] == "fn_1_basic_block_3");
-            way = path_find(g_l, 3, 1, initial, last);
-            REQUIRE(way.size() == 2);
-            REQUIRE(V_names[way[0]] == "fn_1_basic_block_3");
-            REQUIRE(V_names[way[1]] == "fn_1_basic_block_1");
-        }
-    }
+TEST_CASE("difference") {
+    int P = 1, V = 5;
+    std::vector<unsigned int> v11 = {1, 0, 1, 0, 1}, v12 = {0, 1, 1, 0, 0}, check1 = {1, 0, 0, 0, 1};
+    REQUIRE(check1 == difference(P, V, v11, v12));
+    P = 2, V = 6;
+    std::vector<unsigned int> v21 = {3, 2, 1}, v22 = {2, 1, 1}, check2 = {1, 2, 0};
+    REQUIRE(check2 == difference(P, V, v21, v22));
 }
 
-TEST_CASE("test_graph2") {
-    int initial, tests;
-    std::ifstream fin(std::filesystem::current_path().string() + "/tests/test_graph2");
-    REQUIRE(fin.is_open());
-    fin >> tests;
-    for (int test = 0, m, V, E; test < tests; test++) {
-        std::vector<rule> rules;
-        std::vector<int> topsort, way;
-        std::vector<std::vector<std::vector<std::pair<int, std::pair<int, int> > > > > last;
-        std::vector<std::string> nonterminals;
-        std::vector<std::vector<int> > RTDG;
-        std::vector<std::vector<std::vector<int> > > g;
-        std::vector<std::vector<std::vector<std::string> > > g_l;
-        fin >> m; //quantity of rules
-        for (int i = 0; i < m; i++)
-            input_rules(i, nonterminals, rules, fin, initial);
-        fin >> V >> E;
-        std::vector<std::pair<int, std::pair<int, std::string> > > edges;
-        std::vector <std::string> V_names(V);
-        std::vector<std::vector<std::pair<int, std::pair<int, int> > > > l (V, std::vector<std::pair<int, std::pair<int, int> > > (V, {-1, {-1, -1}}));
-        input_V_names(V_names, edges, fin, V, E);
-        for (int i = 0; i < nonterminals.size(); i++)
-            last.push_back(l);
-        find_rtdg(RTDG, nonterminals, topsort, rules);
-        // Semi-Naive CFL
-        for (int i = 0, eps = 0; i < nonterminals.size(); i++, eps = 0)
-            arranging_rules_to_edges(i, eps, edges, g, g_l, initial, last, rules , V);
-        std::vector<std::vector<std::vector<int> > > delta = g;
-        for (int k = RTDG.size() - 1, flag = 1; k >= 0; k--, flag = 1) //
-            for (flag; flag; flag = 0)
-                for (auto i : RTDG[k])
-                    if (not_null(delta[i]))
-                        transitive_closure(flag, delta, RTDG, g, i, k, last, rules);
-        if (test == 0) {
-            REQUIRE(count_ans(g, initial) == 1);
-            REQUIRE(g[initial][0][1] == 1);
-            way = path_find(g_l, 0, 1, initial, last);
-            REQUIRE(way.size() == 3);
-            REQUIRE(V_names[way[0]] == "fn_0_basic_block_0");
-            REQUIRE(V_names[way[1]] == "fn_0_basic_block_2");
-            REQUIRE(V_names[way[2]] == "fn_0_basic_block_1");
-        }
-        else {
-            REQUIRE(count_ans(g, initial) == 1);
-            REQUIRE(g[initial][0][3] == 1);
-            way = path_find(g_l, 0, 3, initial, last);
-            REQUIRE(way.size() == 3);
-            REQUIRE(V_names[way[0]] == "fn_1_basic_block_0");
-            REQUIRE(V_names[way[1]] == "fn_1_basic_block_2");
-            REQUIRE(V_names[way[2]] == "fn_1_basic_block_3");
-        }
+TEST_CASE("add_value") {
+    int a1 = 2, a2 = 3, P = 2;
+    std::vector<unsigned int> v1 = {3, 2, 1}, v2 = v1, check1 = {3, 3, 1}, check2 = {3, 2, 1};
+    add_value(v1, a1, P);
+    add_value(v2, a2, P);
+    REQUIRE(check1 == v1);
+    REQUIRE(check2 == v2);
+}
+
+TEST_CASE("not_null") {
+    int P1 = 2, P2= 3;
+    std::vector<unsigned int> v1 = {3, 1, 2, 0}, v2 = {0, 1, 0, 5};
+    std::vector<int> check1 = {0, 1, 2, 5}, check2 = {3, 9, 11};
+    REQUIRE(check1 == not_null(P1, v1));
+    REQUIRE(check2 == not_null(P2, v2));
+}
+
+TEST_CASE("path_find") {
+    int i = 0, j = 1, nonterm = 0;
+    std::vector<std::vector<std::vector<std::vector<int> > > > prev(3, std::vector<std::vector<std::vector<int>>>(4, std::vector<std::vector<int>>(3, std::vector<int>(3, -1))));
+    prev[0][0][1][0] = 2, prev[0][0][1][1] = 2, prev[0][0][1][2] = 1;
+    std::vector<int> check = {0 , 2, 1};
+    REQUIRE(check == path_find(i, j, nonterm, prev));
+}
+
+TEST_CASE("check") {
+    int initial = 0;
+    std::vector<std::string> a = {"A", "S", "B"}, a3 = {"A", "B", "S"};
+    std::string b1 = "A", b2 = "R", b3 = "S";
+    int check1 = 0, check2 = 3, check3 = 2; 
+    REQUIRE(check1 == check(initial, a, b1));
+    REQUIRE(initial == 0);
+    REQUIRE(check2 == check(initial, a, b2));
+    REQUIRE(initial == 0);
+    REQUIRE(check3 == check(initial, a3, b3));
+    REQUIRE(initial == 2);
+}
+
+TEST_CASE("test1.in") {
+    system("build/code2graph -file tests/test1.in");
+    std::ifstream graph("data/graph");
+    std::ifstream testgraph("tests/test_graph1");
+    std::string str1, str2;
+    while(!graph.eof() && !testgraph.eof()) {
+        graph >> str1;
+        testgraph >> str2;
+        REQUIRE(str1 == str2);
     }
+    graph.close();
+    testgraph.close();
+}
+
+TEST_CASE("test2.in") {
+    system("build/code2graph -file tests/test2.in");
+    std::ifstream graph("data/graph");
+    std::ifstream testgraph("tests/test_graph2");
+    std::string str1, str2;
+    while(!graph.eof() && !testgraph.eof()) {
+        graph >> str1;
+        testgraph >> str2;
+        REQUIRE(str1 == str2);
+    }
+    graph.close();
+    testgraph.close();
 }
