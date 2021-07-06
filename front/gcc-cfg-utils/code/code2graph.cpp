@@ -6,7 +6,8 @@ int main(int argc, char* argv[])
 	std::string arg = (argc >= 2) ? argv[1] : "";
 	int file = (argc >= 2) ? ((arg == "-file") ? 1 : 0) : 0, code_descr = 0, cluster = 0, edgeline = 0, basic_block = 0, subgraph = -1;
 	std::vector <std::pair<std::string, std::pair<int, int>>> Clusters;
-	std::vector <std::vector<std::string>> V, Code;
+	std::vector <std::vector<std::pair<std::string, int>>> V; //V-<block_name, number in V_new>
+	std::vector <std::vector<std::string>> Code;
 	std::vector <std::vector<std::vector<std::pair<int, std::string>>>> E;
 	std::string path_to_input = "", inp, code = "", bin_path = realpath(argv[0], bpath), path = (arg == "-file") ? argv[2] : arg;
 	std::ifstream analyze_file, input_file;
