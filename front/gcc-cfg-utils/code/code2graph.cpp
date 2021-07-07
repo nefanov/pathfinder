@@ -22,12 +22,18 @@ int main(int argc, char* argv[])
 		else
 			code_handler(inp, basic_block, code, Code, subgraph);
 	}
-	graph_list(Clusters);
-	vertex_list(V, E, Clusters, Code);
-	adjacency_list(V, E);
-	std::vector<std::vector<std::pair<std::string, std::string> > > rules(E.size());
-	input_V_E(input_file, file, V, E, Clusters, rules, analyze_file);
-	to_fifo(bin_path, V, E, rules);
+
+	std::vector<std::vector<int>> V_new; // V_new - (graph number, vertex number in graph, number of new_vertex in old_vertex)
+	std::vector<std::string> Code_new;
+	std::vector<std::vector<std::pair<int, std::string>>> E_new; 
+	new_graph_creator(V, E, Code, V_new, E_new, Code_new);
+	graph_merger(Clusters, V, E, Code, V_new, E_new, Code_new);
+	graph_list(Clusters, V);
+	vertex_list(V, Clusters, V_new, Code_new);
+	adjacency_list(E_new);
+	std::vector<std::pair<std::string, std::string> > rules;
+	input_V_E(input_file, file, E_new, rules, analyze_file);
+	to_fifo(bin_path, V_new, V, E_new, rules);
   	execl((bin_path + "core").c_str(), (bin_path + "core").c_str(), (bin_path).c_str(), NULL);
 	return -1;
 }

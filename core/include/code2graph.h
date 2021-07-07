@@ -37,22 +37,34 @@ void blocks_handler    (std::string& code, int& basic_block, int& cluster, int& 
 void code_handler      (std::string& inp, int& basic_block, std::string& code, 
                         std::vector <std::vector<std::string>>& Code, int& subgraph);
 
-void graph_list        (std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters);
+void new_graph_creator (std::vector<std::vector<std::pair<std::string, int>>>& V, 
+                        std::vector<std::vector<std::vector<std::pair<int, std::string>>>>& E, 
+                        std::vector<std::vector<std::string>>& Code,
+                        std::vector<std::vector<int>>& V_new, 
+                        std::vector<std::vector<std::pair<int, std::string>>>& E_new,
+                        std::vector<std::string>& Code_new);
 
-void vertex_list       (std::vector <std::vector<std::pair<std::string, int>>>& V, 
-                        std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, 
-                        std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, 
-                        std::vector <std::vector<std::string>>& Code);
+void graph_merger      (std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters,
+                        std::vector<std::vector<std::pair<std::string, int>>>& V, 
+                        std::vector<std::vector<std::vector<std::pair<int, std::string>>>>& E, 
+                        std::vector<std::vector<std::string>>& Code,
+                        std::vector<std::vector<int>>& V_new, 
+                        std::vector<std::vector<std::pair<int, std::string>>>& E_new,
+                        std::vector<std::string>& Code_new);
 
-void adjacency_list    (std::vector <std::vector<std::pair<std::string, int>>>& V, 
-                        std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E);
+void graph_list        (std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters,
+                        std::vector <std::vector<std::pair<std::string, int>>>& V);
 
-void input_V_E         (std::ifstream& fin, int file, std::vector <std::vector<std::pair<std::string, int>>>& V, 
-                        std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, 
-                        std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, 
-                        std::vector<std::vector<std::pair<std::string, std::string> > >& rules, 
-                        std::ifstream& input_file);
+void vertex_list       (std::vector <std::vector<std::pair<std::string, int>>>& V,
+                        std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters,
+                        std::vector<std::vector<int>>& V_new, std::vector<std::string>& Code_new);
 
-void to_fifo           (std::string bin_path, std::vector <std::vector<std::pair<std::string, int>>>& V, 
-                        std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, 
-                        std::vector<std::vector<std::pair<std::string, std::string> > >& rules);
+void adjacency_list    (std::vector<std::vector<std::pair<int, std::string>>>& E_new);
+
+void input_V_E         (std::ifstream& fin, int file, std::vector<std::vector<std::pair<int, std::string>>>& E_new, 
+                        std::vector<std::pair<std::string, std::string> >& rules, std::ifstream& input_file);
+
+void to_fifo           (std::string bin_path, std::vector<std::vector<int>>& V_new, 
+                        std::vector <std::vector<std::pair<std::string, int>>>& V,
+                        std::vector<std::vector<std::pair<int, std::string>>>& E_new, 
+                        std::vector<std::pair<std::string, std::string> >& rules);

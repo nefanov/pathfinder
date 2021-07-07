@@ -43,7 +43,7 @@ void entry_end_handler(int& subgraph, int& k, std::string& inp, int& len, int& b
 	{
 		basic_block = 1;
 		for(k; k< len && inp[k] != '"'; k++);
-		code = inp.substr(k + 1, len - k) + "\n";
+		code = "";
 	}
 	else
 	{
@@ -112,118 +112,162 @@ void code_handler(std::string& inp, int& basic_block, std::string& code, std::ve
 	if (inp == "}\"];")
 	{
 		basic_block = 0;
-		code += "}\n";
 		Code[subgraph].push_back(code);
 	}
 	else
 		code += inp + "\n";
 }
 
-void graph_list(std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters)
+void new_graph_creator(std::vector<std::vector<std::pair<std::string, int>>>& V, std::vector<std::vector<std::vector<std::pair<int, std::string>>>>& E, std::vector<std::vector<std::string>>& Code, std::vector<std::vector<int>>& V_new, std::vector<std::vector<std::pair<int, std::string>>>& E_new, std::vector<std::string>& Code_new)
 {
-	std::cout << "Clusters names and their start and finish vertexes" << std::endl;
-	for (int i = 0; i < Clusters.size(); i++)
-		std::cout << Clusters[i].first << " " << Clusters[i].second.first << " " << Clusters[i].second.second << std::endl;
-	std::cout << std::endl;
-}
-
-void vertex_list(std::vector <std::vector<std::pair<std::string, int>>>& V, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector <std::vector<std::string>>& Code)
-{
-	std::cout << "Vertexes' names and their code" << std::endl;
 	for (int i = 0; i < V.size(); i++)
 	{
-		std::cout << Clusters[i].first << std::endl;
 		for (int j = 0; j < V[i].size(); j++)
-		{
-			std::cout << V[i][j].first << std::endl;
-			std::cout << Code[i][j] << std::endl;
+		{			
+			V[i][j].second = V_new.size();
+			V_new.push_back({i, j, 0});
+			Code_new.push_back(Code[i][j]);
 		}
-		std::cout << std::endl << std::endl;
 	}
-	std::cout << std::endl;
-}
-
-void adjacency_list(std::vector <std::vector<std::pair<std::string, int>>>& V, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E)
-{
-	std::cout << "Adjacency lists for each graph" << std::endl;
+	E_new.resize(V_new.size());
 	for (int i = 0; i < E.size(); i++)
 	{
 		for (int j = 0; j < E[i].size(); j++)
 		{
-			std::cout << V[i][j].first << " : ";
 			for (int q = 0; q < E[i][j].size(); q++)
-				std::cout << V[i][E[i][j][q].first].first << " ";
-			std::cout << std::endl;
+			{
+				E_new[V[i][j].second].push_back(std::make_pair(V[i][E[i][j][q].first].second, E[i][j][q].second));
+			}
 		}
+	}
+}
+
+void graph_merger(std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector<std::vector<std::pair<std::string, int>>>& V, std::vector<std::vector<std::vector<std::pair<int, std::string>>>>& E, std::vector<std::vector<std::string>>& Code, std::vector<std::vector<int>>& V_new, std::vector<std::vector<std::pair<int, std::string>>>& E_new, std::vector<std::string>& Code_new)
+{
+	for (int i = 0; i < V_new.size(); i++)
+	{
+		for (int j = 0; j < Clusters.size(); j++)
+		{
+			int found = Code_new[i].find(Clusters[j].first);
+			if (found != std::string::npos)
+			{
+				int counter = 0;
+				for (int q = 0; q < found; q++)
+				{
+					if (Code_new[i][q] == '"')
+					{
+						counter++;
+					}
+				}
+				if (counter % 2 == 0)
+				{
+					int found1 = found;
+					while (Code_new[i][found1] != '\n')
+						found1++;
+					std::string code = Code_new[i].substr(found1 + 1, Code_new[i].size() - found1 - 1);
+					Code_new[i] = Code_new[i].substr(0, found1 + 1);
+					V_new.push_back({V_new[i][0], V_new[i][1], V_new[i][2] + 1});
+					Code_new.push_back(code);
+					E_new.push_back(E_new[i]);
+					E_new[i].clear();
+					E_new[i].push_back(std::make_pair(V[j][Clusters[j].second.first].second, ""));
+					E_new[V[j][Clusters[j].second.second].second].push_back(std::make_pair(E_new.size() - 1, ""));
+				}
+			}
+		}
+	}
+}
+
+void graph_list(std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector <std::vector<std::pair<std::string, int>>>& V)
+{
+	std::cout << "Clusters names and their start and finish vertexes" << std::endl;
+	for (int i = 0; i < Clusters.size(); i++)
+		std::cout << Clusters[i].first << " " << V[i][Clusters[i].second.first].second << " " << V[i][Clusters[i].second.second].second << std::endl;
+	std::cout << std::endl;
+}
+
+void vertex_list(std::vector <std::vector<std::pair<std::string, int>>>& V, std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector<std::vector<int>>& V_new, std::vector<std::string>& Code_new)
+{
+	std::cout << "Vertexes' names and their code" << std::endl;
+	for (int i = 0; i < V_new.size(); i++)
+	{
+		std::cout << i << " " << Clusters[V_new[i][0]].first << " " << V[V_new[i][0]][V_new[i][1]].first + "_" + std::to_string(V_new[i][2]) << std::endl;
+		std::cout << Code_new[i] << std::endl;
+	}
+	std::cout << std::endl;
+}
+
+void adjacency_list(std::vector<std::vector<std::pair<int, std::string>>>& E_new)
+{
+	std::cout << "Adjacency list" << std::endl;
+	for (int i = 0; i < E_new.size(); i++)
+	{
+		std::cout << i << " : ";
+		for (int j = 0; j < E_new[i].size(); j++)
+			std::cout << E_new[i][j].first << " ";
 		std::cout << std::endl;
 	}
 	std::cout << std::endl;
 }
 
-void input_V_E(std::ifstream& fin, int file, std::vector <std::vector<std::pair<std::string, int>>>& V, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector<std::vector<std::pair<std::string, std::string> > >& rules, std::ifstream& input_file)
+void input_V_E(std::ifstream& fin, int file, std::vector<std::vector<std::pair<int, std::string>>>& E_new, std::vector<std::pair<std::string, std::string> >& rules, std::ifstream& input_file)
 {
-	std::cout << "Letters on edjes placing process and grammars choosing " << std::endl;
-	for (int i = 0, quan_of_rules; i < E.size(); i++)
+	std::cout << "Letters on edjes placing and grammar choosing processes " << std::endl;
+	int quan_of_rules;
+	std::cout << "Grammar" << std::endl;
+	if (file == 1) {
+		fin >> quan_of_rules;
+		std::cout << quan_of_rules << std::endl;
+	}
+	else
+		std::cin >> quan_of_rules;
+	std::string left, right;
+	for (int j = 0; j < quan_of_rules; j++)
 	{
-		std::cout << "Grammar and graph for " << Clusters[i].first << std::endl;
 		if (file == 1) {
-			fin >> quan_of_rules;
-			std::cout << quan_of_rules << std::endl;
+			fin >> left >> right;
+			std::cout << left << " " << right << std::endl;
 		}
 		else
-			std::cin >> quan_of_rules;
-		std::string left, right;
-		for (int j = 0; j < quan_of_rules; j++)
+			std::cin >> left >> right;
+		rules.push_back(make_pair(left, right));
+	}
+	for (int i = 0; i < E_new.size(); i++)
+	{
+		for (int j = 0; j < E_new[i].size(); j++)
 		{
+			std::cout << "Pick an letter for edge " << i << " -> " << E_new[i][j].first << " :";
 			if (file == 1) {
-				fin >> left >> right;
-				std::cout << left << " " << right << std::endl;
+				fin >> E_new[i][j].second;
+				std::cout << E_new[i][j].second << std::endl;
 			}
 			else
-				std::cin >> left >> right;
-			rules[i].push_back(make_pair(left, right));
-		}
-		for (int j = 0; j < E[i].size(); j++)
-		{
-			for (int q = 0; q < E[i][j].size(); q++)
-			{
-				std::cout << "Pick an letter for edge " << V[i][j].first << " -> " << V[i][E[i][j][q].first].first << " :";
-				if (file == 1) {
-					fin >> E[i][j][q].second;
-					std::cout <<E[i][j][q].second << std::endl;
-				}
-				else
-					std::cin >> E[i][j][q].second;
-			}
+				std::cin >> E_new[i][j].second;
 		}
 	}
 	input_file.close();
 }
 
-void to_fifo(std::string bin_path, std::vector <std::vector<std::pair<std::string, int>>>& V, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, std::vector<std::vector<std::pair<std::string, std::string> > >& rules)
+void to_fifo(std::string bin_path, std::vector<std::vector<int>>& V_new, std::vector <std::vector<std::pair<std::string, int>>>& V, std::vector<std::vector<std::pair<int, std::string>>>& E_new, std::vector<std::pair<std::string, std::string> >& rules)
 {
 	std::ofstream fout;
 	mkdir((bin_path + "../data").c_str(), 0777);
 	fout.open(bin_path + "../data/graph");
-	fout << E.size() << std::endl;
-	for (int i = 0; i < V.size(); i++)
-	{
-		fout << rules[i].size() << std::endl;
-		for (int j = 0; j < rules[i].size(); j++)
-			fout << rules[i][j].first << " " << rules[i][j].second << std::endl;
-		fout << std::endl;
-		int Vv = 0, Ee = 0;
-		Vv = V[i].size();
-		for (int j = 0; j < V[i].size(); j++)
-			Ee += E[i][j].size();
-		fout << Vv << " " << Ee << std::endl;
-		for (int j = 0; j < Vv; j++)
-			fout << V[i][j].first << " ";
-		fout << std::endl;
-		for (int j = 0; j < V[i].size(); j++)
-			for (int q = 0; q < E[i][j].size(); q++)
-				fout << j << " " << E[i][j][q].first << " " << E[i][j][q].second << std::endl;
-		fout << std::endl;
-	}
+	fout << 1 << std::endl;
+	fout << rules.size() << std::endl;
+	for (int i = 0; i < rules.size(); i++)
+		fout << rules[i].first << " " << rules[i].second << std::endl;
+	fout << std::endl;
+	int Ee = 0;
+	for (int i = 0; i < E_new.size(); i++)
+		Ee += E_new[i].size();
+	fout << V_new.size() << " " << Ee << std::endl;
+	for (int i = 0; i < V_new.size(); i++)
+		fout << V[V_new[i][0]][V_new[i][1]].first + "_" + std::to_string(V_new[i][2]) << " ";
+	fout << std::endl;
+	for (int i = 0; i < E_new.size(); i++)
+		for (int j = 0; j < E_new[i].size(); j++)
+			fout << i << " " << E_new[i][j].first << " " << E_new[i][j].second << std::endl;
+	fout << std::endl;
 	fout.close();
 }
