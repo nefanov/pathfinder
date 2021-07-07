@@ -6,3 +6,5 @@ front/Makefile
 front/cmake_install.cmake
 .vscode/
 *.out
+_deps/
+front/DartConfiguration.tcl

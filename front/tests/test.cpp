@@ -1,12 +1,7 @@
 #define CATCH_CONFIG_MAIN
-#include "catch.hpp"
+#include "catch2/catch_test_macros.hpp"
 #include "code2graph.h"
 #include "fast.h"
-#include <sys/wait.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/stat.h>
 
 TEST_CASE("wrong path to the file") {
     std::ifstream input_file, analyze_file;
