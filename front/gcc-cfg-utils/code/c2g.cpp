@@ -118,6 +118,47 @@ void code_handler(std::string& inp, int& basic_block, std::string& code, std::ve
 		code += inp + "\n";
 }
 
+void graph_list(std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters)
+{
+	std::cout << "Clusters names and their start and finish vertexes" << std::endl;
+	for (int i = 0; i < Clusters.size(); i++)
+		std::cout << Clusters[i].first << " " << Clusters[i].second.first << " " << Clusters[i].second.second << std::endl;
+	std::cout << std::endl;
+}
+
+void vertex_list(std::vector <std::vector<std::pair<std::string, int>>>& V, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector <std::vector<std::string>>& Code)
+{
+	std::cout << "Vertexes' names and their code" << std::endl;
+	for (int i = 0; i < V.size(); i++)
+	{
+		std::cout << Clusters[i].first << std::endl;
+		for (int j = 0; j < V[i].size(); j++)
+		{
+			std::cout << V[i][j].first << std::endl;
+			std::cout << Code[i][j] << std::endl;
+		}
+		std::cout << std::endl << std::endl;
+	}
+	std::cout << std::endl;
+}
+
+void adjacency_list(std::vector <std::vector<std::pair<std::string, int>>>& V, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E)
+{
+	std::cout << "Adjacency lists for each graph" << std::endl;
+	for (int i = 0; i < E.size(); i++)
+	{
+		for (int j = 0; j < E[i].size(); j++)
+		{
+			std::cout << V[i][j].first << " : ";
+			for (int q = 0; q < E[i][j].size(); q++)
+				std::cout << V[i][E[i][j][q].first].first << " ";
+			std::cout << std::endl;
+		}
+		std::cout << std::endl;
+	}
+	std::cout << std::endl;
+}
+
 void new_graph_creator(std::vector<std::vector<std::pair<std::string, int>>>& V, std::vector<std::vector<std::vector<std::pair<int, std::string>>>>& E, std::vector<std::vector<std::string>>& Code, std::vector<std::vector<int>>& V_new, std::vector<std::vector<std::pair<int, std::string>>>& E_new, std::vector<std::string>& Code_new)
 {
 	for (int i = 0; i < V.size(); i++)
@@ -146,39 +187,51 @@ void graph_merger(std::vector <std::pair<std::string, std::pair<int, int>>>& Clu
 {
 	for (int i = 0; i < V_new.size(); i++)
 	{
+		int foundmin = Code_new[i].size(), cl_min = -1;
 		for (int j = 0; j < Clusters.size(); j++)
 		{
-			int found = Code_new[i].find(Clusters[j].first);
-			if (found != std::string::npos)
+			int FLAG = 0, found = 0, found1 = 0;
+			while (1)
 			{
-				int counter = 0;
-				for (int q = 0; q < found; q++)
+				found = Code_new[i].find(Clusters[j].first, found1);
+				if (found != std::string::npos)
 				{
-					if (Code_new[i][q] == '"')
+					int counter = 0;
+					for (int q = 0; q < found; q++)
+						if (Code_new[i][q] == '"')
+							counter++;
+					if (counter % 2 == 0)
 					{
-						counter++;
+						FLAG = 1;
+						break;
 					}
+					found1 = Code_new[i].find('\n', found);
 				}
-				if (counter % 2 == 0)
-				{
-					int found1 = found;
-					while (Code_new[i][found1] != '\n')
-						found1++;
-					std::string code = Code_new[i].substr(found1 + 1, Code_new[i].size() - found1 - 1);
-					Code_new[i] = Code_new[i].substr(0, found1 + 1);
-					V_new.push_back({V_new[i][0], V_new[i][1], V_new[i][2] + 1});
-					Code_new.push_back(code);
-					E_new.push_back(E_new[i]);
-					E_new[i].clear();
-					E_new[i].push_back(std::make_pair(V[j][Clusters[j].second.first].second, ""));
-					E_new[V[j][Clusters[j].second.second].second].push_back(std::make_pair(E_new.size() - 1, ""));
-				}
+				else
+					break;
 			}
+			if (FLAG == 1 && found < foundmin)
+			{
+				foundmin = found;
+				cl_min = j;
+			}
+		}		
+		if (cl_min != -1)
+		{
+			int found1 = Code_new[i].find('\n', foundmin);
+			std::string code = Code_new[i].substr(found1 + 1, Code_new[i].size() - found1 - 1);
+			Code_new[i] = Code_new[i].substr(0, found1 + 1);
+			V_new.push_back({V_new[i][0], V_new[i][1], V_new[i][2] + 1});
+			Code_new.push_back(code);
+			E_new.push_back(E_new[i]);
+			E_new[i].clear();
+			E_new[i].push_back(std::make_pair(V[cl_min][Clusters[cl_min].second.first].second, ""));
+			E_new[V[cl_min][Clusters[cl_min].second.second].second].push_back(std::make_pair(E_new.size() - 1, ""));
 		}
 	}
 }
 
-void graph_list(std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector <std::vector<std::pair<std::string, int>>>& V)
+void new_graph_list(std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector <std::vector<std::pair<std::string, int>>>& V)
 {
 	std::cout << "Clusters names and their start and finish vertexes" << std::endl;
 	for (int i = 0; i < Clusters.size(); i++)
@@ -186,7 +239,7 @@ void graph_list(std::vector <std::pair<std::string, std::pair<int, int>>>& Clust
 	std::cout << std::endl;
 }
 
-void vertex_list(std::vector <std::vector<std::pair<std::string, int>>>& V, std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector<std::vector<int>>& V_new, std::vector<std::string>& Code_new)
+void new_vertex_list(std::vector <std::vector<std::pair<std::string, int>>>& V, std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector<std::vector<int>>& V_new, std::vector<std::string>& Code_new)
 {
 	std::cout << "Vertexes' names and their code" << std::endl;
 	for (int i = 0; i < V_new.size(); i++)
@@ -197,7 +250,7 @@ void vertex_list(std::vector <std::vector<std::pair<std::string, int>>>& V, std:
 	std::cout << std::endl;
 }
 
-void adjacency_list(std::vector<std::vector<std::pair<int, std::string>>>& E_new)
+void new_adjacency_list(std::vector<std::vector<std::pair<int, std::string>>>& E_new)
 {
 	std::cout << "Adjacency list" << std::endl;
 	for (int i = 0; i < E_new.size(); i++)
