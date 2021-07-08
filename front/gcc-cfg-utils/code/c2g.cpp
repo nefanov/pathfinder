@@ -59,7 +59,10 @@ void vertex_handler(std::string& code, int& basic_block, size_t& found1, int& le
 	int k = found1;
 	while (k < len && inp[k] != ' ')
 		k++;
-	std::string a = inp.substr(found1 - 5, k - found1 + 5);
+	int k1 = found1;
+	while (k1 >= 0 && inp[k1] != 'f')
+		k1--;
+	std::string a = inp.substr(k1, k - k1);
 	if (a[a.size() - 1] == '0' && a[a.size() - 2] == '_')
 		Clusters[subgraph].second.first = V[subgraph].size();
 	else if (a[a.size() - 1] == '1' && a[a.size() - 2] == '_')
@@ -82,7 +85,7 @@ void edges_handler(size_t& found1, size_t& found2, std::string& inp, std::vector
 	k2r = k2l;
 	while (inp[k2r] != ':')
 		k2r++;
-	std::string b = inp.substr(k2l + 1, k2r - k2l - 1);
+	std::string b = inp.substr(k2l + 1, k2r - k2l - 1);	
 	int va, vb;
 	for (int i = 0; i < V[subgraph].size(); i++)
 	{
