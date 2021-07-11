@@ -18,10 +18,10 @@ void cluster_handler   (int& len, size_t& found, int& cluster, int& subgraph, st
                         std::vector <std::vector<std::pair<std::string, int>>>& V, std::vector <std::vector<std::string>>& Code, 
                         std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E);
 
-void entry_end_handler (int& subgraph, int& k, std::string& inp, int& len, int& basic_block, 
+void entry_end_handler (int& subgraph, int& k, std::string& inp, int len, int& basic_block, 
                         std::string& code, std::vector <std::vector<std::string>>& Code);
 
-void vertex_handler    (std::string& code, int& basic_block, size_t& found1, int& len, std::string& inp, 
+void vertex_handler    (std::string& code, int& basic_block, size_t& found1, int len, std::string& inp, 
                         std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, 
                         std::vector <std::vector<std::pair<std::string, int>>>& V, std::vector <std::vector<std::string>>& Code, 
                         std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, int& subgraph);
@@ -32,7 +32,7 @@ void edges_handler     (int& found1, size_t& found2, std::string& inp, std::vect
 void blocks_handler    (std::string& code, int& basic_block, int& cluster, int& subgraph, 
                         std::string& inp, std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, 
                         std::vector <std::vector<std::pair<std::string, int>>>& V, std::vector <std::vector<std::string>>& Code, 
-                        std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, int& len);
+                        std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, int len);
 
 void code_handler      (std::string& inp, int& basic_block, std::string& code, 
                         std::vector <std::vector<std::string>>& Code, int& subgraph);

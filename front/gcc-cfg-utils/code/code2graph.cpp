@@ -14,13 +14,7 @@ int main(int argc, char* argv[])
 	bin_path.erase(bin_path.find_last_of("/") + 1, bin_path.size()); // .../gcc-cfg-utils/build/code2graph -> .../gcc-cfg-utils/build/
 	process_path(argc, input_file, path, path_to_input, analyze_file, file);
 	while(std::getline(analyze_file, inp)) 
-	{
-		int len = inp.size();
-		if (basic_block == 0) // input is not a code
-			blocks_handler(code, basic_block, cluster, subgraph, inp, Clusters, V, Code, E, len);
-		else
-			code_handler(inp, basic_block, code, Code, subgraph);
-	}
+		(basic_block == 0) ? blocks_handler(code, basic_block, cluster, subgraph, inp, Clusters, V, Code, E, inp.size()): code_handler(inp, basic_block, code, Code, subgraph);
 	graph_list(Clusters);
 	vertex_list(V, E, Clusters, Code);
 	adjacency_list(V, E);

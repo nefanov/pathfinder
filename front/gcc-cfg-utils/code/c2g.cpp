@@ -37,7 +37,7 @@ void cluster_handler(int& len, size_t& found, int& cluster, int& subgraph, std::
 	E.resize(E.size() + 1);
 }
 
-void entry_end_handler(int& subgraph, int& k, std::string& inp, int& len, int& basic_block, std::string& code, std::vector <std::vector<std::string>>& Code)
+void entry_end_handler(int& subgraph, int& k, std::string& inp, int len, int& basic_block, std::string& code, std::vector <std::vector<std::string>>& Code)
 {
 	if (inp[len - 1] == '\\')
 	{
@@ -54,7 +54,7 @@ void entry_end_handler(int& subgraph, int& k, std::string& inp, int& len, int& b
 	}
 }
 
-void vertex_handler(std::string& code, int& basic_block, size_t& found1, int& len, std::string& inp, std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector <std::vector<std::pair<std::string, int>>>& V, std::vector <std::vector<std::string>>& Code, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, int& subgraph)
+void vertex_handler(std::string& code, int& basic_block, size_t& found1, int len, std::string& inp, std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector <std::vector<std::pair<std::string, int>>>& V, std::vector <std::vector<std::string>>& Code, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, int& subgraph)
 {
 	int k = found1;
 	while (k < len && inp[k] != ' ')
@@ -97,7 +97,7 @@ void edges_handler(size_t& found1, size_t& found2, std::string& inp, std::vector
 	E[subgraph][va].push_back({vb, ""});
 }
 
-void blocks_handler(std::string& code, int& basic_block, int& cluster, int& subgraph, std::string& inp, std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector <std::vector<std::pair<std::string, int>>>& V, std::vector <std::vector<std::string>>& Code, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, int& len)
+void blocks_handler(std::string& code, int& basic_block, int& cluster, int& subgraph, std::string& inp, std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector <std::vector<std::pair<std::string, int>>>& V, std::vector <std::vector<std::string>>& Code, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, int len)
 {
 	size_t found = inp.find("subgraph"), found1 = inp.find("basic_block"), found2 = inp.find("->");
 	if (found != -1 && cluster == 0)
