@@ -1,0 +1,84 @@
+digraph "test3.c.012t.cfg" {
+overlap=false;
+subgraph "cluster_fact" {
+	style="dashed";
+	color="black";
+	label="fact ()";
+	fn_0_basic_block_0 [shape=Mdiamond,style=filled,fillcolor=white,label="ENTRY"];
+
+	fn_0_basic_block_1 [shape=Mdiamond,style=filled,fillcolor=white,label="EXIT"];
+
+	fn_0_basic_block_2 [shape=record,style=filled,fillcolor=lightgrey,label="{\<bb\ 2\>:\l\
+|if\ (b\ \>\ 1)\l\
+\ \ goto\ \<bb\ 3\>;\ [INV]\l\
+else\l\
+\ \ goto\ \<bb\ 4\>;\ [INV]\l\
+}"];
+
+	fn_0_basic_block_3 [shape=record,style=filled,fillcolor=lightgrey,label="{\<bb\ 3\>:\l\
+|_1\ =\ b\ +\ -1;\l\
+|_2\ =\ fact\ (_1);\l\
+|D.2321\ =\ b\ *\ _2;\l\
+|//\ predicted\ unlikely\ by\ early\ return\ (on\ trees)\ predictor.\l\
+goto\ \<bb\ 7\>;\ [INV]\l\
+}"];
+
+	fn_0_basic_block_4 [shape=record,style=filled,fillcolor=lightgrey,label="{\<bb\ 4\>:\l\
+|if\ (b\ ==\ 1)\l\
+\ \ goto\ \<bb\ 5\>;\ [INV]\l\
+else\l\
+\ \ goto\ \<bb\ 6\>;\ [INV]\l\
+}"];
+
+	fn_0_basic_block_5 [shape=record,style=filled,fillcolor=lightgrey,label="{\<bb\ 5\>:\l\
+|D.2321\ =\ 1;\l\
+|//\ predicted\ unlikely\ by\ early\ return\ (on\ trees)\ predictor.\l\
+goto\ \<bb\ 7\>;\ [INV]\l\
+}"];
+
+	fn_0_basic_block_6 [shape=record,style=filled,fillcolor=lightgrey,label="{\<bb\ 6\>:\l\
+|D.2321\ =\ 0;\l\
+|//\ predicted\ unlikely\ by\ early\ return\ (on\ trees)\ predictor.\l\
+}"];
+
+	fn_0_basic_block_7 [shape=record,style=filled,fillcolor=lightgrey,label="{\<bb\ 7\>:\l\
+|\<L4\>:\l\
+|return\ D.2321;\l\
+}"];
+
+	fn_0_basic_block_0:s -> fn_0_basic_block_2:n [style="solid,bold",color=blue,weight=100,constraint=true];
+	fn_0_basic_block_2:s -> fn_0_basic_block_3:n [style="solid,bold",color=black,weight=10,constraint=true];
+	fn_0_basic_block_2:s -> fn_0_basic_block_4:n [style="solid,bold",color=black,weight=10,constraint=true];
+	fn_0_basic_block_3:s -> fn_0_basic_block_7:n [style="solid,bold",color=blue,weight=100,constraint=true];
+	fn_0_basic_block_4:s -> fn_0_basic_block_5:n [style="solid,bold",color=black,weight=10,constraint=true];
+	fn_0_basic_block_4:s -> fn_0_basic_block_6:n [style="solid,bold",color=black,weight=10,constraint=true];
+	fn_0_basic_block_5:s -> fn_0_basic_block_7:n [style="solid,bold",color=blue,weight=100,constraint=true];
+	fn_0_basic_block_6:s -> fn_0_basic_block_7:n [style="solid,bold",color=blue,weight=100,constraint=true];
+	fn_0_basic_block_7:s -> fn_0_basic_block_1:n [style="solid,bold",color=black,weight=10,constraint=true];
+	fn_0_basic_block_0:s -> fn_0_basic_block_1:n [style="invis",constraint=true];
+}
+subgraph "cluster_main" {
+	style="dashed";
+	color="black";
+	label="main ()";
+	fn_1_basic_block_0 [shape=Mdiamond,style=filled,fillcolor=white,label="ENTRY"];
+
+	fn_1_basic_block_1 [shape=Mdiamond,style=filled,fillcolor=white,label="EXIT"];
+
+	fn_1_basic_block_2 [shape=record,style=filled,fillcolor=lightgrey,label="{\<bb\ 2\>:\l\
+|_1\ =\ fact\ (3);\l\
+|printf\ (\"%d\\n\",\ _1);\l\
+|D.2325\ =\ 0;\l\
+}"];
+
+	fn_1_basic_block_3 [shape=record,style=filled,fillcolor=lightgrey,label="{\<bb\ 3\>:\l\
+|\<L0\>:\l\
+|return\ D.2325;\l\
+}"];
+
+	fn_1_basic_block_0:s -> fn_1_basic_block_2:n [style="solid,bold",color=blue,weight=100,constraint=true];
+	fn_1_basic_block_2:s -> fn_1_basic_block_3:n [style="solid,bold",color=blue,weight=100,constraint=true];
+	fn_1_basic_block_3:s -> fn_1_basic_block_1:n [style="solid,bold",color=black,weight=10,constraint=true];
+	fn_1_basic_block_0:s -> fn_1_basic_block_1:n [style="invis",constraint=true];
+}
+}

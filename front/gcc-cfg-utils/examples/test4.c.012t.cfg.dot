@@ -1,0 +1,74 @@
+digraph "test4.c.012t.cfg" {
+overlap=false;
+subgraph "cluster_foo1" {
+	style="dashed";
+	color="black";
+	label="foo1 ()";
+	fn_0_basic_block_0 [shape=Mdiamond,style=filled,fillcolor=white,label="ENTRY"];
+
+	fn_0_basic_block_1 [shape=Mdiamond,style=filled,fillcolor=white,label="EXIT"];
+
+	fn_0_basic_block_2 [shape=record,style=filled,fillcolor=lightgrey,label="{\<bb\ 2\>:\l\
+|D.2323\ =\ a\ *\ 2;\l\
+}"];
+
+	fn_0_basic_block_3 [shape=record,style=filled,fillcolor=lightgrey,label="{\<bb\ 3\>:\l\
+|\<L0\>:\l\
+|return\ D.2323;\l\
+}"];
+
+	fn_0_basic_block_0:s -> fn_0_basic_block_2:n [style="solid,bold",color=blue,weight=100,constraint=true];
+	fn_0_basic_block_2:s -> fn_0_basic_block_3:n [style="solid,bold",color=blue,weight=100,constraint=true];
+	fn_0_basic_block_3:s -> fn_0_basic_block_1:n [style="solid,bold",color=black,weight=10,constraint=true];
+	fn_0_basic_block_0:s -> fn_0_basic_block_1:n [style="invis",constraint=true];
+}
+subgraph "cluster_foo2" {
+	style="dashed";
+	color="black";
+	label="foo2 ()";
+	fn_1_basic_block_0 [shape=Mdiamond,style=filled,fillcolor=white,label="ENTRY"];
+
+	fn_1_basic_block_1 [shape=Mdiamond,style=filled,fillcolor=white,label="EXIT"];
+
+	fn_1_basic_block_2 [shape=record,style=filled,fillcolor=lightgrey,label="{\<bb\ 2\>:\l\
+|D.2325\ =\ a\ +\ -3;\l\
+}"];
+
+	fn_1_basic_block_3 [shape=record,style=filled,fillcolor=lightgrey,label="{\<bb\ 3\>:\l\
+|\<L0\>:\l\
+|return\ D.2325;\l\
+}"];
+
+	fn_1_basic_block_0:s -> fn_1_basic_block_2:n [style="solid,bold",color=blue,weight=100,constraint=true];
+	fn_1_basic_block_2:s -> fn_1_basic_block_3:n [style="solid,bold",color=blue,weight=100,constraint=true];
+	fn_1_basic_block_3:s -> fn_1_basic_block_1:n [style="solid,bold",color=black,weight=10,constraint=true];
+	fn_1_basic_block_0:s -> fn_1_basic_block_1:n [style="invis",constraint=true];
+}
+subgraph "cluster_main" {
+	style="dashed";
+	color="black";
+	label="main ()";
+	fn_2_basic_block_0 [shape=Mdiamond,style=filled,fillcolor=white,label="ENTRY"];
+
+	fn_2_basic_block_1 [shape=Mdiamond,style=filled,fillcolor=white,label="EXIT"];
+
+	fn_2_basic_block_2 [shape=record,style=filled,fillcolor=lightgrey,label="{\<bb\ 2\>:\l\
+|b\ =\ 3;\l\
+|_1\ =\ foo2\ (b);\l\
+|_2\ =\ foo1\ (_1);\l\
+|_3\ =\ foo2\ (_2);\l\
+|printf\ (\"foo1foo2oo\ %d\",\ _3);\l\
+|D.2327\ =\ 0;\l\
+}"];
+
+	fn_2_basic_block_3 [shape=record,style=filled,fillcolor=lightgrey,label="{\<bb\ 3\>:\l\
+|\<L0\>:\l\
+|return\ D.2327;\l\
+}"];
+
+	fn_2_basic_block_0:s -> fn_2_basic_block_2:n [style="solid,bold",color=blue,weight=100,constraint=true];
+	fn_2_basic_block_2:s -> fn_2_basic_block_3:n [style="solid,bold",color=blue,weight=100,constraint=true];
+	fn_2_basic_block_3:s -> fn_2_basic_block_1:n [style="solid,bold",color=black,weight=10,constraint=true];
+	fn_2_basic_block_0:s -> fn_2_basic_block_1:n [style="invis",constraint=true];
+}
+}

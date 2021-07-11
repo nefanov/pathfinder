@@ -1,19 +1,21 @@
-using namespace std;
 #include <iostream>
 #include <vector>
 #include <set>
 #include <unordered_set>
+#include <math.h>
 #include <deque>
+#include <fstream>
+#define NUMBER_OF_LETTERS_WITH_OVERFLOW 30
 struct rule
 {
     int type;
     int left;
-    vector<int> right1;
-    string right0;
+    std::vector<int> right1;
+    std::string right0;
 };
 
 int initial;
-int check(vector<string>& a, string b)
+int check(std::vector<std::string>& a, std::string b)
 {
 
     for (int i = 0; i < a.size(); i++)
@@ -34,19 +36,19 @@ int check(vector<string>& a, string b)
     return a.size();
 }
 
-vector<int> path_find(int i, int j, int nonterm,  vector<vector<vector<vector<int> > > >& prev)
+std::vector<int> path_find(int i, int j, int nonterm,  std::vector<std::vector<std::vector<std::vector<int> > > >& prev)
 {
-    vector<int> u = prev[i][nonterm][j];
+    std::vector<int> u = prev[i][nonterm][j];
     if (u[0] == -1 )
     {
-        vector<int> kek;
+        std::vector<int> kek;
         kek.push_back(i);
         kek.push_back(j);
         return kek;
     }
-    vector<int> left = path_find(i, u[0], u[1], prev);
-    vector<int> right = path_find(u[0], j, u[2],  prev);
-    vector<int> way = left;
+    std::vector<int> left = path_find(i, u[0], u[1], prev);
+    std::vector<int> right = path_find(u[0], j, u[2],  prev);
+    std::vector<int> way = left;
     way.pop_back();
     for (auto k: right)
     {
@@ -55,21 +57,27 @@ vector<int> path_find(int i, int j, int nonterm,  vector<vector<vector<vector<in
     return way;
 }
 
-vector<rule> rules;
+std::vector<rule> rules;
 
-int main()
+int main(int argc, char* argv[])
 {
-    //grammar
-    vector<string> nonterminals;
-    int m; //quantity of rules
-    cin >> m;
-    vector<rule> eps_rules;
-    vector<vector<int> > lol(30);
+    int m, number, E, initial, P, V;
+    std::vector <std::string> nonterminals;
+    std::vector <std::vector<int>> lol(NUMBER_OF_LETTERS_WITH_OVERFLOW);
+    std::vector <rule> eps_rules, rules;
+    std::string bin_path = argv[1];
+    std::ifstream fin(bin_path + "../data/graph");
+    if (!fin.is_open()) {
+        std::cout << bin_path + "../data/graph" << " was not opened" << std::endl;
+        return -1;
+    }
+    
+    fin >> number >> m;
     for (int i = 0; i < m; i++)
     {
-        string left, right;
+        std::string left, right;
 
-        cin >> left >> right;
+        fin >> left >> right;
 
         int num;
         if (right.size() == 2)
@@ -78,12 +86,12 @@ int main()
         }
         else if (right.size() == 1)
         {
-            num = 1;
+                        num = 1;
         }
 
         if (num == 1)
         {
-            string a_1, a_2;
+            std::string a_1, a_2;
             a_1 = left;
             a_2 = right;
 
@@ -112,7 +120,7 @@ int main()
         }
         else if (num == 2)
         {
-            string a_1, a_2, a_3;
+            std::string a_1, a_2, a_3;
             a_1 = left;
             a_2 = right[0];
             a_3 = right[1];
@@ -143,7 +151,7 @@ int main()
 
 
             rule a;
-            vector<int> q;
+            std::vector<int> q;
             q.push_back(FLAG2);
             q.push_back(FLAG3);
             a.left = FLAG1;
@@ -152,8 +160,8 @@ int main()
             rules.push_back(a);
         }
     }
-    vector<vector<int>> left_rules(nonterminals.size());
-    vector<vector<int>> right_rules(nonterminals.size());
+    std::vector<std::vector<int>> left_rules(nonterminals.size());
+    std::vector<std::vector<int>> right_rules(nonterminals.size());
     for (int i = 0; i < rules.size(); i++)
     {
         if (rules[i].type == 1)
@@ -167,18 +175,18 @@ int main()
 
 
     int V, E;
-    cin >> V >> E;
-    vector<pair<int, pair<int, string> > > edges;
-    deque<vector<int> > W;
-    vector<vector<unordered_set<int> > > H1 (nonterminals.size(), vector<unordered_set<int> > (V));
-    vector<vector<unordered_set<int> > > H2 (nonterminals.size(), vector<unordered_set<int> > (V));
-    vector<vector<vector<vector<int>> > > prev(V, vector<vector<vector<int > > > (nonterminals.size(), vector<vector<int>>  (V, {-1, -1, -1})));
+    fin >> V >> E;
+    std::vector<std::pair<int, std::pair<int, std::string> > > edges;
+    std::deque<std::vector<int> > W;
+    std::vector<std::vector<std::unordered_set<int> > > H1 (nonterminals.size(), std::vector<std::unordered_set<int> > (V));
+    std::vector<std::vector<std::unordered_set<int> > > H2 (nonterminals.size(), std::vector<std::unordered_set<int> > (V));
+    std::vector<std::vector<std::vector<std::vector<int>> > > prev(V, std::vector<std::vector<std::vector<int > > > (nonterminals.size(), std::vector<std::vector<int>>  (V, {-1, -1, -1})));
     for (int i = 0; i < E; i++)
     {
 
         int u1, u2;
-        string a;
-        cin >> u1 >> u2 >> a;
+        std::string a;
+        fin >> u1 >> u2 >> a;
         int s = 0;
         if (a != "0")
         {
@@ -187,7 +195,7 @@ int main()
 
         for (auto j: lol[s])
         {
-            vector<int> z;
+            std::vector<int> z;
             z.push_back(u1);
             z.push_back(j);
             z.push_back(u2);
@@ -203,7 +211,7 @@ int main()
     {
         for (int j = 0; j < V; j++)
         {
-            vector<int> z;
+            std::vector<int> z;
             z.push_back(i.left);
             z.push_back(j);
             z.push_back(i.left);
@@ -214,7 +222,7 @@ int main()
     }
     while (!W.empty())
     {
-        vector<int> q;
+        std::vector<int> q;
 
 
         q = W.front();
@@ -230,7 +238,7 @@ int main()
 
             int C = rules[i].right1[0];
             int A = rules[i].left;
-            unordered_set<int> w = H2[C][u];
+            std::unordered_set<int> w = H2[C][u];
             for (auto d: H2[A][v])
             {
                 w.erase(d);
@@ -239,7 +247,7 @@ int main()
             {
                 H2[A][v].insert(d);
                 H1[A][d].insert(v);
-                vector<int> z;
+                std::vector<int> z;
                 z.push_back(d);
                 z.push_back(A);
                 z.push_back(v);
@@ -258,7 +266,7 @@ int main()
 
             int C = rules[i].right1[1];
             int A = rules[i].left;
-            unordered_set<int> w = H1[C][v];
+            std::unordered_set<int> w = H1[C][v];
             for (auto d: H1[A][u])
             {
                 w.erase(d);
@@ -267,7 +275,7 @@ int main()
             {
                 H2[A][d].insert(u);
                 H1[A][u].insert(d);
-                vector<int> z;
+                std::vector<int> z;
                 z.push_back(u);
                 z.push_back(A);
                 z.push_back(d);
@@ -286,17 +294,17 @@ int main()
     {
         for (auto j: H1[initial][i])
         {
-            cout << i << " " << j << endl;
-            vector<int> way = path_find(i, j, initial,  prev);
+            std::cout << i << " " << j << std::endl;
+            std::vector<int> way = path_find(i, j, initial,  prev);
             for (auto k: way)
             {
-                cout << k << " ";
+                std::cout << k << " ";
             }
-            cout << endl;
+            std::cout << std::endl;
             counter += 1;
         }
     }
-    cout << counter << endl;
+    std::cout << counter << std::endl;
 
 
 
