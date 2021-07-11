@@ -62,14 +62,14 @@ void graph_merger      (std::vector <std::pair<std::string, std::pair<int, int>>
                         std::vector<std::vector<std::pair<int, std::string>>>& E_new,
                         std::vector<std::string>& Code_new);
 
-void new_graph_list        (std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters,
+void new_graph_list    (std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters,
                         std::vector <std::vector<std::pair<std::string, int>>>& V);
 
-void new_vertex_list       (std::vector <std::vector<std::pair<std::string, int>>>& V,
+void new_vertex_list   (std::vector <std::vector<std::pair<std::string, int>>>& V,
                         std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters,
                         std::vector<std::vector<int>>& V_new, std::vector<std::string>& Code_new);
 
-void new_adjacency_list    (std::vector<std::vector<std::pair<int, std::string>>>& E_new);
+void new_adjacency_list(std::vector<std::vector<std::pair<int, std::string>>>& E_new);
 
 void input_V_E         (std::ifstream& fin, int file, std::vector<std::vector<std::pair<int, std::string>>>& E_new, 
                         std::vector<std::pair<std::string, std::string> >& rules, std::ifstream& input_file);
