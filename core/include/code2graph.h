@@ -11,7 +11,7 @@
 #include <filesystem>
 
 int process_path       (int argc, std::ifstream& input_file, std::string& path, 
-                        std::string& path_to_input, std::ifstream& analyze_file, int file);
+                        std::string& path_to_input, std::ifstream& analyze_file);
 
 void cluster_handler   (int& len, size_t& found, int& cluster, int& subgraph, std::string& inp, 
                         std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, 
@@ -71,10 +71,12 @@ void new_vertex_list       (std::vector <std::vector<std::pair<std::string, int>
 
 void new_adjacency_list    (std::vector<std::vector<std::pair<int, std::string>>>& E_new);
 
-void input_V_E         (std::ifstream& fin, int file, std::vector<std::vector<std::pair<int, std::string>>>& E_new, 
+void input_V_E         (std::ifstream& fin, std::vector<std::vector<std::pair<int, std::string>>>& E_new, 
                         std::vector<std::pair<std::string, std::string> >& rules, std::ifstream& input_file);
 
 void to_fifo           (std::string bin_path, std::vector<std::vector<int>>& V_new, 
                         std::vector <std::vector<std::pair<std::string, int>>>& V,
                         std::vector<std::vector<std::pair<int, std::string>>>& E_new, 
                         std::vector<std::pair<std::string, std::string> >& rules);
+
+int number_of_file_arg(int argc, char* argv[], char* arg);
