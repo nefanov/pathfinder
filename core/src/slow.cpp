@@ -1,6 +1,7 @@
 #include "slow.h"
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[]) 
+{
     int m, number, E, initial, P, V;
     std::vector <std::string> nonterminals;
     std::vector <std::vector<int>> lol(NUMBER_OF_LETTERS_WITH_OVERFLOW);
@@ -37,8 +38,7 @@ int main(int argc, char* argv[]) {
         for (int j = 0; j < V; j++)
             filling_loops(j, P, i, W, H1, H2); //if word is empty
 
-    while (!W.empty())
-    {
+    while (!W.empty()) {
         std::vector<int> q = W.front();
         W.pop_front();
         baseline_cfl(0, q[0], q[2], H2, right_rules, q[1], rules, prev, W, H1, H2);

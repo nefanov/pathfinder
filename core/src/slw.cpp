@@ -2,22 +2,15 @@
 
 int check(int& initial, std::vector<std::string>& a, std::string b)
 {
-
-    for (int i = 0; i < a.size(); i++)
-    {
-        if (a[i] == b)
-        {
+    for (int i = 0; i < a.size(); i++) {
+        if (a[i] == b) {
             if (b == "S")
-            {
                 initial = i;
-            }
             return i;
         }
     }
     if (b == "S")
-    {
         initial = a.size();
-    }
     return a.size();
 }
 
@@ -61,12 +54,10 @@ int filling_edge_matrices(std::ifstream& fin, std::vector <std::vector<int>>& lo
     int u1, u2, s = 0;
     std::string str;
     fin >> u1 >> u2 >> str;
-    if (str != "0")
-    {
+    if (str != "0") {
         s = str[0] - 'a';
     }
-    for (auto j: lol[s])
-    {
+    for (auto j: lol[s]) {
         W.push_back({u1, j, u2});
         H1[j][u1].insert(u2);
         H2[j][u2].insert(u1);
@@ -123,10 +114,8 @@ std::vector<int> path_find(int i, int j, int nonterm,  std::vector<std::vector<s
 int output(int V, int initial, std::vector<std::vector<std::vector<std::vector<int>> > >& prev, std::vector <std::vector <std::unordered_set <int> > >& H1)
 {
     int counter = 0;
-    for (int i = 0; i < V; i++)
-    {
-        for (auto j: H1[initial][i])
-        {
+    for (int i = 0; i < V; i++) {
+        for (auto j: H1[initial][i]) {
             counter++;
             std::cout << i << " " << j << std::endl;
             std::vector<int> way = path_find(i, j, initial,  prev);
