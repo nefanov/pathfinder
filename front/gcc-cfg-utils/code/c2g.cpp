@@ -1,19 +1,19 @@
 #include "code2graph.h"
 
-int process_path(int argc, std::ifstream& input_file, std::string& path, std::string& path_to_input, std::ifstream& analyze_file, int file)
+int process_path(int argc, std::ifstream& input_file, std::string& path, std::string& path_to_input, std::ifstream& analyze_file)
 {
-	std::string path_to_analyze = path, full_path = std::filesystem::current_path().string() + "/" + path;
-    if (argc < 2) {
+	std::string path_to_analyze = path;
+	if (argc < 2) {
 		std::cout << "Enter the name of the file to be analyzed, pre-compiled with gcc file_name -fdump-tree-cfg-graph: ";
 		std::cin >> path_to_analyze;
 	}
-	if (file) {
-		input_file.open(full_path);
-		path_to_input = full_path;
+	if (path_to_input != "") {
+		path_to_input = std::filesystem::current_path().string() + "/" + path_to_input;
+		input_file.open(path_to_input);
+		std::string full_path = path_to_input;
 		input_file >> path_to_analyze;
 		full_path.erase(full_path.find_last_of("/") + 1, full_path.size()); // .../gcc-cfg-utils/input/test.in -> .../gcc-cfg-utils/input/
 		path_to_analyze = full_path + path_to_analyze + ".012t.cfg.dot";
-		//input_file.close();
 	}
 	else
 		path_to_analyze = std::filesystem::current_path().string() + "/" + path_to_analyze + ".012t.cfg.dot";
@@ -37,7 +37,7 @@ void cluster_handler(int& len, size_t& found, int& cluster, int& subgraph, std::
 	E.resize(E.size() + 1);
 }
 
-void entry_end_handler(int& subgraph, int& k, std::string& inp, int& len, int& basic_block, std::string& code, std::vector <std::vector<std::string>>& Code)
+void entry_end_handler(int& subgraph, int& k, std::string& inp, int len, int& basic_block, std::string& code, std::vector <std::vector<std::string>>& Code)
 {
 	if (inp[len - 1] == '\\')
 	{
@@ -54,7 +54,7 @@ void entry_end_handler(int& subgraph, int& k, std::string& inp, int& len, int& b
 	}
 }
 
-void vertex_handler(std::string& code, int& basic_block, size_t& found1, int& len, std::string& inp, std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector <std::vector<std::pair<std::string, int>>>& V, std::vector <std::vector<std::string>>& Code, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, int& subgraph)
+void vertex_handler(std::string& code, int& basic_block, size_t& found1, int len, std::string& inp, std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector <std::vector<std::pair<std::string, int>>>& V, std::vector <std::vector<std::string>>& Code, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, int& subgraph)
 {
 	int k = found1;
 	while (k < len && inp[k] != ' ')
@@ -97,7 +97,7 @@ void edges_handler(size_t& found1, size_t& found2, std::string& inp, std::vector
 	E[subgraph][va].push_back({vb, ""});
 }
 
-void blocks_handler(std::string& code, int& basic_block, int& cluster, int& subgraph, std::string& inp, std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector <std::vector<std::pair<std::string, int>>>& V, std::vector <std::vector<std::string>>& Code, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, int& len)
+void blocks_handler(std::string& code, int& basic_block, int& cluster, int& subgraph, std::string& inp, std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector <std::vector<std::pair<std::string, int>>>& V, std::vector <std::vector<std::string>>& Code, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E, int len)
 {
 	size_t found = inp.find("subgraph"), found1 = inp.find("basic_block"), found2 = inp.find("->");
 	if (found != -1 && cluster == 0)
@@ -266,12 +266,12 @@ void new_adjacency_list(std::vector<std::vector<std::pair<int, std::string>>>& E
 	std::cout << std::endl;
 }
 
-void input_V_E(std::ifstream& fin, int file, std::vector<std::vector<std::pair<int, std::string>>>& E_new, std::vector<std::pair<std::string, std::string> >& rules, std::ifstream& input_file)
+void input_V_E(std::ifstream& fin, std::vector<std::vector<std::pair<int, std::string>>>& E_new, std::vector<std::pair<std::string, std::string> >& rules, std::ifstream& input_file)
 {
 	std::cout << "Letters on edjes placing and grammar choosing processes " << std::endl;
 	int quan_of_rules;
 	std::cout << "Grammar" << std::endl;
-	if (file == 1) {
+	if (fin.is_open()) {
 		fin >> quan_of_rules;
 		std::cout << quan_of_rules << std::endl;
 	}
@@ -280,7 +280,7 @@ void input_V_E(std::ifstream& fin, int file, std::vector<std::vector<std::pair<i
 	std::string left, right;
 	for (int j = 0; j < quan_of_rules; j++)
 	{
-		if (file == 1) {
+		if (fin.is_open()) {
 			fin >> left >> right;
 			std::cout << left << " " << right << std::endl;
 		}
@@ -293,7 +293,7 @@ void input_V_E(std::ifstream& fin, int file, std::vector<std::vector<std::pair<i
 		for (int j = 0; j < E_new[i].size(); j++)
 		{
 			std::cout << "Pick an letter for edge " << i << " -> " << E_new[i][j].first << " :";
-			if (file == 1) {
+			if (fin.is_open()) {
 				fin >> E_new[i][j].second;
 				std::cout << E_new[i][j].second << std::endl;
 			}
@@ -326,4 +326,12 @@ void to_fifo(std::string bin_path, std::vector<std::vector<int>>& V_new, std::ve
 			fout << i << " " << E_new[i][j].first << " " << E_new[i][j].second << std::endl;
 	fout << std::endl;
 	fout.close();
+}
+
+int number_of_file_arg(int argc, char* argv[], char* arg)
+{
+	for (int i = 0; i < argc; i++)
+		if(strcmp(argv[i], arg) == 0)
+			return i;
+	return -1;
 }

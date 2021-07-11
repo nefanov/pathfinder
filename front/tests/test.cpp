@@ -1,32 +1,27 @@
 #define CATCH_CONFIG_MAIN
-#include "catch.hpp"
+#include "catch2/catch_test_macros.hpp"
 #include "code2graph.h"
 #include "fast.h"
-#include <sys/wait.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/stat.h>
 
 TEST_CASE("wrong path to the file") {
     std::ifstream input_file, analyze_file;
     std::string path = "./", path_to_input = "";
-    REQUIRE(process_path(2, input_file, path, path_to_input, analyze_file, 0) == -1);
+    REQUIRE(process_path(2, input_file, path, path_to_input, analyze_file) == -1);
 }
 
 TEST_CASE("using file input/test1.in") {
     std::ifstream input_file, analyze_file;
-    std::string path_to_input = "", path = "tests/test1.in", full_path = std::filesystem::current_path().string() + "/" + path;
-    REQUIRE(process_path(3, input_file, path, path_to_input, analyze_file, 1) == 0);
+    std::string path_to_input = "tests/test1.in", path = "", full_path = std::filesystem::current_path().string() + "/" + path_to_input;
+    REQUIRE(process_path(3, input_file, path, path_to_input, analyze_file) == 0);
     REQUIRE(path_to_input == full_path);
     full_path.erase(full_path.find_last_of("/") + 1, full_path.size()); // .../gcc-cfg-utils/input/test.in -> .../gcc-cfg-utils/input/
-    REQUIRE(path == full_path + "../gcc-cfg-utils/examples/test1.c" + ".012t.cfg.dot");
+    REQUIRE(path == full_path + "../gcc-cfg-utils/examples/test1.c.012t.cfg.dot");
 }
 
 TEST_CASE("path to examples/test1.c") {
     std::ifstream input_file, analyze_file;
     std::string path = "gcc-cfg-utils/examples/test1.c", path_to_input = "";
-    REQUIRE(process_path(2, input_file, path, path_to_input, analyze_file, 0) == 0);
+    REQUIRE(process_path(2, input_file, path, path_to_input, analyze_file) == 0);
 }
 
 TEST_CASE("new_fastset") {
@@ -83,7 +78,7 @@ TEST_CASE("check") {
 }
 
 TEST_CASE("test1.in") {
-    system("build/code2graph -file tests/test1.in");
+    system("build/code2graph -file tests/test1.in -front-only");
     std::ifstream graph("data/graph");
     std::ifstream testgraph("tests/test_graph1");
     std::string str1, str2;
@@ -97,7 +92,7 @@ TEST_CASE("test1.in") {
 }
 
 TEST_CASE("test2.in") {
-    system("build/code2graph -file tests/test2.in");
+    system("build/code2graph -file tests/test2.in -front-only");
     std::ifstream graph("data/graph");
     std::ifstream testgraph("tests/test_graph2");
     std::string str1, str2;

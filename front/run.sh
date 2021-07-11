@@ -7,5 +7,6 @@ if [[ $1 == "-test" ]]; then
     cd $absolute_path
     build/test
 else
-    $absolute_path/build/code2graph $@
+    $absolute_path/build/code2graph $@ -front-only
+    $absolute_path/build/core $absolute_path/build/
 fi
