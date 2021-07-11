@@ -43,10 +43,7 @@ std::vector<int> path_find(int i, int j, int nonterm, std::vector<std::vector<st
 {
     std::vector<int> u = prev[i][nonterm][j];
     if (u[0] == -1)
-    {
-        std::vector<int> kek = {i, j};
-        return kek;
-    }
+        return {i, j};
     std::vector<int> left = path_find(i, u[0], u[1], prev), right = path_find(u[0], j, u[2],  prev), way = left;
     way.pop_back();
     for (auto k: right)
@@ -79,7 +76,7 @@ int output(int P, int V, int initial, std::vector<std::vector<std::vector<std::v
         std::vector<int> q = not_null(P, H1[initial][i]);
         for (auto j: q)
         {
-            counter += 1;
+            counter++;
             std::cout << i << " " << j << std::endl;
             std::vector<int> way = path_find(i, j, initial, prev);
             for (auto k: way)
@@ -165,7 +162,7 @@ int baseline_cfl(int flag, int i2, int i3, std::vector <std::vector <std::vector
             add_value(H2[A][i4], i5, P), add_value(H1[A][i5], i4, P);
             W.push_back({i5, A, i4});
             if (prev[i5][A][i4][0] == -1)
-                prev[i5][A][i4][0] = i2, prev[i5][A][i4][1] = C, prev[i5][A][i4][2] = B;
+                prev[i5][A][i4] = {i2, C, B};
         }
     }
     return 0;
