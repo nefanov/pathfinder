@@ -196,7 +196,8 @@ void graph_merger(std::vector <std::pair<std::string, std::pair<int, int>>>& Clu
 			int FLAG = 0, found = 0, found1 = 0;
 			while (1)
 			{
-				found = Code_new[i].find(Clusters[j].first, found1);
+				std::string func_name = "\\ " + Clusters[j].first + "\\";
+				found = Code_new[i].find(func_name, found1);
 				if (found != std::string::npos)
 				{
 					int counter = 0;
@@ -222,17 +223,22 @@ void graph_merger(std::vector <std::pair<std::string, std::pair<int, int>>>& Clu
 		if (cl_min != -1)
 		{
 			int found1 = Code_new[i].find('\n', foundmin);
-			std::string code = Code_new[i].substr(found1 + 1, Code_new[i].size() - found1 - 1);
-			Code_new[i] = Code_new[i].substr(0, found1 + 1);
-			V_new.push_back({V_new[i][0], V_new[i][1], V_new[i][2] + 1});
-			Code_new.push_back(code);
-			E_new.push_back(E_new[i]);
+			if (found1 != Code_new[i].size() - 1) {
+				std::string code = Code_new[i].substr(found1 + 1, Code_new[i].size() - found1 - 1);
+				Code_new[i] = Code_new[i].substr(0, found1 + 1);
+				V_new.push_back({V_new[i][0], V_new[i][1], V_new[i][2] + 1});
+				Code_new.push_back(code);
+				E_new.push_back(E_new[i]);
+				E_new[V[cl_min][Clusters[cl_min].second.second].second].push_back(std::make_pair(E_new.size() - 1, ""));
+			}
+			else 
+				E_new[V[cl_min][Clusters[cl_min].second.second].second].insert(E_new[V[cl_min][Clusters[cl_min].second.second].second].end(), E_new[i].begin(), E_new[i].end());
 			E_new[i].clear();
 			E_new[i].push_back(std::make_pair(V[cl_min][Clusters[cl_min].second.first].second, ""));
-			E_new[V[cl_min][Clusters[cl_min].second.second].second].push_back(std::make_pair(E_new.size() - 1, ""));
 		}
 	}
 }
+
 
 void new_graph_list(std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector <std::vector<std::pair<std::string, int>>>& V)
 {
