@@ -1,4 +1,4 @@
-#include "fast.h"
+#include "core.h"
 
 int main(int argc, char* argv[]) 
 {
@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
 
     std::vector <std::pair <int, std::pair <int, std::string> > > edges;
     std::deque <std::vector<int>> W;
-    std::vector<unsigned int> a = new_fastset(P, V);
+    //std::vector<unsigned int> a = new_fastset(P, V);
     std::vector <std::vector <std::vector <unsigned int> > > H1(nonterminals.size(), std::vector<std::vector <unsigned int > > (V, a)), H2(nonterminals.size(), std::vector<std::vector <unsigned int> > (V, a));
     std::vector<std::vector<std::vector<std::vector<int>> > > prev(V, std::vector<std::vector<std::vector<int > > > (nonterminals.size(), std::vector<std::vector<int>>  (V, {-1, -1, -1})));
     for (int i = 0; i < E; i++)
