@@ -118,10 +118,7 @@ int baseline_cfl(bool is_fast, int flag, int i2, int i3, std::vector <std::vecto
                 std::cout << "114 bcfl\n";
             }
         };
-        if (is_fast) 
-            lambda_expr(wv);
-        else
-            lambda_expr(wu);
+        (is_fast) ? lambda_expr(wv): lambda_expr(wu);
     }
     return 0;
 }
