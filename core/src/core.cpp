@@ -62,7 +62,7 @@ int main(int argc, char* argv[])
 
     //auto H1 = func.create_H(nonterminals.size(), V, P), H2 = H1;
     std::vector<std::vector<std::vector<unsigned int>>>H1v = func.create_Hv(nonterminals.size(), V, P), H2v = H1v;
-    std::vector<std::vector<std::unordered_set<unsigned int>>>H1u = func.create_Hu(nonterminals.size(), V, P), H2u = H1u;
+    std::vector<std::vector<std::unordered_set<int>>>H1u = func.create_Hu(nonterminals.size(), V, P), H2u = H1u;
     std::cout << "55\n";
 
     //std::vector<std::vector<std::unordered_set<int> > > H1 (nonterminals.size(), std::vector<std::unordered_set<int> > (V)), H2 (nonterminals.size(), std::vector<std::unordered_set<int> > (V));

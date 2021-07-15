@@ -15,7 +15,7 @@ std::vector<int> create_wv(int P, int V, std::vector<unsigned int>& v1, std::vec
     return wv;
 }
 
-void add_value(std::unordered_set<unsigned int>& u, std::vector<unsigned int>& v, int a, int P)
+void add_value(std::unordered_set<int>& u, std::vector<unsigned int>& v, int a, int P)
 {
     u.insert(a);
 }
