@@ -30,8 +30,8 @@ add_library(fat SHARED gcc-cfg-utils/code/wo-thin-bb.cpp)
 
 add_executable(core ../core/src/fast.cpp)
 add_executable(code2graph gcc-cfg-utils/code/code2graph.cpp)
-#add_executable(test tests/test.cpp)
+add_executable(test tests/test.cpp)
 
 target_link_libraries(core PRIVATE fst)
 target_link_libraries(code2graph PRIVATE c2g dl)
-#target_link_libraries(test PRIVATE c2g fst Catch2WithMain)
+target_link_libraries(test PRIVATE c2g fst Catch2WithMain)
