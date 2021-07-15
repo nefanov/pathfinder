@@ -125,7 +125,7 @@ int baseline_cfl(int flag, int i2, int i3, std::vector <std::vector <std::vector
             add_value(H2[A][i4], i5, P), add_value(H1[A][i5], i4, P);
             W.push_back({i5, A, i4});
             if (prev[i5][A][i4][0] == -1)
-                prev[i5][A][i4] = {i2, C, B};
+                prev[i5][A][i4] = {i2, (1 - flag) * C + flag * B, B * (1 - flag) + flag * C};
         }
     }
     return 0;
