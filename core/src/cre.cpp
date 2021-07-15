@@ -123,19 +123,22 @@ int baseline_cfl(bool is_fast, int flag, int i2, int i3, std::vector <std::vecto
     return 0;
 }
 
-int output(int P, int V, int initial, std::vector<std::vector<std::vector<std::vector<int>> > >& prev, std::vector <std::vector <std::vector <unsigned int> > >& H1,std::vector<std::vector<std::unordered_set<int>>>& H1u, std::vector<int>(*create_q)(int P, std::vector<unsigned int> v))
+int output(bool is_fast, int P, int V, int initial, std::vector<std::vector<std::vector<std::vector<int>> > >& prev, std::vector <std::vector <std::vector <unsigned int> > >& H1,std::vector<std::vector<std::unordered_set<int>>>& H1u, std::vector<int>(*create_q)(int P, std::vector<unsigned int> v))
 {
     int counter = 0;
     for (int i = 0; i < V; i++) {
         std::vector<int> q = create_q(P, H1[initial][i]);
-        for (auto j: q) {
-            counter++;
-            std::cout << i << " " << j << std::endl;
-            std::vector<int> way = path_find(i, j, initial, prev);
-            for (auto k: way)
-                std::cout << k << " ";
-            std::cout << std::endl;
-        }
+        auto lambda_expr = [&initial, &prev, &counter, &i](auto qi) {
+            for (auto j: qi) {
+                counter++;
+                std::cout << i << " " << j << std::endl;
+                std::vector<int> way = path_find(i, j, initial, prev);
+                for (auto k: way)
+                    std::cout << k << " ";
+                std::cout << std::endl;
+            }
+        };
+        (is_fast) ? lambda_expr(q): lambda_expr(H1u[initial][i]);
     }
     std::cout << counter << std::endl;
     return 0;

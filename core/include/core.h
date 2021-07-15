@@ -60,7 +60,7 @@ int baseline_cfl(bool is_fast, int flag, int i2, int i3, std::vector <std::vecto
 
 std::vector<int> path_find             (int i, int j, int nonterm, std::vector<std::vector<std::vector<std::vector<int> > > >& prev);
 
-int output                             (int P, int V, int initial, std::vector<std::vector<std::vector<std::vector<int>> > >& prev, 
+int output                             (bool is_fast, int P, int V, int initial, std::vector<std::vector<std::vector<std::vector<int>> > >& prev, 
                                         std::vector <std::vector <std::vector <unsigned int> > >& H1v, std::vector<std::vector<std::unordered_set<int>>>& H1u,
                                         std::vector<int>(*create_q)(int P, std::vector<unsigned int> v));
 

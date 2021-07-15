@@ -89,7 +89,21 @@ int main(int argc, char* argv[])
     
     }
     std::cout << "85\n";
+    std::cout << "H111111:\n";
+    for (auto i:H1u) {
+        for (auto j:i) {
+            for (auto k:j)
+                std::cout << k << " ";
+            std::cout<<std::endl;
+    }
+            std::cout<<std::endl;
 
-    output(P, V, initial, prev, H1v, H1u, func.create_q);
+
+    }
+            std::cout<<std::endl;
+            std::cout<<std::endl;
+            std::cout<<std::endl;
+
+    output(is_fast, P, V, initial, prev, H1v, H1u, func.create_q);
     fin.close();
 }

@@ -17,7 +17,18 @@ std::vector<int> create_wv(int P, int V, std::vector<unsigned int>& v1, std::vec
 
 void add_value(std::unordered_set<int>& u, std::vector<unsigned int>& v, int a, int P)
 {
+    std::cout << "ADDVALUE +" << a << " beg ";
+    for(auto i:u)
+        std::cout << i << " ";
+    std::cout << std::endl;
     u.insert(a);
+    std::cout << "ADDVALUE end ";
+    for(auto i:u)
+        std::cout << i << " ";
+    std::cout << std::endl;
+    std::cout << std::endl;
+    std::cout << std::endl;
+
 }
 
 std::vector<unsigned int> create_q(int P, std::vector<unsigned int> v)
