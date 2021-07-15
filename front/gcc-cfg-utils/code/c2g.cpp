@@ -1,29 +1,33 @@
 #include "code2graph.h"
-
-int process_path(int argc, std::ifstream& input_file, std::string& path, std::string& path_to_input, std::ifstream& analyze_file)
+enum {STDIN, CMD, FILEIN};
+int process_path(int input_type, int argc, std::ifstream& input_file, std::string& path, std::string& path_to_input, std::ifstream& analyze_file)
 {
 	std::string path_to_analyze = path;
-	if (argc < 2) {
-		std::cout << "Enter the name of the file to be analyzed, pre-compiled with gcc file_name -fdump-tree-cfg-graph: ";
-		std::cin >> path_to_analyze;
+	switch(input_type) {
+		case (STDIN):
+			std::cout << "Enter the name of the file to be analyzed, pre-compiled with gcc file_name -fdump-tree-cfg-graph: ";
+			std::cin >> path_to_analyze;
+			path_to_analyze += ".012t.cfg.dot";
+		break;
+		case (CMD):
+			path_to_analyze += ".012t.cfg.dot";
+		break;
+		case (FILEIN):
+			path_to_input = path_to_input;
+			input_file.open(path_to_input);
+			//std::string full_path = path_to_input;
+			input_file >> path_to_analyze;
+			//full_path.erase(full_path.find_last_of("/") + 1, full_path.size()); // .../gcc-cfg-utils/input/test.in -> .../gcc-cfg-utils/input/
+			path_to_analyze += ".012t.cfg.dot";
+		break;
 	}
-	if (path_to_input != "") {
-		path_to_input = std::filesystem::current_path().string() + "/" + path_to_input;
-		input_file.open(path_to_input);
-		//std::string full_path = path_to_input;
-		input_file >> path_to_analyze;
-		//full_path.erase(full_path.find_last_of("/") + 1, full_path.size()); // .../gcc-cfg-utils/input/test.in -> .../gcc-cfg-utils/input/
-		path_to_analyze += ".012t.cfg.dot";
-	}
-	else
-		path_to_analyze = std::filesystem::current_path().string() + "/" + path_to_analyze + ".012t.cfg.dot";
-	analyze_file.open(path_to_analyze);
 	path = path_to_analyze;
+	analyze_file.open(path_to_analyze);
 	if (!analyze_file.is_open()) {
-		std::cout << "file " << path_to_analyze << " was not opened" << std::endl;
-		return -1;
+			std::cout << "file " << path_to_analyze << " was not opened" << std::endl;
+			return -1;
 	}
-    return 0;
+	return 0;
 }
 
 void cluster_handler(int& len, size_t& found, int& cluster, int& subgraph, std::string& inp, std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector <std::vector<std::pair<std::string, int>>>& V, std::vector <std::vector<std::string>>& Code, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E)
@@ -42,7 +46,6 @@ void entry_end_handler(int& subgraph, int& k, std::string& inp, int len, int& ba
 	if (inp[len - 1] == '\\')
 	{
 		basic_block = 1;
-		for(k; k< len && inp[k] != '"'; k++);
 		code = "";
 	}
 	else
@@ -162,78 +165,6 @@ void adjacency_list(std::vector <std::vector<std::pair<std::string, int>>>& V, s
 	std::cout << std::endl;
 }
 
-void new_graph_creator(std::vector<std::vector<std::pair<std::string, int>>>& V, std::vector<std::vector<std::vector<std::pair<int, std::string>>>>& E, std::vector<std::vector<std::string>>& Code, std::vector<std::vector<int>>& V_new, std::vector<std::vector<std::pair<int, std::string>>>& E_new, std::vector<std::string>& Code_new)
-{
-	for (int i = 0; i < V.size(); i++)
-	{
-		for (int j = 0; j < V[i].size(); j++)
-		{			
-			V[i][j].second = V_new.size();
-			V_new.push_back({i, j, 0});
-			Code_new.push_back(Code[i][j]);
-		}
-	}
-	E_new.resize(V_new.size());
-	for (int i = 0; i < E.size(); i++)
-	{
-		for (int j = 0; j < E[i].size(); j++)
-		{
-			for (int q = 0; q < E[i][j].size(); q++)
-			{
-				E_new[V[i][j].second].push_back(std::make_pair(V[i][E[i][j][q].first].second, E[i][j][q].second));
-			}
-		}
-	}
-}
-
-void graph_merger(std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector<std::vector<std::pair<std::string, int>>>& V, std::vector<std::vector<std::vector<std::pair<int, std::string>>>>& E, std::vector<std::vector<std::string>>& Code, std::vector<std::vector<int>>& V_new, std::vector<std::vector<std::pair<int, std::string>>>& E_new, std::vector<std::string>& Code_new)
-{
-	for (int i = 0; i < V_new.size(); i++)
-	{
-		int foundmin = Code_new[i].size(), cl_min = -1;
-		for (int j = 0; j < Clusters.size(); j++)
-		{
-			int FLAG = 0, found = 0, found1 = 0;
-			while (1)
-			{
-				found = Code_new[i].find(Clusters[j].first, found1);
-				if (found != std::string::npos)
-				{
-					int counter = 0;
-					for (int q = 0; q < found; q++)
-						if (Code_new[i][q] == '"')
-							counter++;
-					if (counter % 2 == 0)
-					{
-						FLAG = 1;
-						break;
-					}
-					found1 = Code_new[i].find('\n', found);
-				}
-				else
-					break;
-			}
-			if (FLAG == 1 && found < foundmin)
-			{
-				foundmin = found;
-				cl_min = j;
-			}
-		}		
-		if (cl_min != -1)
-		{
-			int found1 = Code_new[i].find('\n', foundmin);
-			std::string code = Code_new[i].substr(found1 + 1, Code_new[i].size() - found1 - 1);
-			Code_new[i] = Code_new[i].substr(0, found1 + 1);
-			V_new.push_back({V_new[i][0], V_new[i][1], V_new[i][2] + 1});
-			Code_new.push_back(code);
-			E_new.push_back(E_new[i]);
-			E_new[i].clear();
-			E_new[i].push_back(std::make_pair(V[cl_min][Clusters[cl_min].second.first].second, ""));
-			E_new[V[cl_min][Clusters[cl_min].second.second].second].push_back(std::make_pair(E_new.size() - 1, ""));
-		}
-	}
-}
-
 void new_graph_list(std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector <std::vector<std::pair<std::string, int>>>& V)
 {
 	std::cout << "Clusters names and their start and finish vertexes" << std::endl;
@@ -304,6 +235,23 @@ void input_V_E(std::ifstream& fin, std::vector<std::vector<std::pair<int, std::s
 	input_file.close();
 }
 
+void visualising_graph(std::vector<std::vector<int>>& V_new, std::vector<std::vector<std::pair<int, std::string>>>& E_new,	std::vector<std::string>& Code_new, std::vector <std::vector<std::pair<std::string, int>>>& V)
+{
+	std::cout << "-----------------------------------------------\n";
+	std::cout << "For watching how new graph looks like copy this to file.dot and use dot -Tpng file.dot -o filepic\n";
+	std::cout << "digraph code {\n";
+	for (int i = 0; i < V_new.size(); i++) {
+		std::cout << V[V_new[i][0]][V_new[i][1]].first + "_" + std::to_string(V_new[i][2]) << " [shape = record, label = \"" << Code_new[i] << "\"];\n";
+ 	}
+	for (int i = 0; i < V_new.size(); i++) {
+		for (int j = 0; j < E_new[i].size(); j++) {
+			std::cout << V[V_new[i][0]][V_new[i][1]].first + "_" + std::to_string(V_new[i][2]) << " -> " << V[V_new[E_new[i][j].first][0]][V_new[E_new[i][j].first][1]].first + "_" + std::to_string(V_new[E_new[i][j].first][2]) << ";\n"; 
+		}
+	}
+	std::cout << "}\n";
+	std::cout << "-----------------------------------------------\n";
+}
+
 void to_fifo(std::string bin_path, std::vector<std::vector<int>>& V_new, std::vector <std::vector<std::pair<std::string, int>>>& V, std::vector<std::vector<std::pair<int, std::string>>>& E_new, std::vector<std::pair<std::string, std::string> >& rules)
 {
 	std::ofstream fout;
@@ -334,4 +282,13 @@ int number_of_file_arg(int argc, char* argv[], char* arg)
 		if(strcmp(argv[i], arg) == 0)
 			return i;
 	return -1;
+}
+
+int get_input_type(int argc, char* argv[])
+{
+	if (number_of_file_arg(argc, argv, "-file") > 0)
+		return 2;
+	if (number_of_file_arg(argc, argv, "-cmd") > 0)
+		return 1;
+	return 0;
 }
