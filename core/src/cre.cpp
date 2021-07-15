@@ -98,7 +98,7 @@ int baseline_cfl(bool is_fast, int flag, int i2, int i3, std::vector <std::vecto
                 add_value(H1u[A][i5], H1v[A][i5], i4, P);
                     W.push_back({i5, A, i4});
                     if (prev[i5][A][i4][0] == -1)
-                        prev[i5][A][i4] = {i2, C, B};
+                        prev[i5][A][i4] = {i2, (1 - flag) * C + flag * B, B * (1 - flag) + flag * C};
             }
         };
         (is_fast) ? lambda_expr(wv): lambda_expr(wu);
