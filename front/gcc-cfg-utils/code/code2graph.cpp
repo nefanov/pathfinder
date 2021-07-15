@@ -3,15 +3,15 @@
 int main(int argc, char* argv[])
 {
 	char* bpath = (char*)malloc(PATH_MAX);
-	int code_descr = 0, cluster = 0, edgeline = 0, basic_block = 0, subgraph = -1, path_arg_number = number_of_file_arg(argc, argv, "-file") + 1;
+	int code_descr = 0, cluster = 0, edgeline = 0, basic_block = 0, subgraph = -1, file_arg_number = number_of_file_arg(argc, argv, "-file") + 1, cmd_arg_number = number_of_file_arg(argc, argv, "-cmd") + 1, input_type = get_input_type(argc, argv);
 	std::vector <std::pair<std::string, std::pair<int, int>>> Clusters;
 	std::vector <std::vector<std::pair<std::string, int>>> V; //V-<block_name, number in V_new>
 	std::vector <std::vector<std::string>> Code;
 	std::vector <std::vector<std::vector<std::pair<int, std::string>>>> E;
-	std::string path = (path_arg_number > 0) ? argv[1] : "", inp, code = "", bin_path = realpath(argv[0], bpath), path_to_input = (path_arg_number > 0) ? argv[path_arg_number] : "";
+	std::string path = (cmd_arg_number > 0) ? argv[cmd_arg_number] : "", inp, code = "", bin_path = realpath(argv[0], bpath), path_to_input = (file_arg_number > 0) ? argv[file_arg_number] : "";
 	std::ifstream analyze_file, input_file;
 	bin_path.erase(bin_path.find_last_of("/") + 1, bin_path.size()); // .../gcc-cfg-utils/build/code2graph -> .../gcc-cfg-utils/build/
-	process_path(argc, input_file, path, path_to_input, analyze_file);
+	process_path(input_type, argc, input_file, path, path_to_input, analyze_file);
 	while(std::getline(analyze_file, inp)) 
 		(basic_block == 0) ? blocks_handler(code, basic_block, cluster, subgraph, inp, Clusters, V, Code, E, inp.size()): code_handler(inp, basic_block, code, Code, subgraph);
 	graph_list(Clusters);

@@ -1,29 +1,33 @@
 #include "code2graph.h"
-
-int process_path(int argc, std::ifstream& input_file, std::string& path, std::string& path_to_input, std::ifstream& analyze_file)
+enum {STDIN, CMD, FILEIN};
+int process_path(int input_type, int argc, std::ifstream& input_file, std::string& path, std::string& path_to_input, std::ifstream& analyze_file)
 {
 	std::string path_to_analyze = path;
-	if (argc < 2) {
-		std::cout << "Enter the name of the file to be analyzed, pre-compiled with gcc file_name -fdump-tree-cfg-graph: ";
-		std::cin >> path_to_analyze;
+	switch(input_type) {
+		case (STDIN):
+			std::cout << "Enter the name of the file to be analyzed, pre-compiled with gcc file_name -fdump-tree-cfg-graph: ";
+			std::cin >> path_to_analyze;
+			path_to_analyze = std::filesystem::current_path().string() + "/" + path_to_analyze + ".012t.cfg.dot";
+		break;
+		case (CMD):
+			path_to_analyze = std::filesystem::current_path().string() + "/" + path_to_analyze + ".012t.cfg.dot";
+		break;
+		case (FILEIN):
+			path_to_input = std::filesystem::current_path().string() + "/" + path_to_input;
+			input_file.open(path_to_input);
+			std::string full_path = path_to_input;
+			input_file >> path_to_analyze;
+			full_path.erase(full_path.find_last_of("/") + 1, full_path.size()); // .../gcc-cfg-utils/input/test.in -> .../gcc-cfg-utils/input/
+			path_to_analyze = full_path + path_to_analyze + ".012t.cfg.dot";
+		break;
 	}
-	if (path_to_input != "") {
-		path_to_input = std::filesystem::current_path().string() + "/" + path_to_input;
-		input_file.open(path_to_input);
-		std::string full_path = path_to_input;
-		input_file >> path_to_analyze;
-		full_path.erase(full_path.find_last_of("/") + 1, full_path.size()); // .../gcc-cfg-utils/input/test.in -> .../gcc-cfg-utils/input/
-		path_to_analyze = full_path + path_to_analyze + ".012t.cfg.dot";
-	}
-	else
-		path_to_analyze = std::filesystem::current_path().string() + "/" + path_to_analyze + ".012t.cfg.dot";
-	analyze_file.open(path_to_analyze);
 	path = path_to_analyze;
+	analyze_file.open(path_to_analyze);
 	if (!analyze_file.is_open()) {
-		std::cout << "file " << path_to_analyze << " was not opened" << std::endl;
-		return -1;
+			std::cout << "file " << path_to_analyze << " was not opened" << std::endl;
+			return -1;
 	}
-    return 0;
+	return 0;
 }
 
 void cluster_handler(int& len, size_t& found, int& cluster, int& subgraph, std::string& inp, std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector <std::vector<std::pair<std::string, int>>>& V, std::vector <std::vector<std::string>>& Code, std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E)
@@ -278,4 +282,13 @@ int number_of_file_arg(int argc, char* argv[], char* arg)
 		if(strcmp(argv[i], arg) == 0)
 			return i;
 	return -1;
+}
+
+int get_input_type(int argc, char* argv[])
+{
+	if (number_of_file_arg(argc, argv, "-file") > 0)
+		return 2;
+	if (number_of_file_arg(argc, argv, "-cmd") > 0)
+		return 1;
+	return 0;
 }
