@@ -31,8 +31,8 @@ add_library(c2g SHARED gcc-cfg-utils/code/c2g.cpp)
 
 add_executable(core ../core/src/core.cpp)
 add_executable(code2graph gcc-cfg-utils/code/code2graph.cpp)
-#add_executable(test tests/test.cpp)
+add_executable(test tests/test.cpp)
 
 target_link_libraries(core PRIVATE cre dl)
 target_link_libraries(code2graph PRIVATE c2g)
-#target_link_libraries(test PRIVATE c2g fst Catch2WithMain)
+target_link_libraries(test PRIVATE c2g cre Catch2WithMain dl)

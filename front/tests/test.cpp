@@ -1,8 +1,7 @@
 #define CATCH_CONFIG_MAIN
 #include "catch2/catch_test_macros.hpp"
 #include "code2graph.h"
-#include "fast.h"
-
+#include "core.h"
 TEST_CASE("wrong path to the file") {
     std::ifstream input_file, analyze_file;
     std::string path = "./", path_to_input = "";
@@ -15,7 +14,7 @@ TEST_CASE("using file input/test1.in") {
     REQUIRE(process_path(3, input_file, path, path_to_input, analyze_file) == 0);
     REQUIRE(path_to_input == full_path);
     full_path.erase(full_path.find_last_of("/") + 1, full_path.size()); // .../gcc-cfg-utils/input/test.in -> .../gcc-cfg-utils/input/
-    REQUIRE(path == full_path + "../gcc-cfg-utils/examples/test1.c.012t.cfg.dot");
+    REQUIRE(path == "gcc-cfg-utils/examples/test1.c.012t.cfg.dot");
 }
 
 TEST_CASE("path to examples/test1.c") {
@@ -25,12 +24,22 @@ TEST_CASE("path to examples/test1.c") {
 }
 
 TEST_CASE("new_fastset") {
+    void* sl = dlopen("libfst.so", RTLD_LAZY);
+    REQUIRE(sl != NULL);
+    void* f = dlsym(sl, "new_fastset");
+    REQUIRE(f != NULL);
+    std::vector<unsigned int> (*new_fastset)(int P, int V) = reinterpret_cast<std::vector<unsigned int> (*)(int P, int V)>(f);
     std::vector<unsigned int> check1(4, 0), check2(3, 0);
     REQUIRE(check1 == new_fastset(3, 10));
     REQUIRE(check2 == new_fastset(4, 12));
 }
 
 TEST_CASE("difference") {
+    void* sl = dlopen("libfst.so", RTLD_LAZY);
+    REQUIRE(sl != NULL);
+    void* f = dlsym(sl, "difference");
+    REQUIRE(f != NULL);
+    std::vector<unsigned int> (*difference)(int P, int V, std::vector<unsigned int> &kek1, std::vector<unsigned int> &kek2) = reinterpret_cast<std::vector<unsigned int> (*)(int P, int V, std::vector<unsigned int> &kek1, std::vector<unsigned int> &kek2)>(f);
     int P = 1, V = 5;
     std::vector<unsigned int> v11 = {1, 0, 1, 0, 1}, v12 = {0, 1, 1, 0, 0}, check1 = {1, 0, 0, 0, 1};
     REQUIRE(check1 == difference(P, V, v11, v12));
@@ -39,16 +48,27 @@ TEST_CASE("difference") {
     REQUIRE(check2 == difference(P, V, v21, v22));
 }
 
-TEST_CASE("add_value") {
+TEST_CASE("add_value fast") {
+    void* sl = dlopen("libfst.so", RTLD_LAZY);
+    REQUIRE(sl != NULL);
+    void* f = dlsym(sl, "add_value");
+    REQUIRE(f != NULL);
+    void (*add_value)(std::unordered_set<int>& u, std::vector<unsigned int>& v, int a, int P) = reinterpret_cast<void (*)(std::unordered_set<int>& u, std::vector<unsigned int>& v, int a, int P)>(f);
     int a1 = 2, a2 = 3, P = 2;
     std::vector<unsigned int> v1 = {3, 2, 1}, v2 = v1, check1 = {3, 3, 1}, check2 = {3, 2, 1};
-    add_value(v1, a1, P);
-    add_value(v2, a2, P);
+    std::unordered_set<int> u;
+    add_value(u, v1, a1, P);
+    add_value(u, v2, a2, P);
     REQUIRE(check1 == v1);
     REQUIRE(check2 == v2);
 }
 
 TEST_CASE("not_null") {
+    void* sl = dlopen("libfst.so", RTLD_LAZY);
+    REQUIRE(sl != NULL);
+    void* f = dlsym(sl, "not_null");
+    REQUIRE(f != NULL);
+    std::vector<int> (*not_null)(int P, std::vector<unsigned int> kek) = reinterpret_cast<std::vector<int> (*)(int P, std::vector<unsigned int> kek)>(f);
     int P1 = 2, P2= 3;
     std::vector<unsigned int> v1 = {3, 1, 2, 0}, v2 = {0, 1, 0, 5};
     std::vector<int> check1 = {0, 1, 2, 5}, check2 = {3, 9, 11};
