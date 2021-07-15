@@ -87,35 +87,18 @@ std::vector<int> path_find(int i, int j, int nonterm, std::vector<std::vector<st
 
 int baseline_cfl(bool is_fast, int flag, int i2, int i3, std::vector <std::vector <std::vector <unsigned int> > >& Hiv, std::vector <std::vector <std::unordered_set <int> > >& Hiu, std::vector<std::vector<int>> side_rules, int B, int P, int V, std::vector <rule>& rules, std::vector<std::vector<std::vector<std::vector<int>> > >& prev, std::deque <std::vector<int>>& W, std::vector <std::vector <std::vector <unsigned int> > >& H1v, std::vector <std::vector <std::vector <unsigned int> > >& H2v, std::vector <std::vector <std::unordered_set <int> > >& H1u, std::vector <std::vector <std::unordered_set <int> > >& H2u, void (*add_value)(std::unordered_set<int>& u, std::vector<unsigned int>& v, int a, int P), std::vector<int> (*create_wv)(int P, int V, std::vector<unsigned int>& v1, std::vector<unsigned int>& v2, std::unordered_set<int>& u1, std::unordered_set<int>& u2), std::unordered_set<int> (*create_wu)(int P, int V, std::vector<unsigned int>& v1, std::vector<unsigned int>& v2, std::unordered_set<int>& u1, std::unordered_set<int>& u2))
 {
-        std::cout << "90 bcfl\n";
-
     for (auto i:side_rules[B]) {
         int C = rules[i].right1[flag], A = rules[i].left, i4, i5;
-        std::cout << "94 bcfl\n";
-        std::cout << Hiu.size() << " " << Hiu[C].size() << std::endl;
-        //return -1;
         std::vector<int> wv = create_wv(P, V, Hiv[C][i2], Hiv[A][i3], Hiu[C][i2], Hiu[A][i3]);
         std::unordered_set<int> wu = create_wu(P, V, Hiv[C][i2], Hiv[A][i3], Hiu[C][i2], Hiu[A][i3]);
-        std::cout << "96 bcfl\n";
         auto lambda_expr = [&flag, &i2, &C, &B, &W, &i4, &i5, &A, &H2u, &H2v, &H1u, &H1v, &prev, &P, &i3, &add_value](auto w) {
             for (auto d: w) {
-                std::cout << "99 bcfl\n";
-
                 (flag) ? (i4 = d, i5 = i3) : (i4 = i3, i5 = d);
-                std::cout << "102 bcfl\n";
-                std::cout << A << " " << i4 << std::endl;
-                //std::cout << H2u[A][i4].size() << std::endl;
-                //std::cout << H2v[A][i4].size() << std::endl;
                 add_value(H2u[A][i4], H2v[A][i4], i5, P);
-                std::cout << "106 bcfl\n";
-
                 add_value(H1u[A][i5], H1v[A][i5], i4, P);
-                std::cout << "109 bcfl\n";
-                    
                     W.push_back({i5, A, i4});
                     if (prev[i5][A][i4][0] == -1)
                         prev[i5][A][i4] = {i2, C, B};
-                std::cout << "114 bcfl\n";
             }
         };
         (is_fast) ? lambda_expr(wv): lambda_expr(wu);
