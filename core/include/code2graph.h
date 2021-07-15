@@ -9,6 +9,21 @@
 #include <unistd.h>
 #include <limits.h>
 #include <filesystem>
+#include <dlfcn.h>
+
+class funcs
+{
+    public:
+    void (*new_graph_creator)(std::vector<std::vector<std::pair<std::string, int>>>& V, std::vector<std::vector<std::vector<std::pair<int, std::string>>>>& E, std::vector<std::vector<std::string>>& Code, std::vector<std::vector<int>>& V_new, std::vector<std::vector<std::pair<int, std::string>>>& E_new, std::vector<std::string>& Code_new);
+    void (*graph_merger)(std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector<std::vector<std::pair<std::string, int>>>& V, std::vector<std::vector<std::vector<std::pair<int, std::string>>>>& E, std::vector<std::vector<std::string>>& Code, std::vector<std::vector<int>>& V_new, std::vector<std::vector<std::pair<int, std::string>>>& E_new, std::vector<std::string>& Code_new);
+
+    funcs(void* a, void* b)
+    {
+        new_graph_creator = reinterpret_cast<void(*)(std::vector<std::vector<std::pair<std::string, int>>>& V, std::vector<std::vector<std::vector<std::pair<int, std::string>>>>& E, std::vector<std::vector<std::string>>& Code, std::vector<std::vector<int>>& V_new, std::vector<std::vector<std::pair<int, std::string>>>& E_new, std::vector<std::string>& Code_new)>(a);
+        graph_merger = reinterpret_cast<void(*)(std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector<std::vector<std::pair<std::string, int>>>& V, std::vector<std::vector<std::vector<std::pair<int, std::string>>>>& E, std::vector<std::vector<std::string>>& Code, std::vector<std::vector<int>>& V_new, std::vector<std::vector<std::pair<int, std::string>>>& E_new, std::vector<std::string>& Code_new)>(b);
+    }
+
+};
 
 int process_path       (int argc, std::ifstream& input_file, std::string& path, 
                         std::string& path_to_input, std::ifstream& analyze_file);
@@ -47,20 +62,7 @@ void vertex_list       (std::vector <std::vector<std::pair<std::string, int>>>& 
 void adjacency_list    (std::vector <std::vector<std::pair<std::string, int>>>& V, 
                         std::vector <std::vector<std::vector<std::pair<int, std::string>>>>& E);
                         
-void new_graph_creator (std::vector<std::vector<std::pair<std::string, int>>>& V, 
-                        std::vector<std::vector<std::vector<std::pair<int, std::string>>>>& E, 
-                        std::vector<std::vector<std::string>>& Code,
-                        std::vector<std::vector<int>>& V_new, 
-                        std::vector<std::vector<std::pair<int, std::string>>>& E_new,
-                        std::vector<std::string>& Code_new);
 
-void graph_merger      (std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters,
-                        std::vector<std::vector<std::pair<std::string, int>>>& V, 
-                        std::vector<std::vector<std::vector<std::pair<int, std::string>>>>& E, 
-                        std::vector<std::vector<std::string>>& Code,
-                        std::vector<std::vector<int>>& V_new, 
-                        std::vector<std::vector<std::pair<int, std::string>>>& E_new,
-                        std::vector<std::string>& Code_new);
 
 void new_graph_list    (std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters,
                         std::vector <std::vector<std::pair<std::string, int>>>& V);
