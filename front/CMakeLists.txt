@@ -5,7 +5,7 @@ find_package(Catch2 QUIET)
 if (TARGET Catch2::Catch2)
     include(Catch2)
 else()
-    message(not_found)
+    message(catch2_not_found,_downloading...)
     include(FetchContent)
     FetchContent_Declare(
         Catch2
@@ -16,9 +16,10 @@ else()
 endif()
 
 set(CMAKE_CXX_FLAGS "-std=c++17")
-set(CMAKE_CXX_COMPILER g++-9)
+#set(CMAKE_CXX_COMPILER g++-9)
 set(EXECUTABLE_OUTPUT_PATH build)
 set(LIBRARY_OUTPUT_PATH build)
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 include_directories(../core/include)
 include_directories(_deps/catch2-src/src)
