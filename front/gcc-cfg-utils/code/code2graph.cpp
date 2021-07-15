@@ -28,6 +28,7 @@ int main(int argc, char* argv[])
 	new_adjacency_list(E_new);
 	std::vector<std::pair<std::string, std::string> > rules;
 	input_V_E(input_file, E_new, rules, analyze_file);
+	visualising_graph(V_new, E_new, Code_new, V);
 	to_fifo(bin_path, V_new, V, E_new, rules);
 	if (number_of_file_arg(argc, argv, "-front-only") <= 0)
   		execl((bin_path + "core").c_str(), (bin_path + "core").c_str(), (bin_path).c_str(), NULL);
