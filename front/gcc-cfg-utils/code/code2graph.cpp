@@ -8,7 +8,7 @@ int main(int argc, char* argv[])
 	std::vector <std::vector<std::pair<std::string, int>>> V; //V-<block_name, number in V_new>
 	std::vector <std::vector<std::string>> Code;
 	std::vector <std::vector<std::vector<std::pair<int, std::string>>>> E;
-	std::string path = (path_arg_number > 0) ? argv[1] : "", inp, code = "", bin_path = realpath(argv[0], bpath), path_to_input = (path_arg_number > 0) ? argv[path_arg_number] : "";
+	std::string path = (path_arg_number <= 0) ? argv[1] : "", inp, code = "", bin_path = realpath(argv[0], bpath), path_to_input = (path_arg_number > 0) ? argv[path_arg_number] : "";
 	std::ifstream analyze_file, input_file;
 	bin_path.erase(bin_path.find_last_of("/") + 1, bin_path.size()); // .../gcc-cfg-utils/build/code2graph -> .../gcc-cfg-utils/build/
 	process_path(argc, input_file, path, path_to_input, analyze_file);

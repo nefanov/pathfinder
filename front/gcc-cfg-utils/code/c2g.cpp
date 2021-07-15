@@ -10,10 +10,10 @@ int process_path(int argc, std::ifstream& input_file, std::string& path, std::st
 	if (path_to_input != "") {
 		path_to_input = std::filesystem::current_path().string() + "/" + path_to_input;
 		input_file.open(path_to_input);
-		std::string full_path = path_to_input;
+		//std::string full_path = path_to_input;
 		input_file >> path_to_analyze;
-		full_path.erase(full_path.find_last_of("/") + 1, full_path.size()); // .../gcc-cfg-utils/input/test.in -> .../gcc-cfg-utils/input/
-		path_to_analyze = full_path + path_to_analyze + ".012t.cfg.dot";
+		//full_path.erase(full_path.find_last_of("/") + 1, full_path.size()); // .../gcc-cfg-utils/input/test.in -> .../gcc-cfg-utils/input/
+		path_to_analyze += ".012t.cfg.dot";
 	}
 	else
 		path_to_analyze = std::filesystem::current_path().string() + "/" + path_to_analyze + ".012t.cfg.dot";

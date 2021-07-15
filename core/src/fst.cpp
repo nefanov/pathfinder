@@ -64,6 +64,6 @@ std::vector<std::vector<std::vector<unsigned int>>> create_Hv(int ntsize, int V,
 
 std::vector<std::vector<std::unordered_set<int>>> create_Hu(int ntsize, int V, int P)
 {
-    std::vector<std::vector<std::unordered_set<int>>> H;
+    std::vector<std::vector<std::unordered_set<int>>> H (ntsize, std::vector<std::unordered_set<int>> (0));
     return H;
 }
