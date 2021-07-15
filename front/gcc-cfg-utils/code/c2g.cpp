@@ -7,18 +7,18 @@ int process_path(int input_type, int argc, std::ifstream& input_file, std::strin
 		case (STDIN):
 			std::cout << "Enter the name of the file to be analyzed, pre-compiled with gcc file_name -fdump-tree-cfg-graph: ";
 			std::cin >> path_to_analyze;
-			path_to_analyze = std::filesystem::current_path().string() + "/" + path_to_analyze + ".012t.cfg.dot";
+			path_to_analyze += ".012t.cfg.dot";
 		break;
 		case (CMD):
-			path_to_analyze = std::filesystem::current_path().string() + "/" + path_to_analyze + ".012t.cfg.dot";
+			path_to_analyze += ".012t.cfg.dot";
 		break;
 		case (FILEIN):
-			path_to_input = std::filesystem::current_path().string() + "/" + path_to_input;
+			path_to_input = path_to_input;
 			input_file.open(path_to_input);
-			std::string full_path = path_to_input;
+			//std::string full_path = path_to_input;
 			input_file >> path_to_analyze;
-			full_path.erase(full_path.find_last_of("/") + 1, full_path.size()); // .../gcc-cfg-utils/input/test.in -> .../gcc-cfg-utils/input/
-			path_to_analyze = full_path + path_to_analyze + ".012t.cfg.dot";
+			//full_path.erase(full_path.find_last_of("/") + 1, full_path.size()); // .../gcc-cfg-utils/input/test.in -> .../gcc-cfg-utils/input/
+			path_to_analyze += ".012t.cfg.dot";
 		break;
 	}
 	path = path_to_analyze;

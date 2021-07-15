@@ -1,4 +1,4 @@
-../examples/test1.c
+gcc-cfg-utils/examples/test1.c
 5 
 S AB
 S AR
@@ -8,13 +8,7 @@ B b
 a
 a
 b
-5
-S AB
-S AR
-R SB
-A a
-B b
-a
 b
+a
 b
 a

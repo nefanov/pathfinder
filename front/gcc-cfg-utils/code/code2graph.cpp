@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
         fprintf(stderr, "%s\n", dlerror());
         return -1;
     }
-	funcs func(ngc, gm);
+	funcs_front func(ngc, gm);
 	func.new_graph_creator(V, E, Code, V_new, E_new, Code_new);
 	func.graph_merger(Clusters, V, E, Code, V_new, E_new, Code_new);
 	new_graph_list(Clusters, V);
