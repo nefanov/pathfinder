@@ -63,6 +63,21 @@ TEST_CASE("add_value fast") {
     REQUIRE(check2 == v2);
 }
 
+TEST_CASE("add_value slow") {
+    void* sl = dlopen("libslw.so", RTLD_LAZY);
+    REQUIRE(sl != NULL);
+    void* f = dlsym(sl, "add_value");
+    REQUIRE(f != NULL);
+    void (*add_value)(std::unordered_set<int>& u, std::vector<unsigned int>& v, int a, int P) = reinterpret_cast<void (*)(std::unordered_set<int>& u, std::vector<unsigned int>& v, int a, int P)>(f);
+    int a1 = 2, a2 = 3, P = 2;
+    std::vector<unsigned int> v1 = {3, 2, 1}, v2 = v1, check1 = {3, 3, 1}, check2 = {3, 2, 1};
+    std::unordered_set<int> u1 = {3, 2, 1}, u2 = {2, 4, 1}, check1u = {1, 2, 3}, check2u = {3, 2, 4, 1};
+    add_value(u1, v1, a1, P);
+    add_value(u2, v2, a2, P);
+    REQUIRE(check1u == u1);
+    REQUIRE(check2u == u2);
+}
+
 TEST_CASE("not_null") {
     void* sl = dlopen("libfst.so", RTLD_LAZY);
     REQUIRE(sl != NULL);
