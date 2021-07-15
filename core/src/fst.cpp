@@ -39,9 +39,15 @@ std::vector<int> not_null(int P, std::vector<unsigned int> kek)
     return ans;
 }
 
-std::vector<int> create_w(int P, int V, std::vector<unsigned int>& v1, std::vector<unsigned int>& v2, std::unordered_set<int>& u1, std::unordered_set<int>& u2)
+std::vector<int> create_wv(int P, int V, std::vector<unsigned int>& v1, std::vector<unsigned int>& v2, std::unordered_set<int>& u1, std::unordered_set<int>& u2)
 {
     return not_null(P, difference(P, V, v1, v2));
+}
+
+std::unordered_set<int> create_wu(int P, int V, std::vector<unsigned int>& v1, std::vector<unsigned int>& v2, std::unordered_set<int>& u1, std::unordered_set<int>& u2)
+{
+    std::unordered_set<int> w = u1;
+    return w;
 }
 
 std::vector<int> create_q(int P, std::vector<unsigned int> v)
@@ -56,15 +62,14 @@ int create_P(int V)
 
 std::vector<std::vector<std::vector<unsigned int>>> create_Hv(int ntsize, int V, int P)
 {
-    std::vector<unsigned int> a = new_fastset(P, V);
-    std::vector <std::vector <std::vector <unsigned int>>> H(ntsize, std::vector<std::vector <unsigned int > > (V, a));
+    std::vector <std::vector <std::vector <unsigned int>>> H(ntsize, std::vector<std::vector <unsigned int > > (V, new_fastset(P, V)));
     return H;
 }
 
 
 std::vector<std::vector<std::unordered_set<int>>> create_Hu(int ntsize, int V, int P)
 {
-    std::vector<std::vector<std::unordered_set<int>>> H (ntsize, std::vector<std::unordered_set<int>> (0));
+    std::vector<std::vector<std::unordered_set<int>>> H (ntsize, std::vector<std::unordered_set<int>> (V));
     return H;
 }
 }

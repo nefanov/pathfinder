@@ -17,7 +17,8 @@ int main(int argc, char* argv[])
         dlsym(sl, "add_value"), 
         dlsym(sl, "difference"), 
         dlsym(sl, "not_null"), 
-        dlsym(sl, "create_w"), 
+        dlsym(sl, "create_wv"), 
+        dlsym(sl, "create_wu"),
         dlsym(sl, "create_q"), 
         dlsym(sl, "create_Hv"),
         dlsym(sl, "create_Hu"),
@@ -80,10 +81,10 @@ int main(int argc, char* argv[])
         W.pop_front();
     std::cout << "81\n";
 
-        baseline_cfl(0, q[0], q[2], H2v, H2u, right_rules, q[1], P, V, rules, prev, W, H1v, H2v, H1u, H2u, func.add_value, func.create_w);
+        baseline_cfl(is_fast, 0, q[0], q[2], H2v, H2u, right_rules, q[1], P, V, rules, prev, W, H1v, H2v, H1u, H2u, func.add_value, func.create_wv, func.create_wu);
     std::cout << "84\n";
         
-        baseline_cfl(1, q[2], q[0], H1v, H1u, left_rules, q[1], P, V, rules, prev, W, H1v, H2v, H1u, H2u, func.add_value, func.create_w);
+        baseline_cfl(is_fast, 1, q[2], q[0], H1v, H1u, left_rules, q[1], P, V, rules, prev, W, H1v, H2v, H1u, H2u, func.add_value, func.create_wv, func.create_wu);
     std::cout << "87\n";
     
     }

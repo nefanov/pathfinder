@@ -1,12 +1,18 @@
 #include "core.h"
 
 extern "C" {
-std::unordered_set<int> create_w(int P, int V, std::vector<unsigned int>& v1, std::vector<unsigned int>& v2, std::unordered_set<int>& u1, std::unordered_set<int>& u2)
+std::unordered_set<int> create_wu(int P, int V, std::vector<unsigned int>& v1, std::vector<unsigned int>& v2, std::unordered_set<int>& u1, std::unordered_set<int>& u2)
 {
     std::unordered_set<int> w = u1;
-    for (auto d: v2)
+    for (auto d: u2)
         w.erase(d);  
     return w;
+}
+
+std::vector<int> create_wv(int P, int V, std::vector<unsigned int>& v1, std::vector<unsigned int>& v2, std::unordered_set<int>& u1, std::unordered_set<int>& u2)
+{
+    std::vector<int> wv(V, 0);
+    return wv;
 }
 
 void add_value(std::unordered_set<unsigned int>& u, std::vector<unsigned int>& v, int a, int P)
