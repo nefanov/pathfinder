@@ -1,5 +1,6 @@
 #include "code2graph.h"
 
+extern "C" {
 void new_graph_creator(std::vector<std::vector<std::pair<std::string, int>>>& V, std::vector<std::vector<std::vector<std::pair<int, std::string>>>>& E, std::vector<std::vector<std::string>>& Code, std::vector<std::vector<int>>& V_new, std::vector<std::vector<std::pair<int, std::string>>>& E_new, std::vector<std::string>& Code_new)
 {
 	for (int i = 0; i < V.size(); i++) {
@@ -51,4 +52,5 @@ void graph_merger(std::vector <std::pair<std::string, std::pair<int, int>>>& Clu
 			}
 		}
 	}
+}
 }

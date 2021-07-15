@@ -6,13 +6,13 @@
 TEST_CASE("wrong path to the file") {
     std::ifstream input_file, analyze_file;
     std::string path = "./", path_to_input = "";
-    REQUIRE(process_path(2, input_file, path, path_to_input, analyze_file) == -1);
+    REQUIRE(process_path(1, 2, input_file, path, path_to_input, analyze_file) == -1);
 }
 
 TEST_CASE("using file input/test1.in") {
     std::ifstream input_file, analyze_file;
     std::string path_to_input = "tests/test1.in", path = "", full_path = std::filesystem::current_path().string() + "/" + path_to_input;
-    REQUIRE(process_path(3, input_file, path, path_to_input, analyze_file) == 0);
+    REQUIRE(process_path(2, 3, input_file, path, path_to_input, analyze_file) == 0);
     REQUIRE(path_to_input == full_path);
     full_path.erase(full_path.find_last_of("/") + 1, full_path.size()); // .../gcc-cfg-utils/input/test.in -> .../gcc-cfg-utils/input/
     REQUIRE(path == full_path + "../gcc-cfg-utils/examples/test1.c.012t.cfg.dot");
@@ -21,7 +21,7 @@ TEST_CASE("using file input/test1.in") {
 TEST_CASE("path to examples/test1.c") {
     std::ifstream input_file, analyze_file;
     std::string path = "gcc-cfg-utils/examples/test1.c", path_to_input = "";
-    REQUIRE(process_path(2, input_file, path, path_to_input, analyze_file) == 0);
+    REQUIRE(process_path(1, 2, input_file, path, path_to_input, analyze_file) == 0);
 }
 
 TEST_CASE("new_fastset") {

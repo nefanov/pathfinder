@@ -5,7 +5,7 @@ find_package(Catch2 QUIET)
 if (TARGET Catch2::Catch2)
     include(Catch2)
 else()
-    message(not_found)
+    message(catch2_not_found,_downloading...)
     include(FetchContent)
     FetchContent_Declare(
         Catch2
@@ -16,20 +16,23 @@ else()
 endif()
 
 set(CMAKE_CXX_FLAGS "-std=c++17")
-set(CMAKE_CXX_COMPILER g++-9)
+#set(CMAKE_CXX_COMPILER g++-9)
 set(EXECUTABLE_OUTPUT_PATH build)
 set(LIBRARY_OUTPUT_PATH build)
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 include_directories(../core/include)
 include_directories(_deps/catch2-src/src)
 
 add_library(fst SHARED ../core/src/fst.cpp)
 add_library(c2g SHARED gcc-cfg-utils/code/c2g.cpp)
+add_library(thin SHARED gcc-cfg-utils/code/w-thin-bb.cpp)
+add_library(fat SHARED gcc-cfg-utils/code/wo-thin-bb.cpp)
 
 add_executable(core ../core/src/fast.cpp)
 add_executable(code2graph gcc-cfg-utils/code/code2graph.cpp)
 add_executable(test tests/test.cpp)
 
 target_link_libraries(core PRIVATE fst)
-target_link_libraries(code2graph PRIVATE c2g)
+target_link_libraries(code2graph PRIVATE c2g dl)
 target_link_libraries(test PRIVATE c2g fst Catch2WithMain)
