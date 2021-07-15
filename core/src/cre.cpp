@@ -50,15 +50,15 @@ int input_rules(int& initial, std::vector <rule>& eps_rules, std::vector <std::v
     return 0;
 }
 
-int filling_loops(int j, int P, rule& i, std::deque <std::vector<int>>& W, std::vector <std::vector <std::vector <unsigned int> > >& H1, std::vector <std::vector <std::vector <unsigned int> > >& H2, void(*add_value)(std::vector<unsigned int> &kek, int a, int P))
+int filling_loops(int j, int P, rule& i, std::deque <std::vector<int>>& W, std::vector <std::vector <std::vector <unsigned int> > >& H1v, std::vector <std::vector <std::vector <unsigned int> > >& H2v, std::vector <std::vector <std::unordered_set <unsigned int> > >& H1u, std::vector <std::vector <std::unordered_set <unsigned int> > >& H2u, void add_value(std::unordered_set<unsigned int>& u, std::vector<unsigned int>& v, int a, int P))
 {
     W.push_back({i.left, j, i.left});
-    add_value(H1[j][i.left], i.left, P);
-    add_value(H2[j][i.left], i.left, P);
+    add_value(H1u[j][i.left], H1v[j][i.left], i.left, P);
+    add_value(H2u[j][i.left], H2v[j][i.left], i.left, P);
     return 0;
 }
 
-int filling_edge_matrices(int P, std::ifstream& fin, std::vector <std::vector<int>>& lol, std::deque <std::vector<int>>& W, std::vector <std::vector <std::vector <unsigned int> > >& H1, std::vector <std::vector <std::vector <unsigned int> > >& H2, void(*add_value)(std::unordered_set<unsigned int> &u, std::vector<unsigned int> &v, int a, int P))
+int filling_edge_matrices(int P, std::ifstream& fin, std::vector <std::vector<int>>& lol, std::deque <std::vector<int>>& W, std::vector <std::vector <std::vector <unsigned int> > >& H1v, std::vector <std::vector <std::vector <unsigned int> > >& H2v, std::vector <std::vector <std::unordered_set <unsigned int> > >& H1u, std::vector <std::vector <std::unordered_set <unsigned int> > >& H2u, void add_value(std::unordered_set<unsigned int>& u, std::vector<unsigned int>& v, int a, int P))
 {
     int u1, u2, s = 0;
     std::string str;
@@ -67,8 +67,8 @@ int filling_edge_matrices(int P, std::ifstream& fin, std::vector <std::vector<in
         s = str[0] - 'a';
     for (auto j: lol[s]) {
         W.push_back({u1, j, u2});
-        add_value(H1[j][u1], u2, P);
-        add_value(H2[j][u2], u1, P);
+        add_value(H1u[j][u1], H1v[j][u1], u2, P);
+        add_value(H2u[j][u2], H2v[j][u2], u1, P);
     }
     return 0;
 }
@@ -85,21 +85,14 @@ std::vector<int> path_find(int i, int j, int nonterm, std::vector<std::vector<st
     return way;
 }
 
-int baseline_cfl(int flag, int i2, int i3, std::vector <std::vector <std::vector <unsigned int> > >& Hi, std::vector<std::vector<int>> side_rules, int B, int P, int V, std::vector <rule>& rules, std::vector<std::vector<std::vector<std::vector<int>> > >& prev, std::deque <std::vector<int>>& W, std::vector <std::vector <std::vector <unsigned int> > >& H1, std::vector <std::vector <std::vector <unsigned int> > >& H2, void(*add_value)(std::unordered_set<unsigned int> &u, std::vector<unsigned int> &v, int a, int P), std::vector<int> (*create_w)(int P, int V, std::vector<unsigned int>& v1, std::vector<unsigned int>& v2))
+int baseline_cfl(int flag, int i2, int i3, std::vector <std::vector <std::vector <unsigned int> > >& Hiv, std::vector <std::vector <std::unordered_set <unsigned int> > >& Hiu, std::vector<std::vector<int>> side_rules, int B, int P, int V, std::vector <rule>& rules, std::vector<std::vector<std::vector<std::vector<int>> > >& prev, std::deque <std::vector<int>>& W, std::vector <std::vector <std::vector <unsigned int> > >& H1v, std::vector <std::vector <std::vector <unsigned int> > >& H2v, std::vector <std::vector <std::unordered_set <unsigned int> > >& H1u, std::vector <std::vector <std::unordered_set <unsigned int> > >& H2u, void add_value(std::unordered_set<unsigned int>& u, std::vector<unsigned int>& v, int a, int P), std::vector<int> (*create_w)(int P, int V, std::vector<unsigned int>& v1, std::vector<unsigned int>& v2, std::unordered_set<unsigned int>& u1, std::unordered_set<unsigned int>& u2))
 {
-    //flag: 0 1
-    //Hi H2 H1
-    //i2 u v
-    //i3 v u
-    //i4 v d
-    //i5 d u
     for (auto i:side_rules[B]) {
         int C = rules[i].right1[flag], A = rules[i].left, i4, i5;
-        //std::vector<unsigned int> w1 = Hi[C][i2], w2 = Hi[A][i3], w3 = difference(P, V, w1, w2);
-        auto w = create_w(P, V, Hi[C][i2], Hi[A][i3]);
+        auto w = create_w(P, V, Hiv[C][i2], Hiv[A][i3], Hiu[C][i2], Hiu[A][i3]);
         for (auto d: w) {
             (flag) ? (i4 = d, i5 = i3) : (i4 = i3, i5 = d);
-            add_value(H2[A][i4], i5, P), add_value(H1[A][i5], i4, P);
+            add_value(H2u[A][i4], H2v[A][i4], i5, P), add_value(H1u[A][i5], H1v[A][i5], i4, P);
             W.push_back({i5, A, i4});
             if (prev[i5][A][i4][0] == -1)
                 prev[i5][A][i4] = {i2, C, B};
@@ -108,7 +101,7 @@ int baseline_cfl(int flag, int i2, int i3, std::vector <std::vector <std::vector
     return 0;
 }
 
-int output(int P, int V, int initial, std::vector<std::vector<std::vector<std::vector<int>> > >& prev, std::vector <std::vector <std::vector <unsigned int> > >& H1, std::vector<int>(*create_q)(int P, std::vector<unsigned int> v))
+int output(int P, int V, int initial, std::vector<std::vector<std::vector<std::vector<int>> > >& prev, std::vector <std::vector <std::vector <unsigned int> > >& H1,std::vector<std::vector<std::unordered_set<unsigned int>>>& H1u, std::vector<int>(*create_q)(int P, std::vector<unsigned int> v))
 {
     int counter = 0;
     for (int i = 0; i < V; i++) {

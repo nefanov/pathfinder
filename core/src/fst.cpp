@@ -1,5 +1,7 @@
 #include "fast.h"
 
+
+
 std::vector<unsigned int> new_fastset(int P, int V)
 {
     int k = (V % P == 0) ? (V / P): (V / P) + 1;
@@ -7,7 +9,7 @@ std::vector<unsigned int> new_fastset(int P, int V)
     return fset;
 }
 
-void add_value(std::unordered_set<unsigned int> &u, std::vector<unsigned int> &v, int a, int P)
+void add_value(std::unordered_set<unsigned int>& u, std::vector<unsigned int>& v, int a, int P)
 {
     v[a / P] |= (1 << (a % P));
 }
@@ -37,7 +39,7 @@ std::vector<int> not_null(int P, std::vector<unsigned int> kek)
     return ans;
 }
 
-std::vector<int> create_w(int P, int V, std::vector<unsigned int>& v1, std::vector<unsigned int>& v2)
+std::vector<int> create_w(int P, int V, std::vector<unsigned int>& v1, std::vector<unsigned int>& v2, std::unordered_set<int>& u1, std::unordered_set<int>& u2)
 {
     return not_null(P, difference(P, V, v1, v2));
 }
@@ -52,9 +54,16 @@ int create_P(int V)
     return (V != 1) ? ceil(log10(V)): 1; //defining the length of binary number
 }
 
-std::vector <std::vector <std::vector <unsigned int> > > create_H(int ntsize, int V, int P)
+std::vector<std::vector<std::vector<unsigned int>>> create_Hv(int ntsize, int V, int P)
 {
     std::vector<unsigned int> a = new_fastset(P, V);
-    std::vector <std::vector <std::vector <unsigned int> > > H(ntsize, std::vector<std::vector <unsigned int > > (V, a));
+    std::vector <std::vector <std::vector <unsigned int>>> H(ntsize, std::vector<std::vector <unsigned int > > (V, a));
+    return H;
+}
+
+
+std::vector<std::vector<std::unordered_set<int>>> create_Hu(int ntsize, int V, int P)
+{
+    std::vector<std::vector<std::unordered_set<int>>> H;
     return H;
 }
