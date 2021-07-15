@@ -29,16 +29,17 @@ int main(int argc, char* argv[])
 		return -1;
 	}  
 	std::cout << ((thin) ? "THIN" : "FAT") << std::endl;
-	funcs func(
-		dlsym(sl, "new_graph_creator"), 
-		dlsym(sl, "graph_merger")
-	);
-	if (dlsym(sl, "new_graph_creator") == NULL)
-	{
-		std::cout << "ERROR\n";
-		return -1;
-	}
-
+	void* ngc = dlsym(sl, "new_graph_creator");
+	if (ngc == NULL) {
+        fprintf(stderr, "%s\n", dlerror());
+        return -1;
+    }
+	void* gm = dlsym(sl, "graph_merger");
+	if (gm == NULL) {
+        fprintf(stderr, "%s\n", dlerror());
+        return -1;
+    }
+	funcs func(ngc, gm);
 	func.new_graph_creator(V, E, Code, V_new, E_new, Code_new);
 	func.graph_merger(Clusters, V, E, Code, V_new, E_new, Code_new);
 	new_graph_list(Clusters, V);
