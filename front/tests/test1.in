@@ -1,4 +1,4 @@
-../gcc-cfg-utils/examples/test1.c
+gcc-cfg-utils/examples/test1.c
 1 S a
 a
 a
