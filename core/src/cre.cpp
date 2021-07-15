@@ -101,12 +101,12 @@ int baseline_cfl(int flag, int i2, int i3, std::vector <std::vector <std::vector
             (flag) ? (i4 = d, i5 = i3) : (i4 = i3, i5 = d);
         std::cout << "102 bcfl\n";
         std::cout << A << " " << i4 << std::endl;
-        std::cout << H2u[A][i4].size() << std::endl;
+        //std::cout << H2u[A][i4].size() << std::endl;
         //std::cout << H2v[A][i4].size() << std::endl;
-            add_value(H2u[A][i4], H2v[A][i4], i5, P);
+        add_value(H2u[A][i4], H2v[A][i4], i5, P);
         std::cout << "106 bcfl\n";
 
-            add_value(H1u[A][i5], H1v[A][i5], i4, P);
+        add_value(H1u[A][i5], H1v[A][i5], i4, P);
         std::cout << "109 bcfl\n";
             
             W.push_back({i5, A, i4});

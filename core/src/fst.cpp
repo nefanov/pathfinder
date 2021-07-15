@@ -1,7 +1,7 @@
-#include "fast.h"
+#include "core.h"
 
 
-
+extern "C" {
 std::vector<unsigned int> new_fastset(int P, int V)
 {
     int k = (V % P == 0) ? (V / P): (V / P) + 1;
@@ -66,4 +66,5 @@ std::vector<std::vector<std::unordered_set<int>>> create_Hu(int ntsize, int V, i
 {
     std::vector<std::vector<std::unordered_set<int>>> H (ntsize, std::vector<std::unordered_set<int>> (0));
     return H;
+}
 }
