@@ -15,7 +15,9 @@ To meet such restrictions, current pattern only supports:
 *strlen
 *strcmp
 
-Example. Original code:
+#### Example. 
+
+Original code:
 ```C
 size_t i;
 for (i=0; i<strlen(buf); i++) {
