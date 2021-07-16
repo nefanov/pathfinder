@@ -2,7 +2,7 @@
 
 ### 2. Cyclic function call (intraprocedural).
 
-Avoid the cyclic calls to function, which result is unchanged during the cycle.
+Avoid cyclic calls to function, which result is unchanged during the cycle.
 Intraprocedural mode means that the context of callee will not be analysed during the pattern matching.
 
 It takes a list of restriction on function and thus on the pattern:
