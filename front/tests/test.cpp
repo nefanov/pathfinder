@@ -115,6 +115,7 @@ TEST_CASE("check") {
 TEST_CASE("test_front") {
     std::ifstream test_list("tests/test_front.txt");
     std::string test_input_name, test_graph_name, str1, str2;
+    mkdir("data", 0777);
     while(!test_list.eof()) {
         test_list >> test_input_name >> test_graph_name;
         system(("build/code2graph -file tests/" + test_input_name + " -front-only > data/graph.test").c_str());
@@ -135,6 +136,7 @@ TEST_CASE("test_front") {
 TEST_CASE("test_core fast") {
     std::ifstream test_list("tests/test_core.txt");
     std::string test_graph_name, test_output_name, str1, str2;
+    mkdir("data", 0777);
     while(!test_list.eof()) {
         test_list >> test_graph_name >> test_output_name;
         system(("build/core tests/" + test_graph_name + " -fast > data/output.test").c_str());
