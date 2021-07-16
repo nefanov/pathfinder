@@ -50,6 +50,6 @@ int main(int argc, char* argv[])
 	visualising_graph(V_new, E_new, Code_new, V);
 	to_fifo(bin_path, V_new, V, E_new, rules);
 	if (number_of_file_arg(argc, argv, "-front-only") <= 0)
-  		execl((bin_path + "core").c_str(), (bin_path + "core").c_str(), (bin_path).c_str(), NULL);
+  		execl((bin_path + "core").c_str(), (bin_path + "core").c_str(), (bin_path + "../data/graph").c_str(), NULL);
 	return 0;
 }

@@ -126,3 +126,11 @@ int output(bool is_fast, int P, int V, int initial, std::vector<std::vector<std:
     std::cout << counter << std::endl;
     return 0;
 }
+
+int find_arg(int argc, char* argv[], char* arg)
+{
+	for (int i = 0; i < argc; i++)
+		if(strcmp(argv[i], arg) == 0)
+			return i;
+	return -1;
+}
