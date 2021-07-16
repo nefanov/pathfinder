@@ -1,7 +1,7 @@
 #include "core.h"
 int main(int argc, char* argv[]) 
 {
-    bool is_fast = (argc >= 3 && strcmp(argv[2], "-fast") == 0) ? true : false;
+    bool is_fast = (find_arg(argc, argv, "-fast") > 0) ? true : false;
     void* sl = dlopen(((is_fast == true) ? "libfst.so" : "libslw.so"), RTLD_LAZY);
     if (sl == NULL) {
         fprintf(stderr, "%s\n", dlerror());
@@ -23,7 +23,6 @@ int main(int argc, char* argv[])
         dlsym(sl, "create_Hu"),
         dlsym(sl, "create_P")
     );
-
     int m, number, E, initial, P, V;
     std::vector <std::string> nonterminals;
     std::vector <std::vector<int>> lol(NUMBER_OF_LETTERS_WITH_OVERFLOW);
@@ -75,6 +74,7 @@ int main(int argc, char* argv[])
         baseline_cfl(is_fast, 0, q[0], q[2], H2v, H2u, right_rules, q[1], P, V, rules, prev, W, H1v, H2v, H1u, H2u, func.add_value, func.create_wv, func.create_wu);
         baseline_cfl(is_fast, 1, q[2], q[0], H1v, H1u, left_rules, q[1], P, V, rules, prev, W, H1v, H2v, H1u, H2u, func.add_value, func.create_wv, func.create_wu);
     }
+
     output(is_fast, P, V, initial, prev, H1v, H1u, func.create_q);
     fin.close();
 }
