@@ -1,0 +1,20 @@
+gcc-cfg-utils/examples/test1.c
+5 
+S AB
+S AR
+R SB
+A a
+B b
+a
+a
+b
+b
+a
+b
+a
+b
+a
+a
+a
+a
+a
