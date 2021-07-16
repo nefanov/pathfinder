@@ -74,4 +74,6 @@ for (i = 0; i < SZ; i++) {
 }
 ```
 
-### 5. 
+### 5. Matrix operations reordering
+
+Reorder of matrix operations in the goal of cache misses level decreasing.
