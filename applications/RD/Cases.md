@@ -1,6 +1,7 @@
-1.
+### 1.
 
-2. Cyclic function call (intraprocedural).
+### 2. Cyclic function call (intraprocedural).
+
 Avoid the cyclic calls to function, which result is unchanged during the cycle.
 Intraprocedural mode means that the context of callee will not be analysed during the pattern matching.
 
@@ -30,15 +31,17 @@ for (i=0; i < sz; i++) {
   //..anything..//
 }
 ```
-3. Cyclic function call (interprocedural)
+### 3. Cyclic function call (interprocedural)
+
 Avoid the cyclic calls to function, which result is unchanged during the cycle.
 Interprocedural mode means that the context of callee will be analysed during the pattern matching.
 
-4. Memory operations redundancy detection
+### 4. Memory operations redundancy detection
 
 Detect calls of functions memset, malloc, etc, which are redundant in current context.
 
-Example 1. Original code:
+ #### Example 1.
+ Original code:
 ```C
 int* buf=(int*)malloc(sizeof(int)*SZ);
 memset(buf, 0, sizeof(int)*SZ);
@@ -50,7 +53,8 @@ int* buf=(int*)calloc(SZ, sizeof(int));
   //..anything..//
 }
 ```
-Example 2. Original code:
+#### Example 2.
+Original code:
 ```C
 int i=0;
 memset(buf, 0, sizeof(int)*SZ);
@@ -68,4 +72,4 @@ for (i = 0; i < SZ; i++) {
 }
 ```
 
-5. 
+### 5. 
