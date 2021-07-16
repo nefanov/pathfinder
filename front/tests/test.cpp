@@ -112,30 +112,64 @@ TEST_CASE("check") {
     REQUIRE(initial == 2);
 }
 
-TEST_CASE("test1.in") {
-    system("build/code2graph -file tests/test1.in -front-only");
-    std::ifstream graph("data/graph");
-    std::ifstream testgraph("tests/test_graph1");
-    std::string str1, str2;
-    while(!graph.eof() && !testgraph.eof()) {
-        graph >> str1;
-        testgraph >> str2;
-        REQUIRE(str1 == str2);
+TEST_CASE("test_front") {
+    std::ifstream test_list("tests/test_front.txt");
+    std::string test_input_name, test_graph_name, str1, str2;
+    while(!test_list.eof()) {
+        test_list >> test_input_name >> test_graph_name;
+        system(("build/code2graph -file tests/" + test_input_name + " -front-only > data/graph.test").c_str());
+        std::ifstream graph("data/graph");
+        std::ifstream testgraph("tests/" + test_graph_name);
+        while(!graph.eof() && !testgraph.eof()) {
+            graph >> str1;
+            testgraph >> str2;
+            REQUIRE(str1 == str2);
+        }
+        graph.close();
+        testgraph.close();
     }
-    graph.close();
-    testgraph.close();
+    test_list.close();
 }
 
-TEST_CASE("test2.in") {
-    system("build/code2graph -file tests/test2.in -front-only");
-    std::ifstream graph("data/graph");
-    std::ifstream testgraph("tests/test_graph2");
-    std::string str1, str2;
-    while(!graph.eof() && !testgraph.eof()) {
-        graph >> str1;
-        testgraph >> str2;
-        REQUIRE(str1 == str2);
+
+TEST_CASE("test_core fast") {
+    std::ifstream test_list("tests/test_core.txt");
+    std::string test_graph_name, test_output_name, str1, str2;
+    while(!test_list.eof()) {
+        test_list >> test_graph_name >> test_output_name;
+        system(("build/core tests/" + test_graph_name + " -fast > data/output.test").c_str());
+        std::ifstream output("data/output.test");
+        std::ifstream testoutput("tests/" + test_output_name);
+        output >> str1;
+        REQUIRE(str1 == "libfst.so");
+        while(!output.eof() && !testoutput.eof()) {
+            output >> str1;
+            testoutput >> str2;
+            REQUIRE(str1 == str2);
+        }
+        output.close();
+        testoutput.close();
     }
-    graph.close();
-    testgraph.close();
+    test_list.close();
+}
+
+TEST_CASE("test_core slow") {
+    std::ifstream test_list("tests/test_core.txt");
+    std::string test_graph_name, test_output_name, str1, str2;
+    while(!test_list.eof()) {
+        test_list >> test_graph_name >> test_output_name;
+        system(("build/core tests/" + test_graph_name + " -slow > data/output.test").c_str());
+        std::ifstream output("data/output.test");
+        std::ifstream testoutput("tests/" + test_output_name);
+        output >> str1;
+        REQUIRE(str1 == "libslw.so");
+        while(!output.eof() && !testoutput.eof()) {
+            output >> str1;
+            testoutput >> str2;
+            REQUIRE(str1 == str2);
+        }
+        output.close();
+        testoutput.close();
+    }
+    test_list.close();
 }
