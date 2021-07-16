@@ -1,0 +1,25 @@
+name: "Test"
+on: 
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v1
+
+      - name: Build
+        working-directory: front
+        run: |
+          cmake ./
+          make
+
+      - name: Unit tests
+        working-directory: front
+        run: build/test

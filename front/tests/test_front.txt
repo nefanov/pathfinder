@@ -1,0 +1,2 @@
+test1.in test_graph1
+test2.in test_graph2

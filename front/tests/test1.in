@@ -1,14 +1,5 @@
 gcc-cfg-utils/examples/test1.c
-5 
-S AB
-S AR
-R SB
-A a
-B b
+1 S a
 a
 a
 b
-b
-a
-b
-a
