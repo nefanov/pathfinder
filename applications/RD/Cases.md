@@ -11,12 +11,23 @@ It takes a list of restriction on function and thus on the pattern:
 * Return value of function should be used, else function call is redundant.
 
 To meet such restrictions, current pattern only supports:
-strlen
-strcmp
+*strlen
+*strcmp
 
+Example. Original code:
 ```C
-int i=0;
+size_t i;
+for (i=0; i<strlen(buffer); i++) {
+  //..anything..//
+}
+ 
 ```
+Improved code:
+size_t i;
+size_t size = strlen(buf);
+for (i=0; i < size; i++) {
+  //..anything..//
+}
 
 3. Cyclic function call (interprocedural)
 Avoid the cyclic calls to function, which result is unchanged during the cycle.
