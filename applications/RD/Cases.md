@@ -23,12 +23,13 @@ for (i=0; i<strlen(buffer); i++) {
  
 ```
 Improved code:
+```C
 size_t i;
 size_t size = strlen(buf);
 for (i=0; i < size; i++) {
   //..anything..//
 }
-
+```
 3. Cyclic function call (interprocedural)
 Avoid the cyclic calls to function, which result is unchanged during the cycle.
 Interprocedural mode means that the context of callee will be analysed during the pattern matching.
