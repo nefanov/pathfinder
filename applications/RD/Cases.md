@@ -2,6 +2,17 @@
 
 For complex condition check expressions it is preferrable to reorder the condition from simplest to calculationally hardest. If statement is trivially true/false because of more simple part of conditions, the hard part will not be calculated.
 
+#### Example. 
+
+Original code:
+```C
+if (complex_check() && value) 
+```
+Improved code:
+```C
+if (value && complex_check()) // if not value, then no complex_check()
+```
+
 ### 2. Cyclic function call (intraprocedural)
 
 Avoid cyclic calls to function, which result is unchanged during the cycle.
