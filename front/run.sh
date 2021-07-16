@@ -8,5 +8,5 @@ if [[ $1 == "-test" ]]; then
     build/test
 else
     $absolute_path/build/code2graph $@ -front-only
-    $absolute_path/build/core $absolute_path/build/
+    $absolute_path/build/core $absolute_path/data/graph $@
 fi
