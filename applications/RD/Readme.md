@@ -3,3 +3,4 @@
  
 # Supported cases
 [Сases.md] (Сases.md) for list of supported cases. 
+[[_TOC_]]
