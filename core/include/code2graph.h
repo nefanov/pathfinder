@@ -83,5 +83,5 @@ void to_fifo           (std::string bin_path, std::vector<std::vector<int>>& V_n
                         std::vector<std::vector<std::pair<int, std::string>>>& E_new, 
                         std::vector<std::pair<std::string, std::string> >& rules);
 
-int number_of_file_arg(int argc, char* argv[], char* arg);
+int number_of_file_arg(int argc, char* argv[], const char* arg);
 int get_input_type(int argc, char* argv[]);

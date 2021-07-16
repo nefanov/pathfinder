@@ -127,7 +127,7 @@ int output(bool is_fast, int P, int V, int initial, std::vector<std::vector<std:
     return 0;
 }
 
-int find_arg(int argc, char* argv[], char* arg)
+int find_arg(int argc, char* argv[], const char* arg)
 {
 	for (int i = 0; i < argc; i++)
 		if(strcmp(argv[i], arg) == 0)

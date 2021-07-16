@@ -276,7 +276,7 @@ void to_fifo(std::string bin_path, std::vector<std::vector<int>>& V_new, std::ve
 	fout.close();
 }
 
-int number_of_file_arg(int argc, char* argv[], char* arg)
+int number_of_file_arg(int argc, char* argv[], const char* arg)
 {
 	for (int i = 0; i < argc; i++)
 		if(strcmp(argv[i], arg) == 0)

@@ -65,4 +65,4 @@ int output                             (bool is_fast, int P, int V, int initial,
                                         std::vector<int>(*create_q)(int P, std::vector<unsigned int> v));
 
 
-int find_arg(int argc, char* argv[], char* arg);
+int find_arg(int argc, char* argv[], const char* arg);
