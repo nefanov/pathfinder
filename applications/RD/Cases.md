@@ -1,19 +1,4 @@
-### 1. Condition reordering detector
-
-For complex condition check expressions it is preferrable to reorder the condition from simplest to calculationally hardest. If statement is trivially true/false because of more simple part of conditions, the hard part will not be calculated.
-
-#### Example. 
-
-Original code:
-```C
-if (complex_check() && value) 
-```
-Improved code:
-```C
-if (value && complex_check()) // if not value, then no complex_check()
-```
-
-### 2. Cyclic function call (intraprocedural)
+### 1. Cyclic function call (intraprocedural)
 
 Avoid cyclic calls to function, which result is unchanged during the cycle.
 Intraprocedural mode means that the context of callee will not be analysed during the pattern matching.
@@ -46,12 +31,12 @@ for (i=0; i < sz; i++) {
   //..anything..//
 }
 ```
-### 3. Cyclic function call (interprocedural)
+### 2. Cyclic function call (interprocedural)
 
 Avoid the cyclic calls to function, which result is unchanged during the cycle.
 Interprocedural mode means that the context of callee will be analysed during the pattern matching.
 
-### 4. Memory operations redundancy detection
+### 3. Memory operations redundancy detection
 
 Detect calls of functions memset, malloc, etc, which are redundant in current context.
 
@@ -85,6 +70,21 @@ int i=0;
 for (i = 0; i < SZ; i++) {
   mem[i] = i;
 }
+```
+
+### 4. Condition reordering detector
+
+For complex condition check expressions it is preferrable to reorder the condition from simplest to calculationally hardest. If statement is trivially true/false because of more simple part of conditions, the hard part will not be calculated.
+
+#### Example. 
+
+Original code:
+```C
+if (complex_check() && value) 
+```
+Improved code:
+```C
+if (value && complex_check()) // if not value, then no complex_check()
 ```
 
 ### 5. Matrix operations reordering
