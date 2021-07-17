@@ -258,8 +258,8 @@ void to_fifo(std::string path_to_graph, std::string bin_path, std::vector<std::v
 {
 	std::ofstream fout;
 	std::string dir_path = path_to_graph;
-	dir_path.erase(path_to_graph.find_last_of("/") + 1, path_to_graph.size());
-	mkdir(dir_path.c_str(), 0777);
+	dir_path.erase(path_to_graph.find_last_of("/"), path_to_graph.size());
+	system(("mkdir -p "+dir_path).c_str());
 	fout.open(path_to_graph);
 	fout << 1 << std::endl;
 	fout << rules.size() << std::endl;
