@@ -1,2 +1,4 @@
 test_graph1 test_output1
 test_graph2 test_output2
+test_graph3 test_output3
+test_graph4 test_output4

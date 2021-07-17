@@ -78,10 +78,10 @@ void input_V_E         (std::ifstream& fin, std::vector<std::vector<std::pair<in
 
 void visualising_graph(std::vector<std::vector<int>>& V_new, std::vector<std::vector<std::pair<int, std::string>>>& E_new,	std::vector<std::string>& Code_new, std::vector <std::vector<std::pair<std::string, int>>>& V);
 
-void to_fifo           (std::string bin_path, std::vector<std::vector<int>>& V_new, 
+void to_fifo           (std::string& path_to_graph, std::string bin_path, std::vector<std::vector<int>>& V_new, 
                         std::vector <std::vector<std::pair<std::string, int>>>& V,
                         std::vector<std::vector<std::pair<int, std::string>>>& E_new, 
                         std::vector<std::pair<std::string, std::string> >& rules);
 
-int number_of_file_arg(int argc, char* argv[], char* arg);
+int number_of_file_arg(int argc, char* argv[], const char* arg);
 int get_input_type(int argc, char* argv[]);

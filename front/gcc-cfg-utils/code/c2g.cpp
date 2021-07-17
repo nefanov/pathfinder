@@ -15,9 +15,11 @@ int process_path(int input_type, int argc, std::ifstream& input_file, std::strin
 		case (FILEIN):
 			path_to_input = path_to_input;
 			input_file.open(path_to_input);
-			//std::string full_path = path_to_input;
+			if (!input_file.is_open()) {
+				std::cout << "file " << path_to_input << " was not opened" << std::endl; 
+				return -1;
+			}
 			input_file >> path_to_analyze;
-			//full_path.erase(full_path.find_last_of("/") + 1, full_path.size()); // .../gcc-cfg-utils/input/test.in -> .../gcc-cfg-utils/input/
 			path_to_analyze += ".012t.cfg.dot";
 		break;
 	}
@@ -252,11 +254,13 @@ void visualising_graph(std::vector<std::vector<int>>& V_new, std::vector<std::ve
 	std::cout << "-----------------------------------------------\n";
 }
 
-void to_fifo(std::string bin_path, std::vector<std::vector<int>>& V_new, std::vector <std::vector<std::pair<std::string, int>>>& V, std::vector<std::vector<std::pair<int, std::string>>>& E_new, std::vector<std::pair<std::string, std::string> >& rules)
+void to_fifo(std::string& path_to_graph, std::string bin_path, std::vector<std::vector<int>>& V_new, std::vector <std::vector<std::pair<std::string, int>>>& V, std::vector<std::vector<std::pair<int, std::string>>>& E_new, std::vector<std::pair<std::string, std::string> >& rules)
 {
 	std::ofstream fout;
-	mkdir((bin_path + "../data").c_str(), 0777);
-	fout.open(bin_path + "../data/graph");
+	std::string dir_path = path_to_graph;
+	dir_path.erase(path_to_graph.find_last_of("/"), path_to_graph.size());
+	system(("mkdir -p "+dir_path).c_str());
+	fout.open(path_to_graph);
 	fout << 1 << std::endl;
 	fout << rules.size() << std::endl;
 	for (int i = 0; i < rules.size(); i++)
@@ -276,7 +280,7 @@ void to_fifo(std::string bin_path, std::vector<std::vector<int>>& V_new, std::ve
 	fout.close();
 }
 
-int number_of_file_arg(int argc, char* argv[], char* arg)
+int number_of_file_arg(int argc, char* argv[], const char* arg)
 {
 	for (int i = 0; i < argc; i++)
 		if(strcmp(argv[i], arg) == 0)

@@ -2,6 +2,7 @@
 #include "catch2/catch_test_macros.hpp"
 #include "code2graph.h"
 #include "core.h"
+#include <set>
 TEST_CASE("wrong path to the file") {
     std::ifstream input_file, analyze_file;
     std::string path = "./", path_to_input = "";
@@ -135,41 +136,69 @@ TEST_CASE("test_front") {
 
 TEST_CASE("test_core fast") {
     std::ifstream test_list("tests/test_core.txt");
-    std::string test_graph_name, test_output_name, str1, str2;
+    std::string test_graph_name, test_output_name, type, str1, str2;
+    std::multiset<std::pair<std::string, std::string>> s1, s2;
+    std::pair<std::pair<std::string, std::string>, std::pair<std::string, std::string>> t;
+
     mkdir("data", 0777);
     while(!test_list.eof()) {
+        /*test_list >> type;
+        if (type == "slow")
+            continue;*/
         test_list >> test_graph_name >> test_output_name;
+        std::cout << "build/core tests/" + test_graph_name + " -fast > data/output.test\n";
         system(("build/core tests/" + test_graph_name + " -fast > data/output.test").c_str());
         std::ifstream output("data/output.test");
         std::ifstream testoutput("tests/" + test_output_name);
-        output >> str1;
-        REQUIRE(str1 == "libfst.so");
+        REQUIRE(output.is_open());
+        REQUIRE(testoutput.is_open());
+        std::getline(output, type);
+        REQUIRE(type == "libfst.so");
         while(!output.eof() && !testoutput.eof()) {
-            output >> str1;
-            testoutput >> str2;
-            REQUIRE(str1 == str2);
+            std::getline(output, str1);
+            std::getline(output, str2);
+            s1.insert({str1, str2});
+            std::getline(testoutput, str1);
+            std::getline(testoutput, str2);
+            s2.insert({str1, str2});
         }
+        REQUIRE(s1 == s2);
         output.close();
         testoutput.close();
     }
     test_list.close();
 }
 
+
 TEST_CASE("test_core slow") {
     std::ifstream test_list("tests/test_core.txt");
-    std::string test_graph_name, test_output_name, str1, str2;
+    std::string test_graph_name, test_output_name, type, str1, str2;
+    std::multiset<std::pair<std::string, std::string>> s1, s2;
+    std::pair<std::pair<std::string, std::string>, std::pair<std::string, std::string>> t;
+
+    mkdir("data", 0777);
     while(!test_list.eof()) {
+        /*test_list >> type;
+        if (type == "fast")
+            continue;*/
         test_list >> test_graph_name >> test_output_name;
+        std::cout << "build/core tests/" + test_graph_name + " -slow > data/output.test\n";
         system(("build/core tests/" + test_graph_name + " -slow > data/output.test").c_str());
         std::ifstream output("data/output.test");
         std::ifstream testoutput("tests/" + test_output_name);
-        output >> str1;
-        REQUIRE(str1 == "libslw.so");
+        REQUIRE(output.is_open());
+        REQUIRE(testoutput.is_open());
+        std::getline(output, type);
+        REQUIRE(type == "libslw.so");
         while(!output.eof() && !testoutput.eof()) {
-            output >> str1;
-            testoutput >> str2;
-            REQUIRE(str1 == str2);
+            std::getline(output, str1);
+            std::getline(output, str2);
+            s1.insert({str1, str2});
+            std::getline(testoutput, str1);
+            std::getline(testoutput, str2);
+            s2.insert({str1, str2});
         }
+        REQUIRE(s1 == s2);
         output.close();
         testoutput.close();
     }
