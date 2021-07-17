@@ -51,7 +51,9 @@ int main(int argc, char* argv[])
 	input_V_E(input_file, E_new, rules, analyze_file);
 	visualising_graph(V_new, E_new, Code_new, V);
 	to_fifo(path_to_graph, bin_path, V_new, V, E_new, rules);
+	if (path_to_graph != "data/graph")
+		system(("cp -f " + path_to_graph + " data/graph").c_str());
 	if (number_of_file_arg(argc, argv, "-front-only") <= 0)
-  		execl((bin_path + "core").c_str(), (bin_path + "core").c_str(), (path_to_graph).c_str(), NULL);
+  		execl((bin_path + "core").c_str(), (bin_path + "core").c_str(), "data/graph", NULL);
 	return 0;
 }
