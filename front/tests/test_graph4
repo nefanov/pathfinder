@@ -1,0 +1,16 @@
+1
+6
+S SS
+S AR
+R SB
+S 0
+A a
+B b
+
+4 5
+fn_0_basic_block_0_0 fn_0_basic_block_1_0 fn_0_basic_block_2_0 fn_1_basic_block_0_0
+0 1 a
+1 2 a
+2 0 a
+2 3 b
+3 2 b
