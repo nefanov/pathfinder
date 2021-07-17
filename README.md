@@ -51,6 +51,7 @@ To use it write:
 *	`-fast` to use `fast.cpp` alghorithm
 *	`-slow` to use `slow.cpp` alghorithm
 *	`-test` to run unit-tests
+*	`-o` 	to save front output into specific file (specify path into next argument)
 # Examples
 *		bash run.sh
 		gcc-cfg-utils/examples/test1.c
