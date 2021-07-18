@@ -8,7 +8,7 @@ int main(int argc, char* argv[])
 	std::vector <std::vector<std::pair<std::string, int>>> V; //V-<block_name, number in V_new>
 	std::vector <std::vector<std::string>> Code;
 	std::vector <std::vector<std::vector<std::pair<int, std::string>>>> E;
-	std::string path_to_graph = "data/graph", path = (cmd_arg_number > 0) ? argv[cmd_arg_number] : "", inp, code = "", bin_path = realpath(argv[0], bpath), path_to_input = (file_arg_number > 0) ? argv[file_arg_number] : "";
+	std::string path_to_visualizator = "", path = (cmd_arg_number > 0) ? argv[cmd_arg_number] : "", inp, code = "", bin_path = realpath(argv[0], bpath), path_to_input = (file_arg_number > 0) ? argv[file_arg_number] : "";
 	std::ifstream analyze_file, input_file;
 	bin_path.erase(bin_path.find_last_of("/") + 1, bin_path.size()); // .../gcc-cfg-utils/build/code2graph -> .../gcc-cfg-utils/build/
 	if (process_path(input_type, argc, input_file, path, path_to_input, analyze_file) < 0)
@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
 	std::vector<std::vector<std::pair<int, std::string>>> E_new;
 	int onumarg = number_of_file_arg(argc, argv, "-o") + 1;
 	if (onumarg > 0)
-		path_to_graph = argv[onumarg];
+		path_to_visualizator = argv[onumarg];
 	bool thin = (number_of_file_arg(argc, argv, "-thin") > 0) ? true : false;
 	void* sl = dlopen(((thin == true) ? "libthin.so" : "libfat.so"), RTLD_LAZY);
 	if (sl == NULL) {
@@ -49,10 +49,8 @@ int main(int argc, char* argv[])
 	new_adjacency_list(E_new);
 	std::vector<std::pair<std::string, std::string> > rules;
 	input_V_E(input_file, E_new, rules, analyze_file);
-	visualising_graph(V_new, E_new, Code_new, V);
-	to_fifo(path_to_graph, bin_path, V_new, V, E_new, rules);
-	if (path_to_graph != "data/graph")
-		system(("cp -f " + path_to_graph + " data/graph").c_str());
+	visualising_graph(path_to_visualizator, V_new, E_new, Code_new, V);
+	to_fifo(bin_path, V_new, V, E_new, rules);
 	if (number_of_file_arg(argc, argv, "-front-only") <= 0)
   		execl((bin_path + "core").c_str(), (bin_path + "core").c_str(), "data/graph", NULL);
 	return 0;

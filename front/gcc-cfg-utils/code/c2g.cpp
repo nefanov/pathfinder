@@ -237,10 +237,28 @@ void input_V_E(std::ifstream& fin, std::vector<std::vector<std::pair<int, std::s
 	input_file.close();
 }
 
-void visualising_graph(std::vector<std::vector<int>>& V_new, std::vector<std::vector<std::pair<int, std::string>>>& E_new,	std::vector<std::string>& Code_new, std::vector <std::vector<std::pair<std::string, int>>>& V)
-{
-	std::cout << "-----------------------------------------------\n";
-	std::cout << "For watching how new graph looks like copy this to file.dot and use dot -Tpng file.dot -o filepic\n";
+void visualising_graph(std::string& path_to_visualizator, std::vector<std::vector<int>>& V_new, std::vector<std::vector<std::pair<int, std::string>>>& E_new,	std::vector<std::string>& Code_new, std::vector <std::vector<std::pair<std::string, int>>>& V)
+{		
+	std::streambuf *psbuf, *backup;
+	std::ofstream fout;
+	std::string dir_path = path_to_visualizator;
+	std::cout << path_to_visualizator << " keklol\n"; 
+	if (path_to_visualizator != "")
+	{	
+		int pointer = path_to_visualizator.find_last_of("/");
+		if (pointer != std::string::npos) {	
+			dir_path.erase(path_to_visualizator.find_last_of("/"), path_to_visualizator.size());
+			system(("mkdir -p "+dir_path).c_str());
+		}
+		fout.open(path_to_visualizator);
+		backup = std::cout.rdbuf(); 	
+		std::cout.rdbuf(fout.rdbuf());
+	}
+	else
+	{
+		std::cout << "-----------------------------------------------\n";
+		std::cout << "For watching how new graph looks like copy this to file.dot and use dot -Tpng file.dot -o filepic\n";
+	}
 	std::cout << "digraph code {\n";
 	for (int i = 0; i < V_new.size(); i++) {
 		std::cout << V[V_new[i][0]][V_new[i][1]].first + "_" + std::to_string(V_new[i][2]) << " [shape = record, label = \"" << Code_new[i] << "\"];\n";
@@ -251,16 +269,22 @@ void visualising_graph(std::vector<std::vector<int>>& V_new, std::vector<std::ve
 		}
 	}
 	std::cout << "}\n";
-	std::cout << "-----------------------------------------------\n";
+	if (path_to_visualizator != "")
+	{
+		std::cout.rdbuf(backup);
+		fout.close();
+	}	
+	else
+	{
+		std::cout << "-----------------------------------------------\n";
+	}
 }
 
-void to_fifo(std::string& path_to_graph, std::string bin_path, std::vector<std::vector<int>>& V_new, std::vector <std::vector<std::pair<std::string, int>>>& V, std::vector<std::vector<std::pair<int, std::string>>>& E_new, std::vector<std::pair<std::string, std::string> >& rules)
+void to_fifo(std::string bin_path, std::vector<std::vector<int>>& V_new, std::vector <std::vector<std::pair<std::string, int>>>& V, std::vector<std::vector<std::pair<int, std::string>>>& E_new, std::vector<std::pair<std::string, std::string> >& rules)
 {
 	std::ofstream fout;
-	std::string dir_path = path_to_graph;
-	dir_path.erase(path_to_graph.find_last_of("/"), path_to_graph.size());
-	system(("mkdir -p "+dir_path).c_str());
-	fout.open(path_to_graph);
+	mkdir("data", 0777);
+	fout.open("data/graph");
 	fout << 1 << std::endl;
 	fout << rules.size() << std::endl;
 	for (int i = 0; i < rules.size(); i++)
