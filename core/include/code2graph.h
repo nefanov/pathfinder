@@ -76,7 +76,7 @@ void new_adjacency_list(std::vector<std::vector<std::pair<int, std::string>>>& E
 void input_V_E         (std::ifstream& fin, std::vector<std::vector<std::pair<int, std::string>>>& E_new, 
                         std::vector<std::pair<std::string, std::string> >& rules, std::ifstream& input_file);
 
-void visualising_graph(std::vector<std::vector<int>>& V_new, std::vector<std::vector<std::pair<int, std::string>>>& E_new,	std::vector<std::string>& Code_new, std::vector <std::vector<std::pair<std::string, int>>>& V);
+void visualising_graph (std::string& path_to_visualizator, std::vector<std::vector<int>>& V_new, std::vector<std::vector<std::pair<int, std::string>>>& E_new,	std::vector<std::string>& Code_new, std::vector <std::vector<std::pair<std::string, int>>>& V);
 
 void to_fifo           (std::string bin_path, std::vector<std::vector<int>>& V_new, 
                         std::vector <std::vector<std::pair<std::string, int>>>& V,

@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
     std::vector<std::vector<std::vector<unsigned int>>>H1v = func.create_Hv(nonterminals.size(), V, P), H2v = H1v;
     std::vector<std::vector<std::unordered_set<int>>>H1u = func.create_Hu(nonterminals.size(), V, P), H2u = H1u;
     std::vector<std::vector<std::vector<std::vector<int>> > > prev(V, std::vector<std::vector<std::vector<int > > > (nonterminals.size(), std::vector<std::vector<int>>  (V, {-1, -1, -1})));
-    int output_path_arg = find_arg(argc, argv, "-fo");
+    /*int output_path_arg = find_arg(argc, argv, "-fo");
     if (output_path_arg > 0) {
         std::ofstream fout;
         fout.open("data/output");
@@ -62,19 +62,19 @@ int main(int argc, char* argv[])
         if (!fout.is_open())
             std::cout << ":(\n";
         std::cout.rdbuf(fout.rdbuf());
-    }
+    }*/
     for (int i = 0; i < E; i++)
         filling_edge_matrices(P, fin, lol, W, H1v, H2v, H1u, H2u, func.add_value);
     for (auto i: eps_rules)
         for (int j = 0; j < V; j++)
             filling_loops(j, P, i, W, H1v, H2v, H1u, H2u, func.add_value); //if word is empty
+        //std::cout << "KEK\n";
     while (!W.empty()) {
         std::vector<int> q = W.front();
         W.pop_front();
         baseline_cfl(is_fast, 0, q[0], q[2], H2v, H2u, right_rules, q[1], P, V, rules, prev, W, H1v, H2v, H1u, H2u, func.add_value, func.create_wv, func.create_wu);
         baseline_cfl(is_fast, 1, q[2], q[0], H1v, H1u, left_rules, q[1], P, V, rules, prev, W, H1v, H2v, H1u, H2u, func.add_value, func.create_wv, func.create_wu);
     }
-
     output(is_fast, P, V, initial, prev, H1v, H1u, func.create_q);
     fin.close();
 }
