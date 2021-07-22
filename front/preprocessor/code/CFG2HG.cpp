@@ -105,7 +105,6 @@ int main()
             deq.push_back(rules1[j].left);
             counter_rules[j] -= 1;
             eps_net[rules1[j].left] = 1;
-            cout << rules1[j].left << endl;
         }
     }
 
@@ -114,7 +113,6 @@ int main()
     {
         int c = deq.front();
         deq.pop_front();
-        cout << c << " c" << endl;
         for (int i = 0; i < rules1.size(); i++)
         {
             if (g[c][i] != 0)
@@ -184,26 +182,26 @@ int main()
         rules2.push_back(a);
         counter += 1;
     }
-    cout << "||||||||||" << endl;
-    for (auto j: rules1)
-    {
-        cout << j.left << " -> " ;
-        for (auto k: j.right)
-        {
-            cout << k << " ";
-        }
-        cout << endl;
-    }
-    cout << "||||||||||" << endl;
-    for (auto j: rules2)
-    {
-        cout << j.left << " -> " ;
-        for (auto k: j.right)
-        {
-            cout << k << " ";
-        }
-        cout << endl;
-    }
+    //cout << "||||||||||" << endl;
+    //for (auto j: rules1)
+    //{
+    //    cout << j.left << " -> " ;
+    //    for (auto k: j.right)
+     //   {
+    //        cout << k << " ";
+    //    }
+    //    cout << endl;
+    //}
+    //cout << "||||||||||" << endl;
+    //for (auto j: rules2)
+    //{
+    //    cout << j.left << " -> " ;
+    //    for (auto k: j.right)
+    //    {
+    //        cout << k << " ";
+    //    }
+    //    cout << endl;
+    //}
 
 
     //cepnie pravila
@@ -284,16 +282,16 @@ int main()
          }
 
      }
-    cout << "||||||||||" << endl;
-    for (auto j: rules3)
-    {
-        cout << j.left << " -> " ;
-        for (auto k: j.right)
-        {
-            cout << k << " ";
-        }
-        cout << endl;
-    }
+    //cout << "||||||||||" << endl;
+    //for (auto j: rules3)
+    //{
+    //    cout << j.left << " -> " ;
+    //    for (auto k: j.right)
+    //    {
+    //        cout << k << " ";
+    //    }
+    //    cout << endl;
+    //}
 
 
     //deleting useless symbols
@@ -362,16 +360,16 @@ int main()
 
 
 
-    cout << "|||||||||| " << endl;
-    for (auto j: rules4)
-    {
-        cout << j.left << " -> " ;
-        for (auto k: j.right)
-        {
-            cout << k << " ";
-        }
-        cout << endl;
-    }
+    //cout << "|||||||||| " << endl;
+    //for (auto j: rules4)
+    //{
+    //    cout << j.left << " -> " ;
+    //    for (auto k: j.right)
+    //    {
+    //        cout << k << " ";
+    //    }
+    //    cout << endl;
+    //}
 
 
     //changing rules with two terminals
@@ -399,10 +397,11 @@ int main()
             rules5.push_back(i);
         }
     }
-    cout << "||||||||" << endl;
+    cout << rules5.size() << endl;
     for (auto j: rules5)
     {
-        cout << j.left << " -> " ;
+        cout << j.left << " " << (j.right).size();
+        cout << endl;
         for (auto k: j.right)
         {
             cout << k << " ";
