@@ -83,20 +83,6 @@ int main()
             PM.push_back(kek);
         }
     }
-    for (auto j: PM)
-    {
-        cout << "u: " << j.u << " let: " << j.let << " pop: " << j.stack_pop << " v: " << j.v;
-        cout << endl;
-        cout << "stack_push: ";
-        vector<int> stack_push;
-        stack_push = j.stack_push;
-        for (int q: stack_push)
-        {
-            cout << q << " ";
-        }
-        cout << endl;
-    }
-    cout << "/////////" << endl;
     for (int j = 0; j < PM.size(); j++)
     {
         if ((PM[j].stack_push)[0] == let_quantity + 1)
@@ -132,19 +118,6 @@ int main()
 
 
 
-    for (auto j: PM)
-    {
-        cout << "u: " << j.u << " let: " << j.let << " pop: " << j.stack_pop << " v: " << j.v;
-        cout << endl;
-        cout << "stack_push: ";
-        vector<int> stack_push;
-        stack_push = j.stack_push;
-        for (int q: stack_push)
-        {
-            cout << q << " ";
-        }
-        cout << endl;
-    }
 
 
     counter = let_quantity + 3;
@@ -251,10 +224,10 @@ int main()
         }
 
     }
-    cout << counter1 << endl;
+    cout << rules.size() << endl;
     for (auto kek: rules)
     {
-        cout << kek.left << " -> ";
+        cout << kek.left << " " << (kek.right).size() << endl;
         for (auto j:kek.right)
         {
             cout << j << " ";
@@ -263,4 +236,4 @@ int main()
     }
 
 
-
+}
