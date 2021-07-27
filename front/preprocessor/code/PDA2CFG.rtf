@@ -6,31 +6,28 @@
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
 \f0\fs24 \cf0 \
-\uc0\u1055 \u1088 \u1086 \u1075 \u1088 \u1072 \u1084 \u1084 \u1072  \u1087 \u1086  \u1072 \u1074 \u1090 \u1086 \u1084 \u1072 \u1090 \u1091  \u1089 \u1090 \u1088 \u1086 \u1080 \u1090  \u1050 \u1057 -\u1075 \u1088 \u1072 \u1084 \u1084 \u1072 \u1090 \u1080 \u1082 \u1091 .\
+The program converts pushdown automata to context-free grammar. \
 \
+The letters are numerated from 1 to let_quantity, where let_quantity - quantity of letters. z_\{0\}\'92s number is let_quantity + 1, \\epsilon is numerated by 0. Nonterminal symbols are numerated from let_quantity + 2, where let_quantity + 2 is start symbol. \
 \
-\uc0\u1041 \u1091 \u1082 \u1074 \u1099  \u1085 \u1091 \u1084 \u1077 \u1088 \u1091 \u1102 \u1090 \u1089 \u1103  \u1086 \u1090  1 \u1076 \u1086  let_quantity, z_0 - let_quantity + 1, \u1085 \u1072 \u1095 \u1072 \u1083 \u1100 \u1085 \u1099 \u1081  \u1085 \u1077 \u1090 \u1077 \u1088 \u1084 \u1080 \u1085 \u1072 \u1083  - let_quantity + 2,\
-\uc0\u1086 \u1089 \u1090 \u1072 \u1083 \u1100 \u1085 \u1099 \u1077  \u1085 \u1091 \u1084 \u1077 \u1088 \u1091 \u1102 \u1090 \u1089 \u1103  \u1089  let_quantity + 3, \\epsilon \u1086 \u1073 \u1086 \u1079 \u1085 \u1072 \u1095 \u1080 \u1084  0\
-\
-\
-\uc0\u1042 \u1074 \u1086 \u1076 :\
-V - \uc0\u1082 \u1086 \u1083 \u1080 \u1095 \u1077 \u1089 \u1090 \u1074 \u1086  \u1089 \u1086 \u1089 \u1090 \u1086 \u1103 \u1085 \u1080 \u1081 \
-E - \uc0\u1082 \u1086 \u1083 \u1080 \u1095 \u1077 \u1089 \u1090 \u1074 \u1086  \u1087 \u1077 \u1088 \u1077 \u1093 \u1086 \u1076 \u1086 \u1074 \
-initial - \uc0\u1085 \u1072 \u1095 \u1072 \u1083 \u1100 \u1085 \u1086 \u1077  \u1089 \u1086 \u1089 \u1090 \u1086 \u1103 \u1085 \u1080 \u1077  \
-let_quantity - \uc0\u1082 \u1086 \u1083 \u1080 \u1095 \u1077 \u1089 \u1090 \u1074 \u1086  \u1073 \u1091 \u1082 \u1074 \
-\uc0\u1044 \u1072 \u1083 \u1077 \u1077  E \u1089 \u1090 \u1088 \u1086 \u1082 :\
+Input: \
+V - the quantity of automata\'92s states\
+E - the quantity of relations \
+initial - initial state of automata\
+let_quantity - quantity of letters \
+Then E lines:\
 u let stack_pop v stack_push_len a_\{1\}  a_\{2\} .. a_\{stack_push_len\}\
-\uc0\u1043 \u1076 \u1077  \u1080 \u1079  (u, let, stack_pop), \u1075 \u1076 \u1077  u \u1074 \u1077 \u1088 \u1096 \u1080 \u1085 \u1072 , let - \u1089 \u1095 \u1080 \u1090 \u1072 \u1085 \u1085 \u1072 \u1103  \u1073 \u1091 \u1082 \u1074 \u1072 , stack_pop - \u1074 \u1077 \u1088 \u1093 \u1085 \u1080 \u1081  \u1080 \u1079 \u1074 \u1083 \u1077 \u1095 \u1077 \u1085 \u1085 \u1099 \u1081  \u1089 \u1080 \u1084 \u1074 \u1086 \u1083  \u1080 \u1079  \u1089 \u1090 \u1077 \u1082 \u1072 , \u1087 \u1077 \u1088 \u1077 \u1093 \u1086 \u1076  \u1074  (v, a_ 1..a_\{stack_push_len\}) , \u1075 \u1076 \u1077  v - \u1074 \u1077 \u1088 \u1096 \u1080 \u1085 \u1072 , a_1..a_\{stack_push_len\} - \u1090 \u1086 , \u1095 \u1090 \u1086  \u1076 \u1086 \u1073 \u1072 \u1074 \u1083 \u1103 \u1077 \u1090 \u1089 \u1103  \u1074  \u1089 \u1090 \u1077 \u1082 \
-\uc0\u1042 \u1099 \u1074 \u1086 \u1076 :\
-N - \uc0\u1082 \u1086 \u1083 \u1080 \u1095 \u1077 \u1089 \u1090 \u1074 \u1086  \u1087 \u1088 \u1072 \u1074 \u1080 \u1083  \u1074  \u1085 \u1086 \u1074 \u1086 \u1081  \u1075 \u1088 \u1072 \u1084 \u1084 \u1072 \u1090 \u1080 \u1082 \u1077  \
-\uc0\u1044 \u1072 \u1083 \u1077 \u1077  N \u1089 \u1090 \u1088 \u1086 \u1082 :\
+for each relation  (u, let, stack_pop) -> (v, a_1 \'85 a_\{stack_push_len\}), where u, v - states, let - the input, stack_pop - topmost stack symbol, a_\{1\}\'85a_\{stack_push_len\} - symbols added to the stack.   \
+\
+Output: \
+N - quantity of rules in the new grammar;\
+Then N lines: \
 S len_right a_1 \'85 a_\{len_right\}\
-S - \uc0\u1085 \u1077 \u1090 \u1077 \u1088 \u1084 \u1080 \u1085 \u1072 \u1083  \u1080 \u1079  \u1083 \u1077 \u1074 \u1086 \u1081  \u1095 \u1072 \u1089 \u1090 \u1080 , len_right \u1076 \u1083 \u1080 \u1085 \u1072  \u1087 \u1088 \u1072 \u1074 \u1086 \u1081  \u1095 \u1072 \u1089 \u1090 \u1080 , a_i - \u1089 \u1080 \u1084 \u1074 \u1086 \u1083 \u1099  \u1087 \u1088 \u1072 \u1074 \u1086 \u1081  \u1095 \u1072 \u1089 \u1090 \u1080 \
+S - nonterminal symbols on the left-hand side, len_right - length of the right-hand side, a_i - symbol of the right-hand side\
 \
-\
-\uc0\u1055 \u1088 \u1080 \u1084 \u1077 \u1088 :\
-\uc0\u1040 \u1074 \u1090 \u1086 \u1084 \u1072 \u1090  \u1087 \u1088 \u1080 \u1083 \u1086 \u1078 \u1077 \u1085  \u1074  \u1092 \u1072 \u1081 \u1083 \u1077  PDA2CFG.png\
-\uc0\u1042 \u1074 \u1086 \u1076 :\
+Example:\
+Automata is attached in the file PDA2CFG.png\
+Input:\
 1 4\
 0\
 2\
@@ -42,7 +39,7 @@ S - \uc0\u1085 \u1077 \u1090 \u1077 \u1088 \u1084 \u1080 \u1085 \u1072 \u1083  \
 1 1\
 0 2 1 0 1\
 0\
-\uc0\u1042 \u1099 \u1074 \u1086 \u1076 :\
+Output:\
 5\
 4 1\
 5 \
