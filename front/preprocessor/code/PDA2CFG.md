@@ -9,19 +9,19 @@ Nonterminal symbols are numerated from let_quantity + 2, where let_quantity + 2 
 
 ## Input Specifying
 
-V - the quantity of automata\'92s states  
+V - the quantity of automata's states  
 E - the quantity of relations  
 initial - initial state of automata  
 let_quantity - quantity of letters  
 Then inputs E lines:  
 u let stack_pop v stack_push_len a<sub>1</sub> a<sub>2</sub> .. a<sub>stack_push_len</sub>  
-Each line inputs for relation (u, let, stack_pop) -> (v, a<sub>1</sub>...a<sub>stack_push_len</sub>), where u, v - states, let - the input, stack_pop - topmost stack symbol, a<sub>1</sub>...a<sub>stack_push_len</sub> - symbols added to the stack.  
+Each line inputs for relation (u, let, stack_pop) -> (v, a<sub>1</sub> ... a<sub>stack_push_len</sub>), where u, v - states, let - the input, stack_pop - topmost stack symbol, a<sub>1</sub> ... a<sub>stack_push_len</sub> - symbols added to the stack.  
 
 ## Output Specifying
 
 N - quantity of rules in the new grammar  
 Then N lines:  
-S len_right a<sub>1</sub> ... a<sub>len_right</sub>, whereS - nonterminal symbols on the left-hand side, len_right - length of the right-hand side, a<sub>i</sub>  - symbol of the right-hand side  
+S len_right a<sub>1</sub> ... a<sub>len_right</sub>, whereS - nonterminal symbols on the left-hand side, len_right - length of the right-hand side, a<sub>i</sub> - symbol of the right-hand side  
 
 # Example
 
