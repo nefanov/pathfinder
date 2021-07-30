@@ -1,4 +1,5 @@
 using namespace std;
+#define max(a, b) (a > b) ? a : b
 #include <iostream>
 #include <vector>
 #include <deque>
@@ -7,84 +8,53 @@ struct rule
     int left;
     vector<int> right;
 };
-int max(int a, int b)
-{
-    if (a > b)
-    {
-        return a;
-    }
-    return b;
-}
+
 int main()
 {
-
-    vector<rule> rules;
-    int N, let_quantity;
+    vector<rule> rules, rules1, rules2, rules3, rules4, rules5;
+    int N, let_quantity, a, len, t;
 
     cin >> let_quantity >> N;
     int counter = let_quantity + 3;
     for (int i = 0; i < N; i++)
     {
-        int a, len;
         cin >> a >> len;
         counter = max(a + 1, counter);
-        rule b;
-        b.left = a;
-
+        rule b = {a};
         for (int j = 0; j < len; j++)
         {
-            int kek;
-            cin >> kek;
-            (b.right).push_back(kek);
-            counter = max(kek + 1, counter);
+            cin >> t;
+            (b.right).push_back(t);
+            counter = max(t + 1, counter);
         }
         rules.push_back(b);
     }
 
 
-
-
     //long rules deleting
 
 
-    vector<rule> rules1;
     for (int i = 0; i < rules.size(); i++)
     {
 
         if ((rules[i].right).size() > 2)
         {
-            rule a;
-            a.left = rules[i].left;
-            (a.right).push_back((rules[i].right)[0]);
-            (a.right).push_back(counter);
             counter += 1;
-            rules1.push_back(a);
-            rule b;
-            b.left = counter - 1;
-            (b.right).push_back((rules[i].right)[1]);
-            (b.right).push_back((rules[i].right)[2]);
-            rules1.push_back(b);
+            rules1.push_back({rules[i].left, {(rules[i].right)[0], counter}});
+            rules1.push_back({counter + 1, {(rules[i].right)[1], (rules[i].right)[2]}});
         }
         else
-        {
             rules1.push_back(rules[i]);
-        }
     }
-
-
-
 
     //epsilon-rules deleting
 
 
     vector<int> eps_net(counter, 0);
-
     vector<int> counter_rules(rules1.size());
-
-    deque<int> deq;
+    deque<int> deq, deq2;
     vector<vector<int> > g(counter, vector<int> (rules1.size(), 0));
-
-
+    
 
     for (int k = 0; k < rules1.size(); k++)
     {
@@ -92,11 +62,10 @@ int main()
         {
             g[j][k] += 1;
             if (j > let_quantity + 1)
-            {
                 counter_rules[k] += 1;
-            }
         }
     }
+
     for (int j = 0; j < rules1.size(); j++)
     {
 
@@ -127,61 +96,37 @@ int main()
         }
     }
 
-
-    vector<rule> rules2;
     for (int i = 0; i < rules1.size(); i++)
     {
         if ((rules1[i].right).size() == 2)
         {
             if (eps_net[rules1[i].right[0]] == 1)
-            {
-                rule a;
-                a.left = rules1[i].left;
-                (a.right).push_back(rules1[i].right[1]);
-                rules2.push_back(a);
-            }
+                rules2.push_back({rules1[i].left, {(rules1[i].right)[1]}});
             if (eps_net[rules1[i].right[1]] == 1)
-            {
-                rule a;
-                a.left = rules1[i].left;
-                (a.right).push_back(rules1[i].right[0]);
-                rules2.push_back(a);
-            }
+                rules2.push_back({rules1[i].left, {(rules1[i].right)[0]}});
             rules2.push_back(rules1[i]);
         }
         else
-        {
             if ((rules1[i].right)[0] != 0)
-            {
                 rules2.push_back(rules1[i]);
-            }
-        }
     }
     if (eps_net[let_quantity + 2] == 1)
     {
         for (int i = 0; i < rules2.size(); i++)
         {
             if (rules2[i].left == let_quantity + 2)
-            {
                 rules2[i].left = counter;
-            }
             if (rules2[i].right[0] == let_quantity + 2)
-            {
                 rules2[i].right[0] = counter;
-            }
             if (rules2[i].right.size() > 1  && rules2[i].right[1] == let_quantity + 2)
-            {
                 rules2[i].right[1] = counter;
-            }
         }
-        rule a;
-        a.left = let_quantity + 2;
-        (a.right).push_back(counter);
-        rules2.push_back(a);
-        a.right[0] = 0;
-        rules2.push_back(a);
+        rules2.push_back({let_quantity + 2, {{counter}}});
+        rules2.push_back({let_quantity + 2, {{0}}});
         counter += 1;
     }
+
+
     //cout << "||||||||||" << endl;
     //for (auto j: rules1)
     //{
@@ -206,28 +151,18 @@ int main()
 
     //cepnie pravila
 
-
-
-
     deque<pair<int, int> > deq1;
-    vector<vector<int> > g1(counter);
-    vector<vector<int> > G(counter);
+    vector<vector<int> > g1(counter), G(counter);
     for (int i = 0; i < rules2.size(); i++)
     {
         G[rules2[i].left].push_back(i);
         if ((rules2[i].right).size() == 1 && rules2[i].right[0] > let_quantity)
-        {
             g1[rules2[i].left].push_back(rules2[i].right[0]);
-
-        }
     }
     vector<vector<int> > visited(counter, vector<int> (counter, 0));
     for (int i = let_quantity + 2; i < counter; i++)
     {
-        pair<int, int> a;
-        a.first = i;
-        a.second = i;
-        deq1.push_back(a);
+        deq1.push_back({i, i});
         visited[i][i] = 1;
     }
      while (!deq1.empty())
@@ -239,48 +174,24 @@ int main()
              if (!visited[c.first][j])
              {
                  visited[c.first][j] = 1;
-                 pair<int, int> c1;
-                 c1.first = c.first;
-                 c1.second = j;
-                 deq1.push_back(c1);
+                 deq1.push_back({c.first, j});
              }
          }
      }
-
-     vector<rule> rules3;
 
      for (int i = 0; i < counter; i++)
-     {
          for (int j = 0; j < counter; j++)
-         {
              if (i != j)
-             {
                  if (visited[i][j] == 1)
-                 {
                      for (auto q: G[j])
-                     {
                          if ((rules2[q].right).size() > 1 || rules2[q].right[0] < let_quantity + 1)
-                         {
-                             rule a = rules2[q];
-                             a.left = i;
-                             rules3.push_back(a);
-                         }
-                     }
-                 }
-             }
-         }
-     }
+                             rules3.push_back({i, rules2[q].right});
      for (auto i: rules2)
      {
          if ((i.right).size() > 1)
-         {
              rules3.push_back(i);
-         }
          else if (i.right[0] < let_quantity + 1)
-         {
              rules3.push_back(i);
-         }
-
      }
     //cout << "||||||||||" << endl;
     //for (auto j: rules3)
@@ -296,11 +207,8 @@ int main()
 
     //deleting useless symbols
 
-    vector<int> reachable(counter, 0);
-    vector<int> counter_rules3(rules3.size(), 0);
+    vector<int> reachable(counter, 0), counter_rules3(rules3.size(), 0);
     vector<vector<int> > g3(counter, vector<int> (rules3.size(), 0));
-    deque<int> deq2;
-
 
     for (int i = 0; i < rules3.size(); i++)
     {
@@ -308,9 +216,7 @@ int main()
         {
             g3[j][i] += 1;
             if (j > let_quantity + 1)
-            {
                 counter_rules3[i] += 1;
-            }
         }
         if (counter_rules3[i] == 0)
         {
@@ -326,9 +232,7 @@ int main()
         for (int i = 0; i < rules3.size(); i++)
         {
             if (g3[a][i] != 0)
-            {
                 counter_rules3[i] -= g3[a][i];
-            }
             if (counter_rules3[i] == 0 && reachable[rules3[i].left == 0])
             {
                 reachable[rules3[i].left] = 1;
@@ -337,27 +241,18 @@ int main()
         }
     }
 
-    vector<rule> rules4;
     for (auto i:rules3)
     {
         if (reachable[i.left])
         {
             int flag = 1;
             for (auto j: i.right)
-            {
                 if (!reachable[j] && j > let_quantity + 1)
-                {
                     flag = 0;
-                }
-            }
             if (flag)
-            {
                 rules4.push_back(i);
-            }
         }
     }
-
-
 
 
     //cout << "|||||||||| " << endl;
@@ -373,29 +268,17 @@ int main()
 
 
     //changing rules with two terminals
-    vector<rule> rules5;
     for (auto i: rules4)
     {
         if ((i.right).size() > 1 && i.right[0] < let_quantity + 1 && i.right[1] < let_quantity + 1)
         {
-            rule a;
-            a.left = i.left;
-            (a.right).push_back(counter);
-            (a.right).push_back(counter + 1);
-            rules5.push_back(a);
-            rule b;
-            b.left = counter;
-            b.right.push_back(i.right[0]);
-            rules5.push_back(b);
-            b.left += 1;
-            b.right[0] = i.right[1];
-            rules5.push_back(b);
+            rules5.push_back({i.left, {{counter}, {counter + 1}}});
+            rules5.push_back({counter, {i.right[0]}});
+            rules5.push_back({counter + 1, {i.right[1]}});
             counter += 2;
         }
         else
-        {
             rules5.push_back(i);
-        }
     }
     cout << rules5.size() << endl;
     for (auto j: rules5)
@@ -403,13 +286,7 @@ int main()
         cout << j.left << " " << (j.right).size();
         cout << endl;
         for (auto k: j.right)
-        {
             cout << k << " ";
-        }
         cout << endl;
     }
-
-
-
-
 }
