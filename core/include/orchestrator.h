@@ -17,5 +17,4 @@ class options
         int input_type = 0;
         options();
         options(int argc, char* argv[]);
-        options(int argc, std::vector<std::string> argv);
 };

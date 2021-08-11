@@ -5,20 +5,23 @@
 #include "core.h"
 #include <set>
 TEST_CASE("wrong path to the file") {
-    options opt(3, {"test", "-cmd", "./"});
+    char* argv[] = {const_cast<char*>("test"), const_cast<char*>("-cmd"), const_cast<char*>("./")};
+    options opt(3, argv);
     std::ifstream input_file, analyze_file;
     REQUIRE(process_path(opt, input_file, analyze_file) == -1);
 }
 
 TEST_CASE("using file input/test1.in") {
     std::ifstream input_file, analyze_file;
-    options opt(3, {"test", "-file", "tests/test1.in"});
+    char* argv[] = {const_cast<char*>("test"), const_cast<char*>("-file"), const_cast<char*>("tests/test1.in")};
+    options opt(3, argv);
     REQUIRE(process_path(opt, input_file, analyze_file) == 0);
 }
 
 TEST_CASE("path to examples/test1.c") {
     std::ifstream input_file, analyze_file;
-    options opt(3, {"test", "-cmd", "gcc-cfg-utils/examples/test1.c"});
+    char* argv [] = {const_cast<char*>("test"), const_cast<char*>("-cmd"), const_cast<char*>("gcc-cfg-utils/examples/test1.c")};
+    options opt(3, argv);
     REQUIRE(process_path(opt, input_file, analyze_file) == 0);
 }
 
