@@ -23,7 +23,6 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 include_directories(../core/include)
-include_directories(_deps/catch2-src/src)
 
 add_library(fst SHARED ../core/src/fst.cpp)
 add_library(slw SHARED ../core/src/slw.cpp)
@@ -39,4 +38,4 @@ add_executable(test tests/test.cpp)
 
 target_link_libraries(core PRIVATE cre dl)
 target_link_libraries(code2graph PRIVATE c2g orc dl)
-target_link_libraries(test PRIVATE c2g cre Catch2WithMain orc dl)
+target_link_libraries(test PRIVATE c2g cre Catch2::Catch2WithMain orc dl)
