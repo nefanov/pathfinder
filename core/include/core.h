@@ -66,3 +66,5 @@ int output                             (bool is_fast, int P, int V, int initial,
 
 
 int find_arg(int argc, char* argv[], const char* arg);
+funcs create_funcs(void* sl);
+int check_funcs(funcs& func);

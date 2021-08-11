@@ -2,27 +2,11 @@
 int main(int argc, char* argv[]) 
 {
     bool is_fast = (find_arg(argc, argv, "-fast") > 0) ? true : false;
-    void* sl = dlopen(((is_fast == true) ? "libfst.so" : "libslw.so"), RTLD_LAZY);
-    if (sl == NULL) {
-        fprintf(stderr, "%s\n", dlerror());
+    void* sl = dlopen((is_fast == true) ? "libfst.so" : "libslw.so", RTLD_LAZY);
+    std::cout << ((is_fast == true) ? "libfst.so" : "libslw.so") << std::endl;
+    funcs func = create_funcs(sl);
+    if(check_funcs(func) < 0)
         return -1;
-    }  
-    std::cout << ((is_fast) ? "libfst.so" : "libslw.so") << std::endl;
-    if (dlsym(sl, "add_value") == NULL) {
-        fprintf(stderr, "%s\n", dlerror());
-        return -1;
-    }  
-    funcs func(
-        dlsym(sl, "add_value"), 
-        dlsym(sl, "difference"), 
-        dlsym(sl, "not_null"), 
-        dlsym(sl, "create_wv"), 
-        dlsym(sl, "create_wu"),
-        dlsym(sl, "create_q"), 
-        dlsym(sl, "create_Hv"),
-        dlsym(sl, "create_Hu"),
-        dlsym(sl, "create_P")
-    );
     int m, number, E, initial, P, V;
     std::vector <std::string> nonterminals;
     std::vector <std::vector<int>> lol(NUMBER_OF_LETTERS_WITH_OVERFLOW);
