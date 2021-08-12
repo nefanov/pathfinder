@@ -4,14 +4,8 @@ extern "C" {
 void new_graph_creator(std::vector<std::vector<std::pair<std::string, int>>>& V, std::vector<std::vector<std::vector<std::pair<int, std::string>>>>& E, std::vector<std::vector<std::string>>& Code, std::vector<std::vector<int>>& V_new, std::vector<std::vector<std::pair<int, std::string>>>& E_new, std::vector<std::string>& Code_new)
 {
 	for (int i = 0; i < V.size(); i++)
-	{
 		for (int j = 0; j < V[i].size(); j++)
-		{			
-			V[i][j].second = V_new.size();
-			V_new.push_back({i, j, 0});
-			Code_new.push_back(Code[i][j]);
-		}
-	}
+			V[i][j].second = V_new.size(), V_new.push_back({i, j, 0}), Code_new.push_back(Code[i][j]);
 	E_new.resize(V_new.size());
 	for (int i = 0; i < E.size(); i++)
 		for (int j = 0; j < E[i].size(); j++)

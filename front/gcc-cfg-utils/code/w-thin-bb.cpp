@@ -10,14 +10,10 @@ void new_graph_creator(std::vector<std::vector<std::pair<std::string, int>>>& V,
 			int found = -1, counter = 0;
 			while (found != code.size() - 1) {
 				code = code.substr(found + 1, code.size() - found - 1);
-				if (code.substr(0, 4) == "|if\\") {
-					Code_new.push_back(code);
-					found = code.size() - 1;
-				}
-				else {
-					found = code.find('\n');
-					Code_new.push_back(code.substr(0, found + 1));
-				}
+				if (code.substr(0, 4) == "|if\\")
+					Code_new.push_back(code), found = code.size() - 1;
+				else
+					found = code.find('\n'), Code_new.push_back(code.substr(0, found + 1));
 				V_new.push_back({i, j, counter});
 				E_new.resize(V_new.size());
 				if (counter != 0)
