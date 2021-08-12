@@ -21,7 +21,7 @@ options::options(int argc, char* argv[])
         if (s == "-fast")
             is_fast = true;
         if (s == "-slow")
-            is_fast = true;
+            is_slow = true;
         if (s == "-o") {
             is_saving_output = true;
             path_to_save_file = argv[++i];
