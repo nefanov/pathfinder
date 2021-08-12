@@ -136,22 +136,6 @@ int find_arg(int argc, char* argv[], const char* arg)
 	return -1;
 }
 
-funcs create_funcs(void* sl)
-{
-    funcs func(
-        dlsym(sl, "add_value"), 
-        dlsym(sl, "difference"), 
-        dlsym(sl, "not_null"), 
-        dlsym(sl, "create_wv"), 
-        dlsym(sl, "create_wu"),
-        dlsym(sl, "create_q"), 
-        dlsym(sl, "create_Hv"),
-        dlsym(sl, "create_Hu"),
-        dlsym(sl, "create_P")
-    );
-    return func;
-}
-
 int check_funcs(funcs& func)
 {
     int ret = 0;

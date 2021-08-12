@@ -14,15 +14,9 @@ void new_graph_creator(std::vector<std::vector<std::pair<std::string, int>>>& V,
 	}
 	E_new.resize(V_new.size());
 	for (int i = 0; i < E.size(); i++)
-	{
 		for (int j = 0; j < E[i].size(); j++)
-		{
 			for (int q = 0; q < E[i][j].size(); q++)
-			{
 				E_new[V[i][j].second].push_back(std::make_pair(V[i][E[i][j][q].first].second, E[i][j][q].second));
-			}
-		}
-	}
 }
 
 void graph_merger(std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector<std::vector<std::pair<std::string, int>>>& V, std::vector<std::vector<std::vector<std::pair<int, std::string>>>>& E, std::vector<std::vector<std::string>>& Code, std::vector<std::vector<int>>& V_new, std::vector<std::vector<std::pair<int, std::string>>>& E_new, std::vector<std::string>& Code_new)
@@ -54,10 +48,7 @@ void graph_merger(std::vector <std::pair<std::string, std::pair<int, int>>>& Clu
 					break;
 			}
 			if (FLAG == 1 && found < foundmin)
-			{
-				foundmin = found;
-				cl_min = j;
-			}
+				foundmin = found, cl_min = j;
 		}		
 		if (cl_min != -1)
 		{

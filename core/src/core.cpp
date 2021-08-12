@@ -4,8 +4,8 @@ int main(int argc, char* argv[])
     bool is_fast = (find_arg(argc, argv, "-fast") > 0) ? true : false;
     void* sl = dlopen((is_fast == true) ? "libfst.so" : "libslw.so", RTLD_LAZY);
     std::cout << ((is_fast == true) ? "libfst.so" : "libslw.so") << std::endl;
-    funcs func = create_funcs(sl);
-    if(check_funcs(func) < 0)
+    funcs func(sl);
+    if (check_funcs(func) < 0)
         return -1;
     int m, number, E, initial, P, V;
     std::vector <std::string> nonterminals;

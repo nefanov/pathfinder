@@ -30,17 +30,17 @@ class funcs
         std::vector <std::vector <std::unordered_set<int> > > (*create_Hu)(int ntsize, int V, int P);
         int (*create_P)(int V);
 
-        funcs(void* a, void* b, void* c, void* d, void* e, void* f, void* g, void* h, void* i)
+        funcs(void* sl)
         {
-            add_value  = reinterpret_cast<void(*)(std::unordered_set<int>& u, std::vector<unsigned int>& v, int a, int P)>(a);
-            difference = reinterpret_cast<std::vector<unsigned int>(*)(int P, int V, std::vector<unsigned int> &kek1, std::vector<unsigned int> &kek2)>(b);
-            not_null   = reinterpret_cast<std::vector<int>(*)(int P, std::vector<unsigned int> kek)>(c);
-            create_wv  = reinterpret_cast<std::vector<int>(*)(int P, int V, std::vector<unsigned int>& v1, std::vector<unsigned int>& v2, std::unordered_set<int>& u1, std::unordered_set<int>& u2)>(d);
-            create_wu  = reinterpret_cast<std::unordered_set<int>(*)(int P, int V, std::vector<unsigned int>& v1, std::vector<unsigned int>& v2, std::unordered_set<int>& u1, std::unordered_set<int>& u2)>(e);
-            create_q   = reinterpret_cast<std::vector<int>(*)(int P, std::vector<unsigned int> v)>(f);
-            create_Hv   = reinterpret_cast<std::vector <std::vector <std::vector <unsigned int> > >(*)(int ntsize, int V, int P)>(g);
-            create_Hu   = reinterpret_cast<std::vector <std::vector <std::unordered_set <int> > >(*)(int ntsize, int V, int P)>(h);
-            create_P   = reinterpret_cast<int(*)(int V)>(i);
+            add_value  = reinterpret_cast<void(*)(std::unordered_set<int>& u, std::vector<unsigned int>& v, int a, int P)>(dlsym(sl, "add_value"));
+            difference = reinterpret_cast<std::vector<unsigned int>(*)(int P, int V, std::vector<unsigned int> &kek1, std::vector<unsigned int> &kek2)>(dlsym(sl, "difference"));
+            not_null   = reinterpret_cast<std::vector<int>(*)(int P, std::vector<unsigned int> kek)>(dlsym(sl, "not_null"));
+            create_wv  = reinterpret_cast<std::vector<int>(*)(int P, int V, std::vector<unsigned int>& v1, std::vector<unsigned int>& v2, std::unordered_set<int>& u1, std::unordered_set<int>& u2)>(dlsym(sl, "create_wv"));
+            create_wu  = reinterpret_cast<std::unordered_set<int>(*)(int P, int V, std::vector<unsigned int>& v1, std::vector<unsigned int>& v2, std::unordered_set<int>& u1, std::unordered_set<int>& u2)>(dlsym(sl, "create_wu"));
+            create_q   = reinterpret_cast<std::vector<int>(*)(int P, std::vector<unsigned int> v)>(dlsym(sl, "create_q"));
+            create_Hv   = reinterpret_cast<std::vector <std::vector <std::vector <unsigned int> > >(*)(int ntsize, int V, int P)>(dlsym(sl, "create_Hv"));
+            create_Hu   = reinterpret_cast<std::vector <std::vector <std::unordered_set <int> > >(*)(int ntsize, int V, int P)>(dlsym(sl, "create_Hu"));
+            create_P   = reinterpret_cast<int(*)(int V)>(dlsym(sl, "create_P"));
         }
 };
 

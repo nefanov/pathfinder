@@ -20,25 +20,18 @@ void new_graph_creator(std::vector<std::vector<std::pair<std::string, int>>>& V,
 				}
 				V_new.push_back({i, j, counter});
 				E_new.resize(V_new.size());
-				if (counter != 0) {
+				if (counter != 0)
 					E_new[E_new.size() - 2].push_back(std::make_pair(E_new.size() - 1, ""));
-				}
 				counter++;
 			}
 		}
 	}
-	for (int i = 0; i < E.size(); i++) {
-		for (int j = 0; j < E[i].size(); j++) {
-			for (int q = 0; q < E[i][j].size(); q++) {
-				int s = V[i][j].second, f = V[i][E[i][j][q].first].second;
-				while (s + 1 < V_new.size() && V_new[s + 1][2] != 0)
-					s++;
-				E_new[s].push_back(std::make_pair(f, ""));
-			}
-		}
-	}
+	for (int i = 0; i < E.size(); i++)
+		for (int j = 0; j < E[i].size(); j++)
+			for (int q = 0; q < E[i][j].size(); q++)
+				for (int s = V[i][j].second, f = V[i][E[i][j][q].first].second; s + 1 < V_new.size() && V_new[s + 1][2] != 0; s++)
+					E_new[s].push_back(std::make_pair(f, ""));
 }
-
 void graph_merger(std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, std::vector<std::vector<std::pair<std::string, int>>>& V, std::vector<std::vector<std::vector<std::pair<int, std::string>>>>& E, std::vector<std::vector<std::string>>& Code, std::vector<std::vector<int>>& V_new, std::vector<std::vector<std::pair<int, std::string>>>& E_new, std::vector<std::string>& Code_new)
 {
 	for (int i = 0; i < V_new.size(); i++) {
