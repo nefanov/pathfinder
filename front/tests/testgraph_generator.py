@@ -1,18 +1,23 @@
 import random
 import sys
 fout = open("testgraph_generator.output", "w")
-fout.write("5\n")
-fout.write("S AB \n S AR \n R SB \n A a \n B b\n")
+fout.write("1\n5\n")
+fout.write("S AB \nS AR \nR SB \nA a \nB b\n")
 type = int(sys.argv[1]) #type of graph by density
-n = int(sys.argv[2])    #number of vertices 
-m = int(n ** 1.2)       #number of edges
+n = int(sys.argv[2])    #number of vertices
 if type == 0:
     m = 2*n
 if type == 1:
     m = int(n**1.5)
 if type == 2:
     m = n**2/4
-fout.write(str(n) + "\n" + str(m) + "\n")
+if type == 3:
+    m = n**2
+fout.write("\n")
+fout.write(str(n) + " " + str(m) + "\n")
+for i in range(n):
+    fout.write("T ")
+fout.write("\n")
 A = ['a', 'b', 'c']
 if type != 3:
     for i in range(m):
