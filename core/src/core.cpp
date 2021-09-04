@@ -2,27 +2,11 @@
 int main(int argc, char* argv[]) 
 {
     bool is_fast = (find_arg(argc, argv, "-fast") > 0) ? true : false;
-    void* sl = dlopen(((is_fast == true) ? "libfst.so" : "libslw.so"), RTLD_LAZY);
-    if (sl == NULL) {
-        fprintf(stderr, "%s\n", dlerror());
+    void* sl = dlopen((is_fast == true) ? "libfst.so" : "libslw.so", RTLD_LAZY);
+    std::cout << ((is_fast == true) ? "libfst.so" : "libslw.so") << std::endl;
+    funcs func(sl);
+    if (check_funcs(func) < 0)
         return -1;
-    }  
-    std::cout << ((is_fast) ? "libfst.so" : "libslw.so") << std::endl;
-    if (dlsym(sl, "add_value") == NULL) {
-        fprintf(stderr, "%s\n", dlerror());
-        return -1;
-    }  
-    funcs func(
-        dlsym(sl, "add_value"), 
-        dlsym(sl, "difference"), 
-        dlsym(sl, "not_null"), 
-        dlsym(sl, "create_wv"), 
-        dlsym(sl, "create_wu"),
-        dlsym(sl, "create_q"), 
-        dlsym(sl, "create_Hv"),
-        dlsym(sl, "create_Hu"),
-        dlsym(sl, "create_P")
-    );
     int m, number, E, initial, P, V;
     std::vector <std::string> nonterminals;
     std::vector <std::vector<int>> lol(NUMBER_OF_LETTERS_WITH_OVERFLOW);
@@ -54,21 +38,11 @@ int main(int argc, char* argv[])
     std::vector<std::vector<std::vector<unsigned int>>>H1v = func.create_Hv(nonterminals.size(), V, P), H2v = H1v;
     std::vector<std::vector<std::unordered_set<int>>>H1u = func.create_Hu(nonterminals.size(), V, P), H2u = H1u;
     std::vector<std::vector<std::vector<std::vector<int>> > > prev(V, std::vector<std::vector<std::vector<int > > > (nonterminals.size(), std::vector<std::vector<int>>  (V, {-1, -1, -1})));
-    /*int output_path_arg = find_arg(argc, argv, "-fo");
-    if (output_path_arg > 0) {
-        std::ofstream fout;
-        fout.open("data/output");
-        fout << "CHECK\n";
-        if (!fout.is_open())
-            std::cout << ":(\n";
-        std::cout.rdbuf(fout.rdbuf());
-    }*/
     for (int i = 0; i < E; i++)
         filling_edge_matrices(P, fin, lol, W, H1v, H2v, H1u, H2u, func.add_value);
     for (auto i: eps_rules)
         for (int j = 0; j < V; j++)
             filling_loops(j, P, i, W, H1v, H2v, H1u, H2u, func.add_value); //if word is empty
-        //std::cout << "KEK\n";
     while (!W.empty()) {
         std::vector<int> q = W.front();
         W.pop_front();

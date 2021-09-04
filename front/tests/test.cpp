@@ -1,27 +1,28 @@
 #define CATCH_CONFIG_MAIN
 #include "catch2/catch_test_macros.hpp"
 #include "code2graph.h"
+#include "orchestrator.h"
 #include "core.h"
 #include <set>
 TEST_CASE("wrong path to the file") {
+    char* argv[] = {const_cast<char*>("test"), const_cast<char*>("-cmd"), const_cast<char*>("./")};
+    options opt(3, argv);
     std::ifstream input_file, analyze_file;
-    std::string path = "./", path_to_input = "";
-    REQUIRE(process_path(1, 2, input_file, path, path_to_input, analyze_file) == -1);
+    REQUIRE(process_path(opt, input_file, analyze_file) == -1);
 }
 
 TEST_CASE("using file input/test1.in") {
     std::ifstream input_file, analyze_file;
-    std::string path_to_input = "tests/test1.in", path = "", full_path = path_to_input;
-    REQUIRE(process_path(2, 3, input_file, path, path_to_input, analyze_file) == 0);
-    REQUIRE(path_to_input == full_path);
-    full_path.erase(full_path.find_last_of("/") + 1, full_path.size()); // .../gcc-cfg-utils/input/test.in -> .../gcc-cfg-utils/input/
-    REQUIRE(path == "gcc-cfg-utils/examples/test1.c.012t.cfg.dot");
+    char* argv[] = {const_cast<char*>("test"), const_cast<char*>("-file"), const_cast<char*>("tests/test1.in")};
+    options opt(3, argv);
+    REQUIRE(process_path(opt, input_file, analyze_file) == 0);
 }
 
 TEST_CASE("path to examples/test1.c") {
     std::ifstream input_file, analyze_file;
-    std::string path = "gcc-cfg-utils/examples/test1.c", path_to_input = "";
-    REQUIRE(process_path(1, 2, input_file, path, path_to_input, analyze_file) == 0);
+    char* argv [] = {const_cast<char*>("test"), const_cast<char*>("-cmd"), const_cast<char*>("gcc-cfg-utils/examples/test1.c")};
+    options opt(3, argv);
+    REQUIRE(process_path(opt, input_file, analyze_file) == 0);
 }
 
 TEST_CASE("new_fastset") {
