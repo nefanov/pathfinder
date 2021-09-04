@@ -1,6 +1,6 @@
 import random
 import sys
-fout = open("testgraph_generator.output", "w")
+fout = open("graph_generator.output", "w")
 fout.write("1\n5\n")
 fout.write("S AB \nS AR \nR SB \nA a \nB b\n")
 type = int(sys.argv[1]) #type of graph by density
