@@ -32,6 +32,7 @@ add_library(thin SHARED gcc-cfg-utils/code/w-thin-bb.cpp)
 add_library(fat SHARED gcc-cfg-utils/code/wo-thin-bb.cpp)
 add_library(orc SHARED gcc-cfg-utils/code/orchestrator.cpp)
 
+add_executable(speed tests/speed_tests/test_speed.cpp)
 add_executable(core ../core/src/core.cpp)
 add_executable(code2graph gcc-cfg-utils/code/code2graph.cpp)
 add_executable(test tests/test.cpp)
