@@ -12,7 +12,7 @@ if type == 1:
 if type == 2:
     m = n**2/4
 if type == 3:
-    m = n**2
+    m = n*(n-1)
 fout.write("\n")
 fout.write(str(n) + " " + str(m) + "\n")
 for i in range(n):
