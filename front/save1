@@ -1,0 +1,340 @@
+
+TIME 0.001929 TIME
+
+
+TIME 0.002258 TIME
+
+
+TIME 0.003230 TIME
+
+
+TIME 0.002811 TIME
+
+
+TIME 0.007132 TIME
+
+
+TIME 0.006527 TIME
+
+
+TIME 0.011989 TIME
+
+
+TIME 0.005982 TIME
+
+
+TIME 0.031282 TIME
+
+
+TIME 0.012446 TIME
+
+
+TIME 1.460866 TIME
+
+
+TIME 0.116397 TIME
+
+
+TIME 4.379648 TIME
+
+
+TIME 0.236159 TIME
+
+
+TIME 9.861104 TIME
+
+
+TIME 0.341317 TIME
+
+
+TIME 37.615736 TIME
+
+
+TIME 0.575650 TIME
+
+
+TIME 1.209900 TIME
+
+
+TIME 0.015754 TIME
+
+
+TIME 0.021308 TIME
+
+
+TIME 0.064113 TIME
+
+
+TIME 0.159111 TIME
+
+
+TIME 0.256882 TIME
+
+
+TIME 1.106226 TIME
+
+
+TIME 0.625908 TIME
+
+
+TIME 4.114732 TIME
+
+
+TIME 1.227035 TIME
+
+
+TIME 10.075013 TIME
+
+
+TIME 2.075539 TIME
+
+
+TIME 19.244458 TIME
+
+
+TIME 3.963596 TIME
+
+
+TIME 43.369263 TIME
+
+
+TIME 6.695437 TIME
+
+
+TIME 81.144916 TIME
+
+
+TIME 11.924873 TIME
+
+
+TIME 158.892667 TIME
+
+
+TIME 28.866002 TIME
+
+
+TIME 553.073367 TIME
+
+
+TIME 62.264990 TIME
+
+
+TIME 1295.755982 TIME
+
+
+TIME 0.019960 TIME
+
+
+TIME 0.042032 TIME
+
+
+TIME 0.068498 TIME
+
+
+TIME 0.274800 TIME
+
+
+TIME 0.291560 TIME
+
+
+TIME 2.025572 TIME
+
+
+TIME 0.682167 TIME
+
+
+TIME 7.097555 TIME
+
+
+TIME 1.347023 TIME
+
+
+TIME 16.484127 TIME
+
+
+TIME 2.300248 TIME
+
+
+TIME 33.145128 TIME
+
+
+TIME 4.398722 TIME
+
+
+TIME 79.806024 TIME
+
+
+TIME 7.513761 TIME
+
+
+TIME 146.087221 TIME
+
+
+TIME 13.403780 TIME
+
+
+TIME 291.208410 TIME
+
+
+TIME 32.843608 TIME
+
+
+TIME 1115.172347 TIME
+
+
+TIME 70.547024 TIME
+
+
+TIME 0.022508 TIME
+
+
+
+
+
+
+
+
+
+
+
+libfst.so
+libslw.so
+libfst.so
+libslw.so
+libfst.so
+libslw.so
+libfst.so
+libslw.so
+libfst.so
+libslw.so
+libfst.so
+libslw.so
+libfst.so
+libslw.so
+libfst.so
+libslw.so
+libfst.so
+libslw.so
+libfst.so
+Killed
+libslw.so
+libfst.so
+libslw.so
+libfst.so
+libslw.so
+libfst.so
+libslw.so
+libfst.so
+libslw.so
+libfst.so
+libslw.so
+libfst.so
+libslw.so
+libfst.so
+libslw.so
+libfst.so
+libslw.so
+libfst.so
+libslw.so
+libfst.so
+libslw.so
+libfst.so
+libslw.so
+libfst.so
+libslw.so
+libfst.so
+libslw.so
+libfst.so
+libslw.so
+libfst.so
+libslw.so
+libfst.so
+libslw.so
+libfst.so
+libslw.so
+libfst.so
+libslw.so
+libfst.so
+libslw.so
+libfst.so
+libslw.so
+libfst.so
+libslw.so
+libfst.so
+libslw.so
+^Clibfst.so
+libslw.so
+libfst.so
+^Clibslw.so
+^Clibfst.so
+^Clibslw.so
+^Clibfst.so
+^Clibslw.so
+^C^CTraceback (most recent call last):
+  File "tests/speed_tests/graph_generator.py", line 34, in <module>
+    fout.write(str(i) + " " + str(j) + " " + A[random.randint(0, 2)] + "\n")
+KeyboardInterrupt
+libfst.so
+^CSegmentation fault (core dumped)
+libslw.so
+^C^CTraceback (most recent call last):
+  File "tests/speed_tests/graph_generator.py", line 34, in <module>
+    fout.write(str(i) + " " + str(j) + " " + A[random.randint(0, 2)] + "\n")
+KeyboardInterrupt
+libfst.so
+Segmentation fault (core dumped)
+libslw.so
+^C^CTraceback (most recent call last):
+  File "tests/speed_tests/graph_generator.py", line 34, in <module>
+    fout.write(str(i) + " " + str(j) + " " + A[random.randint(0, 2)] + "\n")
+KeyboardInterrupt
+libfst.so
+Segmentation fault (core dumped)
+libslw.so
+^C^CTraceback (most recent call last):
+  File "tests/speed_tests/graph_generator.py", line 34, in <module>
+    fout.write(str(i) + " " + str(j) + " " + A[random.randint(0, 2)] + "\n")
+  File "/usr/lib/python2.7/random.py", line 244, in randint
+    return self.randrange(a, b+1)
+  File "/usr/lib/python2.7/random.py", line 218, in randrange
+    return _int(istart + _int(self.random()*width))
+KeyboardInterrupt
+libfst.so
+Segmentation fault (core dumped)
+libslw.so
+^C^CTraceback (most recent call last):
+  File "tests/speed_tests/graph_generator.py", line 34, in <module>
+    fout.write(str(i) + " " + str(j) + " " + A[random.randint(0, 2)] + "\n")
+KeyboardInterrupt
+libfst.so
+^CSegmentation fault (core dumped)
+libslw.so
+^CSegmentation fault (core dumped)
+^CTraceback (most recent call last):
+  File "tests/speed_tests/graph_generator.py", line 34, in <module>
+    fout.write(str(i) + " " + str(j) + " " + A[random.randint(0, 2)] + "\n")
+  File "/usr/lib/python2.7/random.py", line 244, in randint
+    return self.randrange(a, b+1)
+  File "/usr/lib/python2.7/random.py", line 218, in randrange
+    return _int(istart + _int(self.random()*width))
+KeyboardInterrupt
+libfst.so
+Segmentation fault (core dumped)
+libslw.so
+^C^CTraceback (most recent call last):
+  File "tests/speed_tests/graph_generator.py", line 34, in <module>
+    fout.write(str(i) + " " + str(j) + " " + A[random.randint(0, 2)] + "\n")
+KeyboardInterrupt
+libfst.so
+Segmentation fault (core dumped)
+libslw.so
+
+
+
+
+
+
+
+
+TIME 0.089984 TIME
+
