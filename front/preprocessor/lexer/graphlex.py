@@ -295,9 +295,23 @@ def shortest_path_check(graph, src, dst):
     return False
 
 
+'''
+default_pattern_composer-- now only fill fields, no specialize (or maybe later)
+P - specializing by and for some pattern
+'''
+def default_pattern_composer(scenario={}):
+    P = {'yes_df_list': [], 'no_df_list': [], 'yes_cf_list': [], 'no_cf_list': [], 'rel_kinds': set()}
+    return P
+
+
+def default_specializer(graph, nodes, node_lex_dict, P):
+    return graph
+
+'''
+specialize_Dflow -- специализация по потоку данных (def-use)
 # nodes: словарь по типам вершин
 # P -- list(patterns (relation ))
-
+'''
 def specialize_Dflow(graph, nodes, node_lex_dict, P):
     for p in P: # for each entity (relation, edge) of pattern
         for n in nodes[p.left['type']]:
@@ -309,11 +323,19 @@ def specialize_Dflow(graph, nodes, node_lex_dict, P):
                     graph.add_edge(pydot.Edge(n,
                                     n2,
                                     color=p.params["edge_style"]["color"],
-                                    style ='dashed',
+                                    style='dashed',
                                     label=p.label))
-                    print("Add edge!")
     return graph
 
+
+def markup_graph(graph, nodes, nld, pattern_composer=default_pattern_composer, scenario=None, specializer=default_specializer):
+    P = pattern_composer(scenario)
+    # Adjust graph by extra edges marking (specializing)
+    for _p in P["yes_df_list"]:
+        graph = specializer(graph=graph, nodes=nodes, node_lex_dict=nld, P=_p)
+    for _p in P["no_df_list"]:
+        graph = specializer(graph=graph, nodes=nodes, node_lex_dict=nld, P=_p)
+    return graph, P
 
 def markup_edges(graph=pydot.Graph(), mapping={}):
     edges = graph.get_edges()
