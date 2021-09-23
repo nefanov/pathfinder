@@ -1,5 +1,5 @@
 # example of usage:
-# suppose you want to get thin-bb graph of 1.c and save it to dot for CFL-R and to png to manual analysis
+# suppose you want to get thin-bb graph of 1.c and save it to dot for CFL-R and to png for manual analysis
 # then you should perform:
 # > cd front
 # > ./get_thin_graph.sh 1.c 123.dot pic.png
