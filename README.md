@@ -6,9 +6,7 @@ CFL-R-based software analysis tool
 # Requirements
 * GCC 9.3.0
 * CMAKE 3.16.3
-GCC-front / Callgrind-front dependencies: 
 * PYTHON 3 *(only for Lexer and Callgrind-front analysis)*
-Also:
 * CLANG 10.0.0 *(only for llvm analysis)*
 * LLVM 10.0.0 *(only for llvm analysis)*
 * PYTHON 2.7.18 *(only for llvm analysis)*
