@@ -28,3 +28,23 @@ def prepare_graph(graph_fn, outp_graph_fn, outp_plot, need_graph_save=False, nee
     if need_plot:
         graph.write_png("mapped2_" + inp_file + outp_pic)
     return graph, mapping
+
+
+def prepare_grammar_files(graph, G_list=[], verbose=False, file_name_prefix="grammar"):
+    """
+    prepare grammars: one file for each grammar
+    Note: it is graph-specific because CFL-R input is enumerative (see the core module sources for details)
+    """
+    files_list = []
+    for i, grammar in enumerate(G_list):
+        file_name = file_name_prefix + str(i)
+        files_list.append(file_name)
+        gr.prepare_txt_grammar(
+            grammar, file_name)
+        saved_node_names = gr.prepare_txt_graph(graph, file_name)
+        if verbose:
+            print(saved_node_names)
+
+    if verbose:
+        print("Generated grammar input files for core:\n", files_list)
+    return
