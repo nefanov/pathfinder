@@ -1,4 +1,4 @@
-# script-getter of thin cfg from GCC frontend (currently it is our general frontend)
+# script-getter of thin cfg from GCC frontend (currently it is our main frontend)
 # example of usage:
 # suppose you want to get thin-bb graph of 1.c and save it to dot for CFL-R and to png for manual analysis
 # then you should perform:
