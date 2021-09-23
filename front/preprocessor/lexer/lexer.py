@@ -20,7 +20,7 @@ def prepare_graph(graph_fn, outp_graph_fn, outp_plot, need_graph_save=False, nee
     # markup nodes and edges by token types
     graph, nodes, nld = glex.lex_graph(inp_file)
     # add labeled extra edges, check some predicates; return graph, pattern description list
-    graph, P = glex.markup_graph(graph, nodes, nld, pattern_composer=glex.default_pattern_composer, scenario=None, specializer=glex.default_specializer)
+    graph, P = glex.markup_graph(graph, nodes, nld, pattern_composer=pattern_composer, scenario=None, specializer=specializer)
     if need_plot:
         graph.write_png(outp_pic)
     # create mapping of graph (edges_types --> terminal alphabet)
