@@ -4,18 +4,23 @@ from predicates import *
 import gram as gr
 
 
-def prepare_graph(graph_fn, outp_graph_fn, outp_plot, need_graph_save=False, need_plot=False, P=None):
+def prepare_graph(graph_fn, outp_graph_fn, outp_plot, need_graph_save=False, need_plot=False, pattern_composer=None, specializer=None):
+    
     inp_file = graph_fn if graph_fn else "mem.c.012t.cfg.dot"
     outp_pic = outp_plot if outp_plot else "g_out.png"
     outp_graph = outp_graph_fn if outp_graph_fn else "g_out.dot"
+    if not pattern_composer:
+        pattern_composer = glex.default_pattern_composer
+    if not specializer:
+        pattern_composer = glex.default_specializer
 
     def flatten(t):
         return [item for sublist in t for item in sublist]
 
     # markup nodes and edges by token types
     graph, nodes, nld = glex.lex_graph(inp_file)
-    # add labeled extra edges, check some predicates
-    graph, P = glex.markup_graph(graph, nodes, nld)  # return graph, pattern description list
+    # add labeled extra edges, check some predicates; return graph, pattern description list
+    graph, P = glex.markup_graph(graph, nodes, nld, pattern_composer=glex.default_pattern_composer, scenario=None, specializer=glex.default_specializer)
     if need_plot:
         graph.write_png(outp_pic)
     # create mapping of graph (edges_types --> terminal alphabet)
