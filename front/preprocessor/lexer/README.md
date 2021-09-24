@@ -4,7 +4,7 @@ input of grammar for the core module now is enumerative for each edge as a pair 
 Note: current lexer is dependent on GCC (it tokenizes GIMPLE format)
 
 # Requirements
-* GCC 9
+* GCC >= 9 
 * Python 3 + extra packages:
 -- PyDot
 -- Networkx
