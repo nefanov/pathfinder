@@ -6,7 +6,7 @@ Note: current lexer is dependent on GCC (it tokenizes GIMPLE format)
 # Requirements
 * GCC 9
 * Python 3 + extra packages:
-** PyDot
-** Networkx
+- PyDot
+- Networkx
 ** JSON (optional, for verbose output)
 * GraphViz (currently not need PyGraphViz)
