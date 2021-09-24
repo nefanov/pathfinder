@@ -135,3 +135,45 @@ int find_arg(int argc, char* argv[], const char* arg)
 			return i;
 	return -1;
 }
+
+int check_funcs(funcs& func)
+{
+    int ret = 0;
+    if (func.add_value == NULL) {
+        std::cout << "add_value() not found" << std::endl;
+        ret = -1;
+    }
+    if (func.difference == NULL) {
+        std::cout << "difference() not found" << std::endl;
+        ret = -1;
+    }
+    if (func.not_null == NULL) {
+        std::cout << "not_null() not found" << std::endl;
+        ret = -1;
+    }
+    if (func.create_wv == NULL) {
+        std::cout << "create_wv() not found" << std::endl;
+        ret = -1;
+    }
+        if (func.create_wu == NULL) {
+        std::cout << "create_wu() not found" << std::endl;
+        ret = -1;
+    }
+    if (func.create_q == NULL) {
+        std::cout << "create_q() not found" << std::endl;
+        ret = -1;
+    }
+    if (func.create_Hv == NULL) {
+        std::cout << "create_Hv() not found" << std::endl;
+        ret = -1;
+    }
+    if (func.create_Hu == NULL) {
+        std::cout << "create_Hu() not found" << std::endl;
+        ret = -1;
+    }
+    if (func.create_P == NULL) {
+        std::cout << "create_P() not found" << std::endl;
+        ret = -1;
+    }
+    return ret;
+}
