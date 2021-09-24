@@ -1,9 +1,10 @@
 #include "code2graph.h"
+#include "orchestrator.h"
 enum {STDIN, CMD, FILEIN};
-int process_path(int input_type, int argc, std::ifstream& input_file, std::string& path, std::string& path_to_input, std::ifstream& analyze_file)
+int process_path(class options& opt, std::ifstream& input_file, std::ifstream& analyze_file)
 {
-	std::string path_to_analyze = path;
-	switch(input_type) {
+	std::string path_to_analyze = opt.path_to_analyzed_file;
+	switch(opt.input_type) {
 		case (STDIN):
 			std::cout << "Enter the name of the file to be analyzed, pre-compiled with gcc file_name -fdump-tree-cfg-graph: ";
 			std::cin >> path_to_analyze;
@@ -13,17 +14,15 @@ int process_path(int input_type, int argc, std::ifstream& input_file, std::strin
 			path_to_analyze += ".012t.cfg.dot";
 		break;
 		case (FILEIN):
-			path_to_input = path_to_input;
-			input_file.open(path_to_input);
+			input_file.open(opt.path_to_input_file);
 			if (!input_file.is_open()) {
-				std::cout << "file " << path_to_input << " was not opened" << std::endl; 
+				std::cout << "file " << opt.path_to_input_file << " was not opened" << std::endl; 
 				return -1;
 			}
 			input_file >> path_to_analyze;
 			path_to_analyze += ".012t.cfg.dot";
 		break;
 	}
-	path = path_to_analyze;
 	analyze_file.open(path_to_analyze);
 	if (!analyze_file.is_open()) {
 			std::cout << "file " << path_to_analyze << " was not opened" << std::endl;

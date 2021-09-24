@@ -8,7 +8,6 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <limits.h>
-#include <filesystem>
 #include <dlfcn.h>
 
 class funcs_front
@@ -25,8 +24,7 @@ class funcs_front
 
 };
 
-int process_path       (int input_type, int argc, std::ifstream& input_file, std::string& path, 
-                        std::string& path_to_input, std::ifstream& analyze_file);
+int process_path       (class options& opt, std::ifstream& input_file, std::ifstream& analyze_file);
 
 void cluster_handler   (int& len, size_t& found, int& cluster, int& subgraph, std::string& inp, 
                         std::vector <std::pair<std::string, std::pair<int, int>>>& Clusters, 

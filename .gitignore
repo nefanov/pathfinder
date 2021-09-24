@@ -8,3 +8,5 @@ front/cmake_install.cmake
 *.out
 _deps/
 front/DartConfiguration.tcl
+testgraph_generator.output
+data/
