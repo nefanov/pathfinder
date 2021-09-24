@@ -8,5 +8,5 @@ Note: current lexer is dependent on GCC (it tokenizes GIMPLE format)
 * Python 3 + extra packages:
 -- PyDot
 -- Networkx
-* JSON (optional, for verbose output)
+-- JSON (optional, for verbose output)
 * GraphViz (currently not need PyGraphViz)
