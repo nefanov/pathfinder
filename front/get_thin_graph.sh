@@ -8,7 +8,7 @@
 # stdout: Picture generating from dotfile 123.dot, saving to: pic.png
 
 # functionality:
-gcc -fdump-tree-cfg-graph $1 && sync $1.012t.cfg*
+gcc-9 -fdump-tree-cfg-graph $1 && sync $1.012t.cfg*
 echo $1 | build/code2graph -cmd $1 -front-only -thin > $1_gcc_frontend.output && sync $1_gcc_frontend.output
 csplit $1_gcc_frontend.output '/digraph /' > /dev/null
 rm $1_gcc_frontend.output && sync
