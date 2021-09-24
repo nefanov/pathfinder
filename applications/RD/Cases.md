@@ -40,7 +40,7 @@ Interprocedural mode means that the context of callee will be analysed during th
 
 Detect calls of functions memset, malloc, etc, which are redundant in current context.
 
- #### Example 1.
+ #### Example 1. (Already implemented)
  Original code:
 ```C
 int* buf=(int*)malloc(sizeof(int)*SZ);
