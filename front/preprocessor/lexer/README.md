@@ -8,4 +8,4 @@ Note: current lexer is dependent on GCC (it tokenizes GIMPLE format)
 * PyDot
 * Networkx
 * JSON (optional, for verbose output)
-* GraphViz (currently not need Python bindings)
+* GraphViz (currently not need PyGraphViz)
