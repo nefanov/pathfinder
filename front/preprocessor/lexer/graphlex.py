@@ -153,6 +153,33 @@ lex['assign_MEM'] = {
     }
 }
 
+
+#===================================================================================
+
+def get_function_args(arg_str):
+    spl = arg_str.split(",")
+    return spl
+
+
+def parse_function_call_args(item):
+    if item['exp'] == assign_function_call:
+        arg_list = get_function_args(item['format']['arguments'])
+        return arg_list
+    return None
+
+
+def parse_function_def_args(st):
+    arg_list = get_function_args(st)
+    if len(arg_list[0]) is 0:
+        return arg_list
+    return [pos.split()[-1][1:]
+            if pos.split()[-1][0] == '*'
+            else pos.split()[-1]
+            for pos in arg_list] # maybe should be rewritten -- pointer matters...
+
+#===================================================================================
+
+
 nodes = {}
 for k in lex.keys():
     nodes.update({k:[]})

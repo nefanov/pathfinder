@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # script-getter of thin CFG from GCC frontend (currently it is our main frontend)
 # example of usage:
 # suppose you want to get thin-bb graph of 1.c and save it to dot for CFL-R and to png for manual analysis
