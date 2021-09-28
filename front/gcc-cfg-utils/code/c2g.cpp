@@ -8,10 +8,10 @@ int process_path(class options& opt, std::ifstream& input_file, std::ifstream& a
 		case (STDIN):
 			std::cout << "Enter the name of the file to be analyzed, pre-compiled with gcc file_name -fdump-tree-cfg-graph: ";
 			std::cin >> path_to_analyze;
-			path_to_analyze += ".012t.cfg.dot";
+			path_to_analyze += opt.ir_file_suffix;
 		break;
 		case (CMD):
-			path_to_analyze += ".012t.cfg.dot";
+			path_to_analyze += opt.ir_file_suffix;
 		break;
 		case (FILEIN):
 			input_file.open(opt.path_to_input_file);
@@ -20,7 +20,7 @@ int process_path(class options& opt, std::ifstream& input_file, std::ifstream& a
 				return -1;
 			}
 			input_file >> path_to_analyze;
-			path_to_analyze += ".012t.cfg.dot";
+			path_to_analyze += opt.ir_file_suffix;
 		break;
 	}
 	analyze_file.open(path_to_analyze);

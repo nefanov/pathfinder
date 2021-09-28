@@ -1,4 +1,5 @@
 #include "orchestrator.h"
+
 options::options(int argc, char* argv[])
 {
     std::string s;
@@ -18,5 +19,7 @@ options::options(int argc, char* argv[])
             is_slow = true;
         if (s == "-o")
             is_saving_output = true, path_to_save_file = argv[++i];
+	if (s == "-SSA")
+	    ir_file_suffix = IR_SUFFIX_SSA;
     }
 }

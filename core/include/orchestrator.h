@@ -1,5 +1,9 @@
 #include <string>
 #include <vector>
+
+#define IR_SUFFIX_DFL ".012t.cfg.dot"
+#define IR_SUFFIX_SSA ".019t.ssa.dot"
+
 class options
 {
     public:
@@ -12,6 +16,7 @@ class options
         bool is_slow = false;
         bool is_saving_output = false;
         std::string path_to_input_file = "";
+	std::string ir_file_suffix = IR_SUFFIX_DFL;
         std::string path_to_analyzed_file = "";
         std::string path_to_save_file = "";
         int input_type = 0;
