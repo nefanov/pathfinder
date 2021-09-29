@@ -12,7 +12,7 @@ def prepare_graph(graph_fn, outp_graph_fn, outp_plot, need_graph_save=False, nee
     if not pattern_composer:
         pattern_composer = glex.default_pattern_composer
     if not specializer:
-        pattern_composer = glex.default_specializer
+        specializer = glex.default_specializer
 
     def flatten(t):
         return [item for sublist in t for item in sublist]
@@ -31,7 +31,7 @@ def prepare_graph(graph_fn, outp_graph_fn, outp_plot, need_graph_save=False, nee
     # markup edges by terminal alphabet
     graph = glex.markup_edges(graph, mapping)
     if need_plot:
-        graph.write_png("mapped2_" + inp_file + outp_pic)
+        graph.write_png(outp_pic)
     return graph, mapping
 
 

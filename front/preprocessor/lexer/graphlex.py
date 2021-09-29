@@ -170,7 +170,7 @@ def parse_function_call_args(item):
 
 def parse_function_def_args(st):
     arg_list = get_function_args(st)
-    if len(arg_list[0]) is 0:
+    if len(arg_list[0]) == 0:
         return arg_list
     return [pos.split()[-1][1:]
             if pos.split()[-1][0] == '*'
@@ -226,10 +226,9 @@ def trim_prefix(fn):
 
 def lex_graph(inp_file):
     print("Load graph from", inp_file)
-    tr_file=trim_prefix(inp_file)
+    tr_file = inp_file
     graph = load_graph(tr_file)
     node_lex_dict = {}
-    graph.write_png("g.png")
 
     def make_lex_node(n):
         if n.get_name() in node_lex_dict.keys():
@@ -327,7 +326,7 @@ default_pattern_composer-- now only fill fields, no specialize (or maybe later)
 P - specializing by and for some pattern
 '''
 def default_pattern_composer(scenario={}):
-    P = {'yes_df_list': [], 'no_df_list': [], 'yes_cf_list': [], 'no_cf_list': [], 'rel_kinds': set()}
+    P = {'yes_df_list': [], 'no_df_list': [], 'yes_cf_list': [], 'no_cf_list': [], 'rel_kinds': set()} 
     return P
 
 
