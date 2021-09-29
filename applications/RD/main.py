@@ -15,6 +15,8 @@ import lexer
 def prepare_graph_example():
     """
     creating graph with empty (any) edges labeling
+    pattern_composer -- function to compose the pattern
+    specializer -- function to adjust graph by specific edges, nodes, labels, to check some predicates etc
     """
     os.chdir("../../front")
     os.system('./get_thin_graph.sh -i 1.c -s m.dot -p pic25.png')
