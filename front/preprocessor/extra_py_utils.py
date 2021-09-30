@@ -36,11 +36,34 @@ def search_pattern(pattern, lines, fname):
 	return res
 
 
+def make_func_def_table(func_names, arg_names):
+	table=dict()
+	fn = [f[0] for f in func_names]
+	for i, name in enumerate(fn):
+		table[name] = arg_names[i]
+
+	return table
+
+
+
 def extract_func_def_list(fname):
 	with open(fname) as f:
 		lines = f.readlines()
 		res = search_pattern(pattern, lines, fname)
 		return res
+
+
+def func_call_var_remap(func_name, func_arg_table, callee):
+	caller_args = func_arg_table[func_name]
+	remap = dict()
+	try:	
+		for i,item in enumerate(parse_func_call_args):
+			remap[caller_args[i]] = item
+	except Exception as e:
+		print(e, "func call args parsing exception")
+	return remap
+	
+
 #===================================================================================
 
 if __name__ == '__main__':
@@ -51,5 +74,4 @@ if __name__ == '__main__':
 	fl = extract_func_def_list(sys.argv[1])	
 	arg_names = [parse_function_def_args(it[-1]) for it in [el[-1] for el in [item[-1] for item in fl]]]
 	func_names =[parse_function_def_args(it[-2]) for it in [el[-1] for el in [item[-1] for item in fl]]]
-	pprint.pprint(arg_names)
-	print(func_names)
+	print(make_func_def_table(func_names, arg_names))
