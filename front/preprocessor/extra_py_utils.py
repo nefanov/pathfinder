@@ -53,12 +53,12 @@ def extract_func_def_list(fname):
 		return res
 
 
-def func_call_var_remap(func_name, func_arg_table, callee):
-	caller_args = func_arg_table[func_name]
+def func_call_var_remap(func_name, func_arg_table, caller):
+	callee_args = func_arg_table[func_name]
 	remap = dict()
 	try:	
-		for i,item in enumerate(parse_func_call_args):
-			remap[caller_args[i]] = item
+		for i,item in enumerate(parse_function_call_args(caller)):
+			remap[callee_args[i]] = item
 	except Exception as e:
 		print(e, "func call args parsing exception")
 	return remap
@@ -74,4 +74,7 @@ if __name__ == '__main__':
 	fl = extract_func_def_list(sys.argv[1])	
 	arg_names = [parse_function_def_args(it[-1]) for it in [el[-1] for el in [item[-1] for item in fl]]]
 	func_names =[parse_function_def_args(it[-2]) for it in [el[-1] for el in [item[-1] for item in fl]]]
-	print(make_func_def_table(func_names, arg_names))
+	def_table = make_func_def_table(func_names, arg_names))
+	
+	f_name = item['format']['func_name']
+	caller_args = func_call_var_remap(item)
