@@ -94,6 +94,27 @@ def get_interfunc_remap(label, def_table, l, r):
 	switched_caller_args = dict(zip(caller_args.values(), caller_args.keys()))
 	print("Assignment:", caller_args)
 	print("Mnemonic '-->'", switched_caller_args)
+	return caller_args
+
+
+def append_var_chain(g, src, dst, caller_args):
+	# add and specify the chain of variables assignment: var=arg
+	last = dst
+	current = src
+	for k,v in caller_args.items():
+		next = pydot.Node(label=k + " = "+v+";")
+		g.add_edge(pydot.Edge(current,
+                                   next,
+                                   color="yellow",
+                                   style ='dashed',
+                                   label="argpass"))
+		current = next
+	g.add_edge(pydot.Edge(current,
+                                   last,
+                                   color="black",
+                                   style ='solid',
+                                   label="call"))
+	return g
 #===================================================================================
 
 if __name__ == '__main__':
@@ -102,20 +123,35 @@ if __name__ == '__main__':
 	"""
 	current_path = os.path.dirname(os.path.abspath("."))
 	sys.path.append(os.path.join(current_path, "./preprocessor/lexer"))
-	import pprint
+
 	import lexer
+	import pydot
 
 	def_table = func_table(sys.argv[1])
 
 	label = r'D.1 = m(1,2);'
-	l = 'assign_function_call'
-	r = {
-		'exp': lexer.glex.assign_function_call,'format': {
-			'left': "",
-			'func_name': "",
-			'arguments': "",
+
+	g=pydot.Graph()
+	for e in g.get_edges():
+		src = e.get_source()
+		dst = e.get_destination()
+		src_label = src.get_attributes()['label'].replace("\\", "")[2:]
+		dst_label = src.get_attributes()['label'].replace("\\", "")[2:]
+
+		src_match = re.search(lexer.glex.assign_function_call, src_label)
+		dst_match = re.search(r'.*ENTRY.*', dst_label)
+
+		l = 'assign_function_call'
+		r = {
+			'exp': lexer.glex.assign_function_call,'format': {
+				'left': "",
+				'func_name': "",
+				'arguments': "",
+			}
 		}
-	}
-	get_interfunc_remap(label, def_table, l, r )
-	
-	
+		caller_args = get_interfunc_remap(src_label, def_table, l, r)
+
+		if src_match and dst_match and len(caller_args) > 0:
+			append_var_chain(g, src, dst, caller_args)
+
+
