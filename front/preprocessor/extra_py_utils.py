@@ -69,39 +69,20 @@ def func_call_var_remap(func_name, func_arg_table, caller):
 		print("func call args parsing exception",e)
 	return remap
 
-
 #===================================================================================
+def func_table(fn):
+		fl = extract_func_def_list(fn)	
+		arg_names = [parse_function_def_args(it[-1]) for it in [el[-1] for el in [item[-1] for item in fl]]]
+		func_names =[parse_function_def_args(it[-2]) for it in [el[-1] for el in [item[-1] for item in fl]]]
+		def_table = make_func_def_table(func_names, arg_names)
+		return def_table
 
-if __name__ == '__main__':
-	"""
-	test
-	"""
-	current_path = os.path.dirname(os.path.abspath("."))
-	sys.path.append(os.path.join(current_path, "./preprocessor/lexer"))
-	import pprint
-	import lexer
 
-	fl = extract_func_def_list(sys.argv[1])	
-	arg_names = [parse_function_def_args(it[-1]) for it in [el[-1] for el in [item[-1] for item in fl]]]
-	func_names =[parse_function_def_args(it[-2]) for it in [el[-1] for el in [item[-1] for item in fl]]]
-	def_table = make_func_def_table(func_names, arg_names)
-
-	label = r'D.1 = m(1,2);'
-
-	l = 'assign_function_call'
-	r = {
-		'exp': lexer.glex.assign_function_call,'format': {
-			'left': "",
-			'func_name': "",
-			'arguments': "",
-		}
-	}
-
-	
+def get_interfunc_remap(label, def_table, l, r):
 	res = re.search(r['exp'], label)
 	if not res:
 		print("Not matched")
-	print(res)
+
 	r['format'].update({
                         'left': res.group(2),
                         'func_name': res.group(3),
@@ -113,3 +94,28 @@ if __name__ == '__main__':
 	switched_caller_args = dict(zip(caller_args.values(), caller_args.keys()))
 	print("Assignment:", caller_args)
 	print("Mnemonic '-->'", switched_caller_args)
+#===================================================================================
+
+if __name__ == '__main__':
+	"""
+	test
+	"""
+	current_path = os.path.dirname(os.path.abspath("."))
+	sys.path.append(os.path.join(current_path, "./preprocessor/lexer"))
+	import pprint
+	import lexer
+
+	def_table = func_table(sys.argv[1])
+
+	label = r'D.1 = m(1,2);'
+	l = 'assign_function_call'
+	r = {
+		'exp': lexer.glex.assign_function_call,'format': {
+			'left': "",
+			'func_name': "",
+			'arguments': "",
+		}
+	}
+	get_interfunc_remap(label, def_table, l, r )
+	
+	
