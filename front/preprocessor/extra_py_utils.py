@@ -1,5 +1,4 @@
 import re
-import lexer
 import os, sys
 
 def get_function_args(arg_str):
@@ -8,7 +7,7 @@ def get_function_args(arg_str):
 
 
 def parse_function_call_args(item):
-    if item['exp'] == assign_function_call:
+    if item['exp'] == lexer.glex.assign_function_call:
         arg_list = get_function_args(item['format']['arguments'])
         return arg_list
     return None
@@ -54,15 +53,22 @@ def extract_func_def_list(fname):
 
 
 def func_call_var_remap(func_name, func_arg_table, caller):
-	callee_args = func_arg_table[func_name]
+	try:
+		callee_args = func_arg_table[func_name]
+	except KeyError:
+		print(func_name, ": function name not defined in sources")
+		sys.exit(0)
+		return {}
+
 	remap = dict()
+	
 	try:	
 		for i,item in enumerate(parse_function_call_args(caller)):
 			remap[callee_args[i]] = item
 	except Exception as e:
-		print(e, "func call args parsing exception")
+		print("func call args parsing exception",e)
 	return remap
-	
+
 
 #===================================================================================
 
@@ -70,11 +76,40 @@ if __name__ == '__main__':
 	"""
 	test
 	"""
+	current_path = os.path.dirname(os.path.abspath("."))
+	sys.path.append(os.path.join(current_path, "./preprocessor/lexer"))
 	import pprint
+	import lexer
+
 	fl = extract_func_def_list(sys.argv[1])	
 	arg_names = [parse_function_def_args(it[-1]) for it in [el[-1] for el in [item[-1] for item in fl]]]
 	func_names =[parse_function_def_args(it[-2]) for it in [el[-1] for el in [item[-1] for item in fl]]]
-	def_table = make_func_def_table(func_names, arg_names))
+	def_table = make_func_def_table(func_names, arg_names)
+
+	label = r'D.1 = m(1,2);'
+
+	l = 'assign_function_call'
+	r = {
+		'exp': lexer.glex.assign_function_call,'format': {
+			'left': "",
+			'func_name': "",
+			'arguments': "",
+		}
+	}
+
 	
-	f_name = item['format']['func_name']
-	caller_args = func_call_var_remap(item)
+	res = re.search(r['exp'], label)
+	if not res:
+		print("Not matched")
+	print(res)
+	r['format'].update({
+                        'left': res.group(2),
+                        'func_name': res.group(3),
+                        'arguments': res.group(4)
+                    })
+
+	f_name = r['format']['func_name']
+	caller_args = func_call_var_remap(f_name, def_table, r)
+	switched_caller_args = dict(zip(caller_args.values(), caller_args.keys()))
+	print("Assignment:", caller_args)
+	print("Mnemonic '-->'", switched_caller_args)

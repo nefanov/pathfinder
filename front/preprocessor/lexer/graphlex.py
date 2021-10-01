@@ -47,11 +47,7 @@ assign_string_const = re.compile(
     re.VERBOSE
 )
 
-assign_function_call = re.compile(
-    r'((\*?[a-zA-Z_$][a-zA-Z_$0-9]*|.*D\.\d+)\s?=?'
-    r'\s+)?([a-zA-Z_{1}][a-zA-Z0-9_]+)\s*\((.*?)\);.*',
-    re.VERBOSE
-)
+assign_function_call = re.compile(r'((\*?[a-zA-Z_$][a-zA-Z_$0-9]*|.*D\.\d+)\s?=?\s+)?([a-zA-Z_{1}][a-zA-Z0-9_]*)\s*\((.*?)\);.*', re.VERBOSE)
 
 assign_aryphmetic_op = re.compile(
     r'(\*?[a-zA-Z_$][a-zA-Z_$0-9]*|.*D\.\d+)\s+='
@@ -310,8 +306,8 @@ def default_specializer(graph, nodes, node_lex_dict, P):
     return graph
 
 '''
-specialize_Dflow -- специализация по потоку данных (def-use)
-# nodes: словарь по типам вершин
+specialize_Dflow  (like def-use)
+# nodes: keys -- node types
 # P -- list(patterns (relation ))
 '''
 def specialize_Dflow(graph, nodes, node_lex_dict, P):
