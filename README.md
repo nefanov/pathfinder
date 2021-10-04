@@ -53,6 +53,7 @@ To use it write:
 *	`-slow` to use `slow.cpp` alghorithm
 *	`-test` to run unit-tests
 *	`-o` 	to save front output into specific file (specify path into next argument)
+*	`-ssa` 	to represent input graph in SSA form
 # Examples
 *		bash run.sh
 		gcc-cfg-utils/examples/test1.c
