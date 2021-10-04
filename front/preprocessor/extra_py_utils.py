@@ -115,23 +115,9 @@ def append_var_chain(g, src, dst, caller_args):
                                    style ='solid',
                                    label="call"))
 	return g
+
 #===================================================================================
-
-if __name__ == '__main__':
-	"""
-	test
-	"""
-	current_path = os.path.dirname(os.path.abspath("."))
-	sys.path.append(os.path.join(current_path, "./preprocessor/lexer"))
-
-	import lexer
-	import pydot
-
-	def_table = func_table(sys.argv[1])
-
-	label = r'D.1 = m(1,2);'
-
-	g=pydot.Graph()
+def prepare_interproc_graph_var_trans(g, def_table):
 	for e in g.get_edges():
 		src = e.get_source()
 		dst = e.get_destination()
@@ -154,4 +140,25 @@ if __name__ == '__main__':
 		if src_match and dst_match and len(caller_args) > 0:
 			append_var_chain(g, src, dst, caller_args)
 
+	return g
 
+
+#===================================================================================
+
+if __name__ == '__main__':
+	"""
+	test
+	"""
+	current_path = os.path.dirname(os.path.abspath("."))
+	sys.path.append(os.path.join(current_path, "./preprocessor/lexer"))
+
+	import lexer
+	import pydot
+
+	def_table = func_table(sys.argv[1])
+
+	label = r'D.1 = m(1,2);'
+
+	g=pydot.Graph()
+
+	prepare_interproc_graph_var_trans(g, def_table)
