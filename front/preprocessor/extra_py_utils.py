@@ -1,5 +1,8 @@
 import re
 import os, sys
+import pydot
+
+import lexer
 
 def get_function_args(arg_str):
     spl = arg_str.split(",")
@@ -46,6 +49,7 @@ def make_func_def_table(func_names, arg_names):
 
 
 def extract_func_def_list(fname):
+	print(os.getcwd())
 	with open(fname) as f:
 		lines = f.readlines()
 		res = search_pattern(pattern, lines, fname)
@@ -81,7 +85,8 @@ def func_table(fn):
 def get_interfunc_remap(label, def_table, l, r):
 	res = re.search(r['exp'], label)
 	if not res:
-		print("Not matched")
+		# not matched
+		return {}
 
 	r['format'].update({
                         'left': res.group(2),
@@ -102,30 +107,47 @@ def append_var_chain(g, src, dst, caller_args):
 	last = dst
 	current = src
 	for k,v in caller_args.items():
-		next = pydot.Node(label=k + " = "+v+";")
-		g.add_edge(pydot.Edge(current,
+		next = pydot.Node(label=k +" = "+v+";")
+		next.set_name(k + " = "+v+";")
+		print("Node added:", next, next)
+		ed = pydot.Edge(current,
                                    next,
-                                   color="yellow",
-                                   style ='dashed',
-                                   label="argpass"))
+                                   color="maroon",
+                                   style ='solid',
+                                   label="argpass")
+						
+		g.add_edge(ed)
+		
+		print("Edge added:", ed)
+
 		current = next
+
 	g.add_edge(pydot.Edge(current,
                                    last,
-                                   color="black",
+                                   color="maroon",
                                    style ='solid',
                                    label="call"))
+
 	return g
 
 #===================================================================================
-def prepare_interproc_graph_var_trans(g, def_table):
+def prepare_interproc_graph_var_trans(g, def_table, verbose=False, rm_direct_calledge=True):
 	for e in g.get_edges():
-		src = e.get_source()
-		dst = e.get_destination()
+		src_n = e.get_source()
+		dst_n = e.get_destination()
+		src = g.get_node(src_n)[0]
+		dst = g.get_node(dst_n)[0]
 		src_label = src.get_attributes()['label'].replace("\\", "")[2:]
-		dst_label = src.get_attributes()['label'].replace("\\", "")[2:]
-
+		dst_label = dst.get_attributes()['label'].replace("\\", "")[2:]
 		src_match = re.search(lexer.glex.assign_function_call, src_label)
-		dst_match = re.search(r'.*ENTRY.*', dst_label)
+		dst_match = re.search(r'.*NTRY.*', dst_label)
+
+
+		if verbose:
+			print(src_n, src_match, src.get_attributes()['label'])
+			print("|\nV")
+			print(dst_n, dst_match, dst.get_attributes()['label'])
+			print("----------")
 
 		l = 'assign_function_call'
 		r = {
@@ -135,10 +157,15 @@ def prepare_interproc_graph_var_trans(g, def_table):
 				'arguments': "",
 			}
 		}
-		caller_args = get_interfunc_remap(src_label, def_table, l, r)
-
-		if src_match and dst_match and len(caller_args) > 0:
-			append_var_chain(g, src, dst, caller_args)
+		
+		if src_match is not None and dst_match is not None:
+			print(src_label,"-->", dst_label)
+			caller_args = get_interfunc_remap(src_label, def_table, l, r) 
+			print(caller_args)
+			if len(caller_args) > 0:
+				append_var_chain(g, src, dst, caller_args)
+				if rm_direct_calledge:
+					g.del_edge(e)
 
 	return g
 
