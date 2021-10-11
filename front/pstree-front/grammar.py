@@ -45,6 +45,7 @@ def construct(W=["aaaa"], n=2):
 				num_cnt += 1
 				l_name = "N"+str(num_cnt)
 				grammar_table.update({l_name:right})
+			new_chunks.append(l_name)
 
 		chunks = new_chunks
 		print("Chunks:", chunks)
