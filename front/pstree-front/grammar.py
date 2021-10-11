@@ -52,8 +52,7 @@ def construct(W=["aaaaa"], n=2):
 
 	l_name = "S"
 	grammar_table.update({l_name:chunks[0]})
-	pprint.pprint(grammar_table)
-	
+
 
 	# remove chain rules
 	k = GetKey(grammar_table[chunks[0]], grammar_table)
