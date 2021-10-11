@@ -7,9 +7,10 @@ def GetKey(val, d):
    for key, value in d.items():
       if val == value:
          return key
-      return "key doesn't exist"
 
-def construct(W=["aaaa"], n=2):
+   return "key doesn't exist"
+
+def construct(W=["aaaaa"], n=2):
 
 	
 	num_cnt = 0
@@ -30,15 +31,13 @@ def construct(W=["aaaa"], n=2):
 	print("chunks 1:", chunks)
 	# compose rules Nj --> NiNk
 	while (len(chunks)>1):
-		chunks = [list(chunks[i:i + n]) for i in range(0, len(chunks) - (len(chunks) % n) + 1, n)]
-		
-		print("len:", len(chunks))
+		chunks = [list(chunks[i:i + n])
+		 for i in range(0, len(chunks) - (len(chunks) % n) + 1, n)]
+
 		if (len(chunks[-1])== 0):
 			chunks = chunks[:-1]
-		print("postproc chunks:", chunks)
 		new_chunks = []
 		for right in chunks:
-			print("right:",right)
 			if right in grammar_table.values():
 				l_name = GetKey(right, grammar_table)
 			else:
@@ -50,7 +49,6 @@ def construct(W=["aaaa"], n=2):
 		chunks = new_chunks
 		print("Chunks:", chunks)
 		pprint.pprint(grammar_table)
-		input()
 
 	l_name = "S"
 	grammar_table.update({l_name:chunks[0]})
@@ -58,6 +56,11 @@ def construct(W=["aaaa"], n=2):
 	
 
 	# remove chain rules
+	k = GetKey(grammar_table[chunks[0]], grammar_table)
+	print(grammar_table[k],";;;",k)
+	grammar_table.update({l_name: grammar_table[k]})
+	del grammar_table[k]
+	print(grammar_table)
 
 if __name__ == "__main__":
 	construct()
