@@ -10,7 +10,7 @@ def GetKey(val, d):
 
    return "key doesn't exist"
 
-def construct(W=["aaaaab"], n=2):
+def construct(W=["a","aaa","aaaaa","aaaaaaa","aaaaaaaaaa"], n=2):
 	S_storage=[] 
 	num_cnt = 0
 	grammar_table = {}
@@ -51,9 +51,8 @@ def construct(W=["aaaaab"], n=2):
 				new_chunks.append(l_name)
 
 			chunks = new_chunks
-			pprint.pprint(grammar_table)
 
-		l_name = "S"+str(i)
+		l_name = "IS"+str(i)
 		S_storage.append([l_name])
 		grammar_table.update({l_name:chunks[0]})
 
@@ -62,8 +61,15 @@ def construct(W=["aaaaab"], n=2):
 		k = GetKey(grammar_table[chunks[0]], grammar_table)
 		grammar_table.update({l_name: grammar_table[k]})
 		del grammar_table[k]
-		print(grammar_table)
+
+	d = [(key,v) for key,v in grammar_table.items()]
+	for key,v in d:
+		if key.startswith('IS'):
+			grammar_table.update({key[1:]:v})
+	return grammar_table
 
 
 if __name__ == "__main__":
-	construct()
+	gt = construct()
+	print("=====grammar======")
+	pprint.pprint(gt)
