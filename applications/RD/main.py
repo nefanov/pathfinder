@@ -18,6 +18,17 @@ from predicates import *
 # specificators imports
 from mem_spec import *
 
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
 def prepare_graph_example():
     """
     creating graph with empty (any) edges labeling
@@ -82,3 +93,20 @@ if __name__ == '__main__':
 
     elif (sys.argv[1]=="--test" and sys.argv[2]=="interproc"):
        prepare_interproc_graph()
+
+    elif (sys.argv[1]=="--test" and sys.argv[2] == "interproc_ba"):
+        def read_c(fn="../../front/1.c"):
+            with open(fn) as file:
+                lines = file.readlines()
+                return lines
+
+        def highlight(code, colors={2:bcolors.OKCYAN,3:bcolors.OKCYAN,4:bcolors.FAIL,5:bcolors.OKCYAN,6:bcolors.OKGREEN,7:bcolors.OKCYAN, 22:bcolors.OKBLUE}):
+            for idx, line in enumerate(code):
+                if idx in colors:
+                    line=colors[idx]+line+bcolors.ENDC
+                print(line)
+
+        code = read_c()
+        highlight(code)
+
+        
