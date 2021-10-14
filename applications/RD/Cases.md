@@ -102,3 +102,5 @@ https://cwe.mitre.org/data/definitions/416.html
 https://cwe.mitre.org/data/definitions/476.html
 
 ### 8. Большинство примеров из MISRA C должны реализовываться довольно просто
+
+### 9. https://cwe.mitre.org/data/definitions/754.html
