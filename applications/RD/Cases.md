@@ -36,11 +36,11 @@ for (i=0; i < sz; i++) {
 Avoid the cyclic calls to function, which result is unchanged during the cycle.
 Interprocedural mode means that the context of callee will be analysed during the pattern matching.
 
-### 3. Memory operations redundancy detection
+### 3. Memory operations redundancy detection [done, be improved]
 
 Detect calls of functions memset, malloc, etc, which are redundant in current context.
 
- #### Example 1. (Already implemented)
+ #### Example 1.
  Original code:
 ```C
 int* buf=(int*)malloc(sizeof(int)*SZ);
