@@ -90,3 +90,15 @@ if (value && complex_check()) // if not value, then no complex_check()
 ### 5. Matrix operations reordering
 
 Reorder of matrix operations in the goal of cache misses level decreasing.
+
+### Moreover anti-patterns:
+
+### 6. CWE-416: Use After Free
+
+https://cwe.mitre.org/data/definitions/416.html
+
+### 7. CWE-476: NULL Pointer Dereference
+
+https://cwe.mitre.org/data/definitions/476.html
+
+### 8. Большинство примеров из MISRA C должны реализовываться довольно просто
