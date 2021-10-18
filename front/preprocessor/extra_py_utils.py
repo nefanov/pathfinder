@@ -4,15 +4,18 @@ import pydot
 
 import lexer
 
-def highlight_node_seq(G, seq):
+def highlight_node_seq(G, seq, color='black'):
 	for idx, n in enumerate(seq[:-1]):
 		N1 = G.get_node(n)
 		N1[0].set_style('bold')
+		N1[0].set_color(color)
 		N2 = G.get_node(seq[idx + 1])
 		N2[0].set_style('bold')
+		N2[0].set_color(color)
 		E = G.get_edge(n, seq[idx + 1])
 		for e in E:
 			e.set_style('bold')
+			e.set_color(color)
 
 		#G.set_edge_style(n, seq[idx + 1], style='bold')
 		#G.set_node_style(N1[0], style='bold')

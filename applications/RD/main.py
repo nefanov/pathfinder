@@ -115,7 +115,7 @@ if __name__ == '__main__':
 
     elif (sys.argv[1]=="--test" and sys.argv[2]=="cycle_detector"):
     # print_labels -- verbose print of labels -- may be useless 
-    
+       color_palette =['blue','orange','green','lime','red','purple']
        G = prepare_interproc_graph()
        print("Test 1")
        print(os.getcwd())
@@ -125,16 +125,18 @@ if __name__ == '__main__':
        print("Test 3")
        ret = cycle_detector.detect(fn="../front/m.dot", only_shortest=True, print_labels=False)
        print(ret)
-       for r in ret:
-           G = extra_py_utils.highlight_node_seq(G, r)
+       for idx, r in enumerate(ret):
+           color = color_palette[idx % len(color_palette)]
+           G = extra_py_utils.highlight_node_seq(G, r, color)
 
        G.write_png("../front/det_cycles3.png")
        print("Test 4")
        
        ret = cycle_detector.detect(fn="../front/m.dot", only_shortest=False, print_labels=False)
        print(ret)
-       for r in ret:
-           G = extra_py_utils.highlight_node_seq(G, r)
+       for idx, r in enumerate(ret):
+           color = color_palette[idx % len(color_palette)]
+           G = extra_py_utils.highlight_node_seq(G, r, color)
 
        G.write_png("../front/det_cycles4.png")
 
