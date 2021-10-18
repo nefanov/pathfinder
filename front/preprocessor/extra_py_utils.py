@@ -4,6 +4,21 @@ import pydot
 
 import lexer
 
+def highlight_node_seq(G, seq):
+	for idx, n in enumerate(seq[:-1]):
+		N1 = G.get_node(n)
+		N1[0].set_style('bold')
+		N2 = G.get_node(seq[idx + 1])
+		N2[0].set_style('bold')
+		E = G.get_edge(n, seq[idx + 1])
+		for e in E:
+			e.set_style('bold')
+
+		#G.set_edge_style(n, seq[idx + 1], style='bold')
+		#G.set_node_style(N1[0], style='bold')
+		#G.set_node_style(N2[0], style='bold')
+	return G
+
 def get_function_args(arg_str):
     spl = arg_str.split(",")
     return spl
@@ -166,7 +181,6 @@ def prepare_interproc_graph_var_trans(g, def_table, verbose=False, rm_direct_cal
 				append_var_chain(g, src, dst, caller_args)
 				if rm_direct_calledge:
 					g.del_edge(e)
-
 	return g
 
 
@@ -184,8 +198,8 @@ if __name__ == '__main__':
 
 	def_table = func_table(sys.argv[1])
 
-	label = r'D.1 = m(1,2);'
 
-	g=pydot.Graph()
+	g=pydot.Dot()
+	g = prepare_interproc_graph_var_trans(g, def_table)
 
-	prepare_interproc_graph_var_trans(g, def_table)
+	g.write_png('output.png')

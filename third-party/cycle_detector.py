@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-Copypasted from: https://github.com/jantman/misc-scripts/blob/master/dot_find_cycles.py
+Inspired from: https://github.com/jantman/misc-scripts/blob/master/dot_find_cycles.py
 dot_find_cycles.py - uses Pydot and NetworkX to find cycles in a dot file directed graph.
 Very helpful for Puppet stuff.
 By Jason Antman <jason@jasonantman.com> 2012.
@@ -40,38 +40,31 @@ CHANGELOG:
 """
 
 import sys
-from os import path, access, R_OK
-import argparse
 import networkx as nx
+from os import path, access, R_OK
+
 from networkx.drawing.nx_pydot import read_dot
 
 
-def main():
-    parser = argparse.ArgumentParser(description="Finds cycles in dot file graphs, such as those from Puppet. "
-            "By Jason Antman <http://blog.jasonantman.com>")
-    parser.add_argument('dotfile', metavar='DOTFILE', nargs='?', type=argparse.FileType('r'), default=sys.stdin,
-            help="the dotfile to process. Uses standard input if argument is '-' or not present")
-    parser.add_argument("--only-shortest", action='store_true',
-            help="only show the shortest cycles. Example: if both A->C and A->B->C exist, only show the former. "
-            "This vastly reduces the amount of output when analysing dependency issues.")
-    parser.add_argument("--print-labels", action='store_true',
-            help="print the node labels instead of their ids.")
-    args = parser.parse_args()
-
+def detect(fn=sys.argv[1], only_shortest=True, print_labels=True):
     # read in the specified file, create a networkx DiGraph
-    G = nx.DiGraph(read_dot(args.dotfile))
-
+    G = nx.DiGraph(read_dot(fn))
     C = nx.simple_cycles(G)
-    if args.only_shortest:
+    if only_shortest:
         C = remove_super_cycles(C)
 
-    if args.print_labels:
+    if print_labels:
         C = extract_node_labels(C, G)
 
+    ret_list = []
     for i in C:
         # append the first node again so that the cycle is complete
         i.append(i[0])
         print(" -> ".join(i))
+        ret_list.append(i)
+
+    return ret_list
+    
 
 def remove_super_cycles(cycle_list):
     # sorting by length makes the search easier, because shorter cycles cannot be supercycles of longer ones
@@ -107,6 +100,6 @@ def extract_node_labels(C, G):
 
 if __name__ == "__main__":
     try:
-        main()
+        detect()
     except KeyboardInterrupt:
         pass  # eat CTRL+C so it won't show an exception

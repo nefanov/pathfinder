@@ -10,7 +10,7 @@ def GetKey(val, d):
 
    return "key doesn't exist"
 
-def construct(W=["a","aaa","aaaaa","aaaaaaa","aaaaaaaaaa"], n=2):
+def construct(W=['hi', 'how', 'are', 'you'], n=2):
 	S_storage=[] 
 	num_cnt = 0
 	grammar_table = {}

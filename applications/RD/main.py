@@ -9,10 +9,12 @@ import pydot
 current_path = os.path.dirname(os.path.abspath("."))
 sys.path.append(os.path.join(current_path, "../front/preprocessor"))
 sys.path.append(os.path.join(current_path, "../front/preprocessor/lexer"))
+sys.path.append(os.path.join(current_path, "../third-party"))
 
 # API imports
 import lexer
 import extra_py_utils
+import cycle_detector
 from predicates import *
 
 # specificators imports
@@ -83,6 +85,7 @@ def prepare_interproc_graph():
     print([n.get_name() for n in augm_g.get_nodes()])
 
     augm_g.write_png("interpr_1.c.png")
+    return augm_g
 
 
 if __name__ == '__main__':
@@ -106,7 +109,35 @@ if __name__ == '__main__':
                     line=colors[idx]+line+bcolors.ENDC
                 print(line)
 
+       
         code = read_c()
         highlight(code)
+
+    elif (sys.argv[1]=="--test" and sys.argv[2]=="cycle_detector"):
+    # print_labels -- verbose print of labels -- may be useless 
+    
+       G = prepare_interproc_graph()
+       print("Test 1")
+       print(os.getcwd())
+       cycle_detector.detect(fn="../front/m.dot", only_shortest=True, print_labels=True)
+       print("Test 2")
+       cycle_detector.detect(fn="../front/m.dot", only_shortest=False, print_labels=True)
+       print("Test 3")
+       ret = cycle_detector.detect(fn="../front/m.dot", only_shortest=True, print_labels=False)
+       print(ret)
+       for r in ret:
+           G = extra_py_utils.highlight_node_seq(G, r)
+
+       G.write_png("../front/det_cycles3.png")
+       print("Test 4")
+       
+       ret = cycle_detector.detect(fn="../front/m.dot", only_shortest=False, print_labels=False)
+       print(ret)
+       for r in ret:
+           G = extra_py_utils.highlight_node_seq(G, r)
+
+       G.write_png("../front/det_cycles4.png")
+
+       
 
         
