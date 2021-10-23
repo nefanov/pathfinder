@@ -36,9 +36,11 @@ void graph_merger(std::vector <std::pair<std::string, std::pair<int, int>>>& Clu
 {
 	for (int i = 0; i < V_new.size(); i++) {
 		for (int j = 0; j < Clusters.size(); j++) {
-			std::string func_name = Clusters[j].first + "\\";
-			int found = Code_new[i].find(func_name);
-			if (found != std::string::npos) {
+			std::string func_name_1 = "|" + Clusters[j].first + "\\";
+			std::string func_name_2 = "\\ " + Clusters[j].first + "\\";
+			int found_1 = Code_new[i].find(func_name_1);
+			int found_2 = Code_new[i].find(func_name_2);
+			if (found_1 != std::string::npos || found_2 != std::string::npos) {
 				E_new[V[j][Clusters[j].second.second].second].insert(E_new[V[j][Clusters[j].second.second].second].end(), E_new[i].begin(), E_new[i].end());
 				E_new[i].clear();
 				E_new[i].push_back(std::make_pair(V[j][Clusters[j].second.first].second, ""));
