@@ -23,8 +23,18 @@ void graph_merger(std::vector <std::pair<std::string, std::pair<int, int>>>& Clu
 			int FLAG = 0, found = 0, found1 = 0;
 			while (1)
 			{
-				std::string func_name = Clusters[j].first + "\\";
-				found = Code_new[i].find(func_name, found1);
+				std::string func_name_1 = "|" + Clusters[j].first + "\\";
+				std::string func_name_2 = "\\ " + Clusters[j].first + "\\";
+				int found_1 = Code_new[i].find(func_name_1);
+				int found_2 = Code_new[i].find(func_name_2);
+				if (found_1 == std::string::npos)
+				{
+					found = found_2;
+				}
+				else
+				{
+					found = found_1;
+				}
 				if (found != std::string::npos)
 				{
 					int counter = 0;
