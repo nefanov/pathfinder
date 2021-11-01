@@ -65,6 +65,11 @@ assign_MEM = re.compile(
     re.VERBOSE
 )
 
+return_val = re.compile(
+    r'|return\\\s(\S*);.*',
+    re.VERBOSE
+)
+
 goto = re.compile(
     r'.*goto\s+(\<(bb\s+[0-9]+)\>);.*',
     re.VERBOSE
@@ -146,6 +151,13 @@ lex['assign_MEM'] = {
         'base': "",
         'op': "",
         'shift': ""
+    }
+}
+
+lex['return_val'] = {
+    'exp' : return_val,
+    'format':{
+        'retval':""    
     }
 }
 
@@ -264,6 +276,9 @@ def lex_graph(inp_file):
                         'op': "",
                         'shift': ""
                     })
+
+                elif l == "return_val":
+                    r['format'].update({'retval': 0})
 
                 print("PATTERN:\n", l)
                 print("FORMAT:\n", r['format'], "\n---------------")
