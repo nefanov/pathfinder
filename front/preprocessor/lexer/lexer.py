@@ -4,7 +4,7 @@ from predicates import *
 import gram as gr
 
 
-def prepare_graph(graph_fn, outp_graph_fn, outp_plot, need_graph_save=False, need_plot=False, pattern_composer=None, specializer=None):
+def prepare_graph(graph_fn, outp_graph_fn, outp_plot, need_graph_save=False, need_plot=False, pattern_composer=None, specializer=None, verbose=True):
     
     inp_file = graph_fn if graph_fn else "mem.c.012t.cfg.dot"
     outp_pic = outp_plot if outp_plot else "g_out.png"
@@ -19,6 +19,7 @@ def prepare_graph(graph_fn, outp_graph_fn, outp_plot, need_graph_save=False, nee
 
     # markup nodes and edges by token types
     graph, nodes, nld = glex.lex_graph(inp_file)
+
     # add labeled extra edges, check some predicates; return graph, pattern description list
     graph, P = glex.markup_graph(graph, nodes, nld, pattern_composer=pattern_composer, scenario=None, specializer=specializer)
     if need_plot:
@@ -30,8 +31,9 @@ def prepare_graph(graph_fn, outp_graph_fn, outp_plot, need_graph_save=False, nee
                                 ))
     # markup edges by terminal alphabet
     graph = glex.markup_edges(graph, mapping)
-    print("============MAPPING============")
-    print(mapping)
+    if verbose:
+        print("============MAPPING============")
+        print(mapping)
 
     if need_plot:
         graph.write_png(outp_pic)

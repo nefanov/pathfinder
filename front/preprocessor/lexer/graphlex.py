@@ -217,7 +217,7 @@ def trim_prefix(fn):
     return fn + "_prefix_trimmed"
 
 
-def lex_graph(inp_file):
+def lex_graph(inp_file, verbose=False):
     tr_file = inp_file
     graph = load_graph(tr_file)
     node_lex_dict = {}
@@ -227,7 +227,8 @@ def lex_graph(inp_file):
             return node_lex_dict[n.get_name()]
 
         label = n.get_attributes()['label'].replace("\\", "")[2:]
-        print("node lable:", label)
+        if verbose:
+            print("node label:", label)
         _lex = copy.deepcopy(lex)
         for l, r in _lex.items():
 
@@ -292,9 +293,9 @@ def lex_graph(inp_file):
 
                 elif l == "return_val":
                     r['format'].update({'retval': 0})
-
-                print("PATTERN:\n", l)
-                print("FORMAT:\n", r['format'], "\n---------------")
+                if verbose:
+                    print("PATTERN:\n", l)
+                    print("FORMAT:\n", r['format'], "\n---------------")
                 node_lex_dict.update({n.get_name():{'pattern':l,'content':r}})
                 pass
                 nodes[l].append(n.get_name())
@@ -364,7 +365,7 @@ def markup_graph(graph, nodes, nld, pattern_composer=default_pattern_composer, s
     return graph, P
 
 
-def markup_edges(graph=pydot.Graph(), mapping={}):
+def markup_edges(graph=pydot.Graph(), mapping={}, verbose=False):
     edges = graph.get_edges()
     for e in edges:
         attr = e.get_attributes()
@@ -380,6 +381,7 @@ def markup_edges(graph=pydot.Graph(), mapping={}):
         else:
             print("Error in markup")
             sys.exit(1)
-        print("Edge remap:", e.get_source(), e.get_destination, previous_label, e.get_attributes()['label'])
+        if verbose:
+            print("Edge remap:", e.get_source(), e.get_destination, previous_label, e.get_attributes()['label'])
 
     return graph
