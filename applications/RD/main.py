@@ -70,7 +70,7 @@ def prepare_graph_from_article():
                         specializer=specialize_Dflow)
 
 
-def prepare_cycle_exit_markup():
+def prepare_cycle_exit_markup(scenario=None):
     os.chdir("../../front")
     os.system('./get_thin_graph.sh -i 1.c -s m.dot -p pic25.png')
     wdir = os.path.join(current_path, "../front")
@@ -79,8 +79,8 @@ def prepare_cycle_exit_markup():
     out_pic = os.path.join(wdir, 'p_cycle_exit_markup.png')
     os.chdir(current_path)
     lexer.prepare_graph(in_graph, out_f, out_pic, need_graph_save=True,need_plot=True,
-                            pattern_composer=compose_exit_cycle_pattern,
-                            specializer=specialize_Dflow
+                            pattern_composer=compose_pattern,
+                            specializer=specialize_Dflow, scenario = scenario
                 )
 
 
