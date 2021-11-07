@@ -66,7 +66,7 @@ assign_MEM = re.compile(
 )
 
 return_val = re.compile(
-    r'|return\\\s(\S*);.*',
+    r'return.*',
     re.VERBOSE
 )
 

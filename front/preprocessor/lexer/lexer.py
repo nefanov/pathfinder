@@ -22,14 +22,17 @@ def prepare_graph(graph_fn, outp_graph_fn, outp_plot, need_graph_save=False, nee
     # add labeled extra edges, check some predicates; return graph, pattern description list
     graph, P = glex.markup_graph(graph, nodes, nld, pattern_composer=pattern_composer, scenario=None, specializer=specializer)
     if need_plot:
-        graph.write_png(outp_pic)
+        graph.write_png(outp_pic+"_pre.png")
     # create mapping of graph (edges_types --> terminal alphabet)
     mapping = gr.make_gram_map(sorted
                                (list(set([p.label for p in flatten(P['yes_df_list']) + flatten(P['no_df_list'])]))
-                                + list(set([p for p in flatten(P['yes_cf_list'])]))
+                                + list(set([p for p in flatten(P['yes_cf_list'])])) + list(set([p for p in flatten(P['no_cf_list'])]))
                                 ))
     # markup edges by terminal alphabet
     graph = glex.markup_edges(graph, mapping)
+    print("============MAPPING============")
+    print(mapping)
+
     if need_plot:
         graph.write_png(outp_pic)
     return graph, mapping

@@ -29,7 +29,7 @@ def compose_exit_cycle_pattern(scenario={}):
         #P['yes_df_list'].append([rel])
         #P['rel_kinds'].add(rel)
         P['yes_cf_list'].append(
-            ["any if", "if any"])
+            ["goto if_cond", "if_cond any"])
         P['no_cf_list'].append(["return_val exit"])
     else:
         pass  # TO DO: support scenarios

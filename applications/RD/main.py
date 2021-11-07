@@ -80,7 +80,7 @@ def prepare_cycle_exit_markup():
     os.chdir(current_path)
     lexer.prepare_graph(in_graph, out_f, out_pic, need_graph_save=True,need_plot=True,
                             pattern_composer=compose_exit_cycle_pattern,
-                            specializer=None
+                            specializer=specialize_Dflow
                 )
 
 
