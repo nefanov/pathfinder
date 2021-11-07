@@ -21,7 +21,7 @@ class Relation:
 # complete common lex patterns
 
 if_cond = re.compile(
-    r'\s*if\s+\(\s*(\*?[a-zA-Z_$][a-zA-Z_$0-9]*|.*D\.\d+)' # left side of header
+    r'.*if\s+\(\s*(\*?[a-zA-Z_$][a-zA-Z_$0-9]*|.*D\.\d+)' # left side of header
     r'\s+(>=|<=|>|<|==|!=)' # operation
     r'\s+((\*?[a-zA-Z_$][a-zA-Z_$0-9]*|.*D\.\d+)|(\d+(\.\d+)?))\s*\).*\n' # right side of header
     r'.*goto\s+(\<(bb\s+[0-9]+)\>);.*\nelse.\n\s+goto\s(\<(bb\s+[0-9]+)\>);.*', # body
@@ -76,7 +76,7 @@ _exit = re.compile(
 )
 
 goto = re.compile(
-    r'.*goto\s+(\<(bb\s+[0-9]+)\>);.*',
+    r'oto\s+(\<(bb\s+[0-9]+)\>);.*',
     re.VERBOSE
 )
 
@@ -218,7 +218,6 @@ def trim_prefix(fn):
 
 
 def lex_graph(inp_file):
-    print("Load graph from", inp_file)
     tr_file = inp_file
     graph = load_graph(tr_file)
     node_lex_dict = {}
@@ -228,6 +227,7 @@ def lex_graph(inp_file):
             return node_lex_dict[n.get_name()]
 
         label = n.get_attributes()['label'].replace("\\", "")[2:]
+        print("node lable:", label)
         _lex = copy.deepcopy(lex)
         for l, r in _lex.items():
 
@@ -241,11 +241,13 @@ def lex_graph(inp_file):
                         'if_true': res.group(8),
                         'if_false': res.group(10)
                     })
+
                 elif l == "assign_const":
                     r['format'].update({
                         'left': res.group(1),
                         'right': res.group(2),
                     })
+
                 elif l == "assign_var":
                     r['format'].update({
                         'left': res.group(1),
@@ -272,10 +274,12 @@ def lex_graph(inp_file):
                         'op': res.group(6),
                         'r_operand2': res.group(7),
                     })
+
                 elif l == "goto":
                     r['format'].update({
                         'dest': res.group(1),
                     })
+
 
                 elif l == "assign_MEM":
                     r['format'].update({
@@ -295,7 +299,7 @@ def lex_graph(inp_file):
                 pass
                 nodes[l].append(n.get_name())
 
-                continue
+                break
 
         if n.get_name() not in node_lex_dict.keys():
                 node_lex_dict.update({n.get_name(): {'pattern': "none", 'content': None}})
@@ -358,6 +362,7 @@ def markup_graph(graph, nodes, nld, pattern_composer=default_pattern_composer, s
     for _p in P["no_df_list"]:
         graph = specializer(graph=graph, nodes=nodes, node_lex_dict=nld, P=_p)
     return graph, P
+
 
 def markup_edges(graph=pydot.Graph(), mapping={}):
     edges = graph.get_edges()
