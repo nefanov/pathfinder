@@ -23,11 +23,19 @@ def compose_pattern(scenario=None):
             ["any if_cond", "if_cond any"])
         P['no_cf_list'].append(["return_val exit"])
     else:
-        pass  # TO DO: support scenarios
+        pass # scenario:#{"type":flowlists|relations, data:dict}
+             # relations: set left-->right labels, predicates to check, etc
+             # flowlists: *f_list of correspondent src->dst nodes' labels
+        if scenario['type'] == 'flowlists':
+            P = scenario['data']
+        else:
+            pass # to do relations
+
+
     return P
 
 
-def compose_mem_pattern(scenario={}):
+def compose_mem_pattern(scenario=None):
     if not scenario:  # if scenario is not preset
         P = {'yes_df_list': [], 'no_df_list': [], 'yes_cf_list': [], 'no_cf_list': [], 'rel_kinds': set()}
         # first for good paths
