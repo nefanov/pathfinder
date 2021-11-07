@@ -16,6 +16,26 @@ def shortest_path_check(graph, src, dst):
     return False
 
 
+def compose_exit_cycle_pattern(scenario={}):
+    if not scenario:
+        P = {'yes_df_list': [], 'no_df_list': [], 'yes_cf_list': [], 'no_cf_list': [], 'rel_kinds': set()}
+        # first for good paths
+        #rel = lexer.glex.Relation(left={'type': "assign_function_call"},
+        #                          right={'type': "assign_function_call"},
+        #                          predicate=lexer.predicate_malloc_memset,
+        #                          extra=None,
+        #                          label="DF_malloc_memset",
+        #                          params={"edge_style": {"color": "dodgerblue"}})
+        #P['yes_df_list'].append([rel])
+        #P['rel_kinds'].add(rel)
+        P['yes_cf_list'].append(
+            ["any if", "if any"])
+        P['no_cf_list'].append(["return_val exit"])
+    else:
+        pass  # TO DO: support scenarios
+    return P
+
+
 def compose_mem_pattern(scenario={}):
     if not scenario:  # if scenario is not preset
         P = {'yes_df_list': [], 'no_df_list': [], 'yes_cf_list': [], 'no_cf_list': [], 'rel_kinds': set()}
@@ -28,6 +48,7 @@ def compose_mem_pattern(scenario={}):
                        params={"edge_style": {"color": "dodgerblue"}})
         P['yes_df_list'].append([rel])
         P['rel_kinds'].add(rel)
+
         P['yes_cf_list'].append(
             ["assign_function_call any", "any assign_function_call", "assign_function_call assign_function_call"])
 

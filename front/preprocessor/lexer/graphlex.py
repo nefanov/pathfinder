@@ -70,6 +70,11 @@ return_val = re.compile(
     re.VERBOSE
 )
 
+_exit = re.compile(
+    r'.*XIT.*',
+    re.VERBOSE
+)
+
 goto = re.compile(
     r'.*goto\s+(\<(bb\s+[0-9]+)\>);.*',
     re.VERBOSE
@@ -161,6 +166,10 @@ lex['return_val'] = {
     }
 }
 
+lex['exit'] = {
+    'exp' : _exit,
+    'format':{}
+}
 
 #===================================================================================
 

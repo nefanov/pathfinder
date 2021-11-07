@@ -70,6 +70,20 @@ def prepare_graph_from_article():
                         specializer=specialize_Dflow)
 
 
+def prepare_cycle_exit_markup():
+    os.chdir("../../front")
+    os.system('./get_thin_graph.sh -i 1.c -s m.dot -p pic25.png')
+    wdir = os.path.join(current_path, "../front")
+    in_graph = os.path.join(wdir, 'm.dot')
+    out_f = os.path.join(wdir, 'processed.dot')
+    out_pic = os.path.join(wdir, 'p_cycle_exit_markup.png')
+    os.chdir(current_path)
+    lexer.prepare_graph(in_graph, out_f, out_pic, need_graph_save=True,need_plot=True,
+                            pattern_composer=compose_exit_cycle_pattern,
+                            specializer=None
+                )
+
+
 def prepare_interproc_graph():
     os.chdir("../../front")
     os.system('./get_thin_graph.sh -i 1.c -s m.dot -p pic25.png')
@@ -93,6 +107,9 @@ if __name__ == '__main__':
         prepare_graph_example()
     elif (sys.argv[1]=="--test" and sys.argv[2]=="malloc_memset"):
        prepare_graph_from_article()
+
+    elif (sys.argv[1]=="--test" and sys.argv[2]=="cycle_exit"):
+       prepare_cycle_exit_markup()
 
     elif (sys.argv[1]=="--test" and sys.argv[2]=="interproc"):
        prepare_interproc_graph()
