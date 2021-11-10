@@ -1,4 +1,4 @@
-##CPU
+###CPU
 
 ### Absolute values
 The most theoretically proven and at the same time the simplest way of performance estimation is the calculation of peak float-points operations per second, which your CPU can achieve.
