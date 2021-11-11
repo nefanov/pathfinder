@@ -72,7 +72,7 @@ def prepare_graph_from_article():
 
 def prepare_custom_markup(scenario=None):
     os.chdir("../../front")
-    os.system('./get_thin_graph.sh -i 1.c -s m.dot -p pic25.png')
+    os.system('./get_thin_graph.sh -i 1.c -s m.dot -p pic25.png --ssa')
     wdir = os.path.join(current_path, "../front")
     in_graph = os.path.join(wdir, 'm.dot')
     out_f = os.path.join(wdir, 'processed.dot')
