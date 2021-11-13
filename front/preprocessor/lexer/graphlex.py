@@ -20,7 +20,7 @@ class Relation:
 
 # simple entities:
 
-identifirer = r'\*?[a-zA-Z_$][a-zA-Z_$0-9]*|.*D\.\d+'
+identifirer = r'\*?[a-zA-Z_$][a-zA-Z_$0-9]*(\[.*\])*|.*D\.\d+' #r'\*?[a-zA-Z_$][a-zA-Z_$0-9]*|.*D\.\d+'
 numeric_const = r'\d+(\.\d+)?'
 aryphmetical_operation = r'\%|\/|\+|\-|\*'
 # complete common lex patterns
@@ -32,7 +32,6 @@ if_cond = re.compile(
     r'.*goto\s+(\<(bb\s+[0-9]+)\>);.*\nelse.\n\s+goto\s(\<(bb\s+[0-9]+)\>);.*', # body
     re.VERBOSE
 )
-
 
 assign_const = re.compile(
     r'('+identifirer+r')\s+='
