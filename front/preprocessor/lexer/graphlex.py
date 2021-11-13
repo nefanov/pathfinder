@@ -21,8 +21,8 @@ class Relation:
 # simple entities:
 
 identifirer = r'\*?[a-zA-Z_$][a-zA-Z_$0-9]*|.*D\.\d+'
-
 numeric_const = r'\d+(\.\d+)?'
+aryphmetical_operation = r'\%|\/|\+|\-|\*'
 # complete common lex patterns
 
 if_cond = re.compile(
@@ -57,7 +57,7 @@ assign_function_call = re.compile(r'(('+identifirer+r')\s?=?\s+)?([a-zA-Z_{1}][a
 assign_aryphmetic_op = re.compile(
     r'('+identifirer+r')\s+='
     r'\s+(('+identifirer+r')|('+numeric_const+r'))\s+'
-    r'(\%|\/|\+|\-|\*)\s+'
+    r'('+aryphmetical_operation+r')\s+'
     r'(('+identifirer+r')|('+numeric_const+r'));',
     re.VERBOSE
 )
@@ -65,7 +65,7 @@ assign_aryphmetic_op = re.compile(
 assign_MEM = re.compile(
     r'('+identifirer+r')\s+=\s+MEM(\[\('+identifirer+r'\*\))?'
     r'\s+(('+identifirer+r')|('+numeric_const+r'))\s+'
-    r'(\%|\/|\+|\-|\*)\s+'
+    r'('+aryphmetical_operation+r')\s+'
     r'(('+identifirer+r')|('+numeric_const+r'));',
     re.VERBOSE
 )
