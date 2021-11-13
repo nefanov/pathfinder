@@ -21,6 +21,7 @@ class Relation:
 # simple entities:
 
 identifirer = r'\*?[a-zA-Z_$][a-zA-Z_$0-9]*|.*D\.\d+'
+
 numeric_const = r'\d+(\.\d+)?'
 # complete common lex patterns
 
@@ -41,7 +42,7 @@ assign_const = re.compile(
 
 assign_var = re.compile(
     r'('+identifirer+r')\s+='
-    r'\s+(\*?[a-zA-Z_$][a-zA-Z_$0-9]*);.*',
+    r'\s+('+identifirer+r');.*',
     re.VERBOSE
 )
 
