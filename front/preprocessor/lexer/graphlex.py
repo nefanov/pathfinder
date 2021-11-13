@@ -56,7 +56,7 @@ assign_function_call = re.compile(r'(('+identifirer+r')\s?=?\s+)?([a-zA-Z_{1}][a
 
 assign_aryphmetic_op = re.compile(
     r'('+identifirer+r')\s+='
-    r'\s+((\*?[a-zA-Z_$][a-zA-Z_$0-9]*)|('+numeric_const+r'))\s+'
+    r'\s+(('+identifirer+r')|('+numeric_const+r'))\s+'
     r'(\%|\/|\+|\-|\*)\s+'
     r'(('+identifirer+r')|('+numeric_const+r'));',
     re.VERBOSE
