@@ -18,50 +18,54 @@ class Relation:
 
 #===================================================================================
 
+# simple entities:
+
+identifirer = r'\*?[a-zA-Z_$][a-zA-Z_$0-9]*|.*D\.\d+'
+numeric_const = r'\d+(\.\d+)?'
 # complete common lex patterns
 
 if_cond = re.compile(
-    r'.*if\s+\(\s*(\*?[a-zA-Z_$][a-zA-Z_$0-9]*|.*D\.\d+)' # left side of header
+    r'.*if\s+\(\s*('+identifirer+r')' # left side of header
     r'\s+(>=|<=|>|<|==|!=)' # operation
-    r'\s+((\*?[a-zA-Z_$][a-zA-Z_$0-9]*|.*D\.\d+)|(\d+(\.\d+)?))\s*\).*\n' # right side of header
+    r'\s+(('+identifirer+r')|('+numeric_const+r'))\s*\).*\n' # right side of header
     r'.*goto\s+(\<(bb\s+[0-9]+)\>);.*\nelse.\n\s+goto\s(\<(bb\s+[0-9]+)\>);.*', # body
     re.VERBOSE
 )
 
 
 assign_const = re.compile(
-    r'(\*?[a-zA-Z_$][a-zA-Z_$0-9]*|.*D\.\d+)\s+='
-    r'\s+(\d+(\.\d+)?);.*',
+    r'('+identifirer+r')\s+='
+    r'\s+('+numeric_const+r');.*',
     re.VERBOSE
 )
 
 assign_var = re.compile(
-    r'(\*?[a-zA-Z_$][a-zA-Z_$0-9]*|.*D\.\d+)\s+='
+    r'('+identifirer+r')\s+='
     r'\s+(\*?[a-zA-Z_$][a-zA-Z_$0-9]*);.*',
     re.VERBOSE
 )
 
 assign_string_const = re.compile(
-    r'(\*?[a-zA-Z_$][a-zA-Z_$0-9]*|.*D\.\d+)\s+='
+    r'('+identifirer+r')\s+='
     r'\s+"(.*)";.*',
     re.VERBOSE
 )
 
-assign_function_call = re.compile(r'((\*?[a-zA-Z_$][a-zA-Z_$0-9]*|.*D\.\d+)\s?=?\s+)?([a-zA-Z_{1}][a-zA-Z0-9_]*)\s*\((.*?)\);.*', re.VERBOSE)
+assign_function_call = re.compile(r'(('+identifirer+r')\s?=?\s+)?([a-zA-Z_{1}][a-zA-Z0-9_]*)\s*\((.*?)\);.*', re.VERBOSE)
 
 assign_aryphmetic_op = re.compile(
-    r'(\*?[a-zA-Z_$][a-zA-Z_$0-9]*|.*D\.\d+)\s+='
-    r'\s+((\*?[a-zA-Z_$][a-zA-Z_$0-9]*)|(\d+(\.\d+)?))\s+'
+    r'('+identifirer+r')\s+='
+    r'\s+((\*?[a-zA-Z_$][a-zA-Z_$0-9]*)|('+numeric_const+r'))\s+'
     r'(\%|\/|\+|\-|\*)\s+'
-    r'((\*?[a-zA-Z_$][a-zA-Z_$0-9]*|.*D\.\d+)|(\d+(\.\d+)?));',
+    r'(('+identifirer+r')|('+numeric_const+r'));',
     re.VERBOSE
 )
-
+# identifirer = r'\*?[a-zA-Z_$][a-zA-Z_$0-9]*|.*D\.\d+'
 assign_MEM = re.compile(
-    r'(\*?[a-zA-Z_$][a-zA-Z_$0-9]*|.*D\.\d+)\s+=\s+MEM(\[\(\*?[a-zA-Z_$][a-zA-Z_$0-9]*\*\))?'
-    r'\s+((\*?[a-zA-Z_$][a-zA-Z_$0-9]*)|(\d+(\.\d+)?))\s+'
+    r'('+identifirer+r')\s+=\s+MEM(\[\('+identifirer+r'\*\))?'
+    r'\s+(('+identifirer+r')|('+numeric_const+r'))\s+'
     r'(\%|\/|\+|\-|\*)\s+'
-    r'((\*?[a-zA-Z_$][a-zA-Z_$0-9]*|.*D\.\d+)|(\d+(\.\d+)?));',
+    r'(('+identifirer+r')|('+numeric_const+r'));',
     re.VERBOSE
 )
 
