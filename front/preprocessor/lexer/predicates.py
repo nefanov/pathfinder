@@ -1,8 +1,8 @@
-def predicate_any(self, l,r):
+def predicate_any(self, l,r,type):
     return True
 
 
-def predicate_is_depointer(self, l,r):
+def predicate_is_depointer(self, l,r,type):
     try:
         return l['l'].startswith(r'\*') or l['l'].startswith("*")
 
@@ -11,7 +11,7 @@ def predicate_is_depointer(self, l,r):
         return False
 
 
-def predicate_malloc_memset(self, l, r):
+def predicate_malloc_memset(self, l, r,type):
     larg = [x.strip() for x in l['arguments'].split(',')]
     rarg = [x.strip() for x in r['arguments'].split(',')]
     try:
@@ -25,11 +25,11 @@ def predicate_malloc_memset(self, l, r):
         return False
 
 
-def predicate_malloc_getptr(self, l,r):
+def predicate_malloc_getptr(self, l,r,type):
     return (l['func_name'] == 'malloc') and\
            (r['r_operand1'].startswith(l['left']))
 
 
-def predicate_getptr_write(self, l, r):
+def predicate_getptr_write(self, l, r,type):
     return r['left'].startswith('*') and r['left'][1:] == l['left']
 

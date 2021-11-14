@@ -45,7 +45,7 @@ def prepare_graph_example():
     out_pic = os.path.join(wdir, 'processed_pic.png')
     os.chdir(current_path)
     print(in_graph, out_f, out_pic, current_path, os.getcwd())
-    return lexer.prepare_graph(in_graph, out_f, out_pic,
+    lexer.prepare_graph(in_graph, out_f, out_pic,
                         need_graph_save=True,
                         need_plot=True,
                         pattern_composer=None,
@@ -63,24 +63,73 @@ def prepare_graph_from_article():
     out_pic = os.path.join(wdir, 'processed_pic.png')
     os.chdir(current_path)
     print(in_graph, out_f, out_pic, current_path, os.getcwd())
-    return lexer.prepare_graph(in_graph, out_f, out_pic,
+    lexer.prepare_graph(in_graph, out_f, out_pic,
                         need_graph_save=True,
                         need_plot=True,
                         pattern_composer=compose_mem_pattern,
                         specializer=specialize_Dflow)
 
 
-def prepare_custom_markup(scenario=None):
+def specialize_prev_mem_dep(graph, nodes, node_lex_dict, P):
+    def get_accepted_types(nodes, ptrn):
+        ret_=[]
+        for k, N in nodes.items():
+            if k.startswith(ptrn[:-1]):
+                ret_.extend([(_n,{'type':k}) for _n in N])
+        return ret_
+
+    def collect_nodes(p, nodes):
+        if (p.left['type'].endswith('*')):
+            l_nodes_agg = get_accepted_types(nodes, p.left['type'])
+        else:
+            l_nodes_agg = [(_n,{'type':p.left['type']}) for _n in nodes[p.left['type']]]
+        if (p.right['type'].endswith('*')):
+            r_nodes_agg = get_accepted_types(nodes, p.right['type'])
+        else:
+            r_nodes_agg = [(_n,{'type':p.right['type']}) for _n in nodes[p.right['type']]]
+
+        return l_nodes_agg, r_nodes_agg
+
+    p = lexer.glex.Relation(
+        left={'type': "assign*"},right={'type': "assign*"},
+        predicate=check_ref_dep_mem,
+        extra=None,
+        label="DF_dep_from",
+        params={"edge_style": {"color": "#f76d23"}
+    })
+
+    l_nodes_agg, r_nodes_agg = collect_nodes(p, nodes)
+
+    for _n in l_nodes_agg:
+        n = _n[0]
+        print("node", graph.get_node(n)[0].get_attributes()['label'])
+        n1s = node_lex_dict[n]['content']
+        for _n2 in r_nodes_agg:
+            n2 = _n2[0]
+            print("node2", graph.get_node(n2)[0].get_attributes()['label'])
+            n2s = node_lex_dict[n2]['content']
+            if shortest_path_check(graph, n, n2):
+                print(n1s['format'], n2s['format'])
+                if p.predicate(n1s['format'], n2s['format'],{'src_type':_n[1]['type'], 'dst_type':_n2[1]['type']}):
+                    graph.add_edge(pydot.Edge(n,
+                                n2,
+                                color=p.params["edge_style"]["color"],
+                                style='dashed',
+                                label=p.label+"_"+n2s['format']['right']))
+    return graph
+
+
+def prepare_custom_markup(scenario=None, spec=specialize_prev_mem_dep):
     os.chdir("../../front")
-    os.system('./get_thin_graph.sh -i 1.c -s m.dot -p pic25.png --ssa')
+    os.system('./get_thin_graph.sh -i 1.c -s m.dot -p pic25.png')
     wdir = os.path.join(current_path, "../front")
     in_graph = os.path.join(wdir, 'm.dot')
     out_f = os.path.join(wdir, 'processed.dot')
     out_pic = os.path.join(wdir, 'p_cycle_exit_markup.png')
     os.chdir(current_path)
-    return lexer.prepare_graph(in_graph, out_f, out_pic, need_graph_save=True,need_plot=True,
+    lexer.prepare_graph(in_graph, out_f, out_pic, need_graph_save=True,need_plot=True,
                             pattern_composer=compose_pattern,
-                            specializer=specialize_Dflow,
+                            specializer=specialize_prev_mem_dep,
                             scenario=scenario
                 )
 
@@ -103,24 +152,35 @@ def prepare_interproc_graph():
     return augm_g
 
 
+def depends_from(inst, dependency):
+    print("DEBUG: instance --", inst, "dep --", dependency)
+    if inst.find(dependency):
+        return True
+    return False
+
+
+def check_ref_dep_mem(self, l, r, type):
+    return depends_from(r['right'], l['left'])
+
+
+    return G
+
 if __name__ == '__main__':
     if (len(sys.argv)<2 or (sys.argv[1] =="--test" and sys.argv[2]=="empty_labeling")):
-        graph, mapping = prepare_graph_example()
+        prepare_graph_example()
     elif (sys.argv[1]=="--test" and sys.argv[2]=="malloc_memset"):
-        graph, mapping = prepare_graph_from_article()
+       prepare_graph_from_article()
 
     elif (sys.argv[1]=="--test" and sys.argv[2]=="cycle_exit"):
         scenario = {
                     'type':'flowlists',
                     'data':{'yes_df_list': [],
-                            'no_df_list' : [],
+                            'no_df_list' : ["yuy"],
                             'yes_cf_list': [["any if_cond", "if_cond any"]], #
                             'no_cf_list' : [["return_val exit"]],
                             'rel_kinds'  : set()}
                     }
-        graph, mapping = prepare_custom_markup(scenario)
-
-    
+        prepare_custom_markup(scenario)
 
     elif (sys.argv[1]=="--test" and sys.argv[2]=="interproc"):
        prepare_interproc_graph()

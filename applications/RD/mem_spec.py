@@ -1,5 +1,6 @@
 import os
 import sys
+import networkx as nx
 
 # API paths
 current_path = os.path.dirname(os.path.abspath("."))
@@ -11,9 +12,12 @@ import lexer
 
 def shortest_path_check(graph, src, dst):
     nx_graph = nx.nx_pydot.from_pydot(graph)
-    if nx.shortest_path(nx_graph, src, dst):
-        return True
-    return False
+    try:
+        if nx.shortest_path(nx_graph, src, dst):
+            return True
+        return False
+    except:
+        return False
 
 
 def compose_pattern(scenario=None):
@@ -85,7 +89,7 @@ def specialize_Dflow(graph, nodes, node_lex_dict, P):
             for n2 in nodes[p.right['type']]:
                 n2s = node_lex_dict[n2]['content']
                 # TO DO: check scope!
-                if not p.extra and p.predicate(n1s['format'], n2s['format']) and shortest_path_check(graph, n, n2):
+                if not p.extra and p.predicate(n1s['format'], n2s['format'],None) and shortest_path_check(graph, n, n2):
                     graph.add_edge(pydot.Edge(n,
                                    n2,
                                    color=p.params["edge_style"]["color"],

@@ -250,13 +250,13 @@ def lex_graph(inp_file, verbose=False):
                 elif l == "assign_const":
                     r['format'].update({
                         'left': res.group(1),
-                        'right': res.group(2),
+                        'right': res.group(3),
                     })
 
                 elif l == "assign_var":
                     r['format'].update({
                         'left': res.group(1),
-                        'right': res.group(2),
+                        'right': res.group(3),
                     })
 
                 elif l == "assign_string_const":
@@ -275,9 +275,9 @@ def lex_graph(inp_file, verbose=False):
                 elif l == "assign_aryphmetic_op":
                     r['format'].update({
                         'left': res.group(1),
-                        'r_operand1': res.group(2),
-                        'op': res.group(6),
-                        'r_operand2': res.group(7),
+                        'r_operand1': res.group(3),
+                        'op': res.group(8),
+                        'r_operand2': res.group(9),
                     })
 
                 elif l == "goto":
@@ -357,6 +357,8 @@ def specialize_Dflow(graph, nodes, node_lex_dict, P):
                                     style='dashed',
                                     label=p.label))
     return graph
+
+
 
 
 def markup_graph(graph, nodes, nld, pattern_composer=default_pattern_composer, scenario=None, specializer=default_specializer):
