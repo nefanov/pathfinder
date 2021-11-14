@@ -174,7 +174,7 @@ if __name__ == '__main__':
     elif (sys.argv[1]=="--test" and sys.argv[2]=="malloc_memset"):
        prepare_graph_from_article()
 
-    elif (sys.argv[1]=="--test" and sys.argv[2]=="cycle_exit"):
+    elif (sys.argv[1]=="--test" and sys.argv[2]=="cycle_basic"):
         scenario = {
                     'type':'flowlists',
                     'data':{'yes_df_list': [],
