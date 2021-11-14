@@ -102,20 +102,20 @@ def specialize_prev_mem_dep(graph, nodes, node_lex_dict, P):
 
     for _n in l_nodes_agg:
         n = _n[0]
-        print("node", graph.get_node(n)[0].get_attributes()['label'])
+        lbl_l = "node", graph.get_node(n)[0].get_attributes()['label']
         n1s = node_lex_dict[n]['content']
         for _n2 in r_nodes_agg:
             n2 = _n2[0]
-            print("node2", graph.get_node(n2)[0].get_attributes()['label'])
+            lbl_r = "node2", graph.get_node(n2)[0].get_attributes()['label']
             n2s = node_lex_dict[n2]['content']
             if shortest_path_check(graph, n, n2):
-                print(n1s['format'], n2s['format'])
-                if p.predicate(n1s['format'], n2s['format'],{'src_type':_n[1]['type'], 'dst_type':_n2[1]['type']}):
+                if p.predicate(n1s['format'], n2s['format'], {'src_type':_n[1]['type'], 'dst_type':_n2[1]['type']}):
+                    #print("Predicate is true, ", lbl_l, lbl_r)
                     graph.add_edge(pydot.Edge(n,
                                 n2,
                                 color=p.params["edge_style"]["color"],
                                 style='dashed',
-                                label=p.label+"_"+n2s['format']['right']))
+                                label=p.label+"_on_"+n1s['format']['left']))
     return graph
 
 
@@ -151,15 +151,18 @@ def prepare_interproc_graph():
     augm_g.write_png("interpr_1.c.png")
     return augm_g
 
-
-def depends_from(inst, dependency):
-    print("DEBUG: instance --", inst, "dep --", dependency)
-    if inst.find(dependency):
-        return True
-    return False
-
-
+# == predicate ==
 def check_ref_dep_mem(self, l, r, type):
+    def depends_from(inst, dependency):
+        if inst.find(dependency) != -1:
+            return True
+        return False
+
+    if type['dst_type'] == "assign_aryphmetic_op":
+        return l['left'] in [r['r_operand1'], r['r_operand2']]
+    elif type['dst_type'] == "assign_function_call":
+        return False # now it is intraproc
+
     return depends_from(r['right'], l['left'])
 
 
@@ -175,7 +178,13 @@ if __name__ == '__main__':
         scenario = {
                     'type':'flowlists',
                     'data':{'yes_df_list': [],
-                            'no_df_list' : ["yuy"],
+                            'no_df_list' : [[lexer.glex.Relation(
+                                            left={'type': "assign*"},right={'type': "assign*"},
+                                            predicate=check_ref_dep_mem,
+                                            extra=None,
+                                            label="DF_dep_from",
+                                            params={"edge_style": {"color": "#f76d23"}
+                            })]],
                             'yes_cf_list': [["any if_cond", "if_cond any"]], #
                             'no_cf_list' : [["return_val exit"]],
                             'rel_kinds'  : set()}

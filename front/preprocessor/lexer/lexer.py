@@ -24,9 +24,16 @@ def prepare_graph(graph_fn, outp_graph_fn, outp_plot, need_graph_save=False, nee
     if need_plot:
         graph.write_png(outp_pic+"_pre.png")
     # create mapping of graph (edges_types --> terminal alphabet)
+    print("YUY", flatten(P['no_df_list']))
+    l_1 = list(set([p.label for p in flatten(P['yes_df_list']) + flatten(P['no_df_list'])]))
+    l_2 = list(set([p for p in flatten(P['yes_cf_list'])]))
+    l_3 = list(set([p for p in flatten(P['no_cf_list'])]))
     mapping = gr.make_gram_map(sorted
-                               (list(set([p.label for p in flatten(P['yes_df_list']) + flatten(P['no_df_list'])]))
-                                + list(set([p for p in flatten(P['yes_cf_list'])])) + list(set([p for p in flatten(P['no_cf_list'])]))
+                               (l_1
+                                +
+                                l_2
+                                +
+                                l_3
                                 ))
     # markup edges by terminal alphabet
     graph = glex.markup_edges(graph, mapping)
