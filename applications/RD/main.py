@@ -46,7 +46,7 @@ def prepare_graph_example():
     out_pic = os.path.join(wdir, 'processed_pic.png')
     os.chdir(current_path)
     print(in_graph, out_f, out_pic, current_path, os.getcwd())
-    lexer.prepare_graph(in_graph, out_f, out_pic,
+    return lexer.prepare_graph(in_graph, out_f, out_pic,
                         need_graph_save=True,
                         need_plot=True,
                         pattern_composer=None,
@@ -64,7 +64,7 @@ def prepare_graph_from_article():
     out_pic = os.path.join(wdir, 'processed_pic.png')
     os.chdir(current_path)
     print(in_graph, out_f, out_pic, current_path, os.getcwd())
-    lexer.prepare_graph(in_graph, out_f, out_pic,
+    return lexer.prepare_graph(in_graph, out_f, out_pic,
                         need_graph_save=True,
                         need_plot=True,
                         pattern_composer=compose_mem_pattern,
@@ -140,11 +140,12 @@ def prepare_custom_markup(scenario=None, spec=specialize_prev_mem_dep):
     out_f = os.path.join(wdir, 'processed.dot')
     out_pic = os.path.join(wdir, 'p_cycle_exit_markup.png')
     os.chdir(current_path)
-    lexer.prepare_graph(in_graph, out_f, out_pic, need_graph_save=True,need_plot=True,
+    return lexer.prepare_graph(in_graph, out_f, out_pic, need_graph_save=True,need_plot=True,
                             pattern_composer=compose_pattern,
                             specializer=specialize_prev_mem_dep,
                             scenario=scenario
                 )
+    
 
 
 def prepare_interproc_graph():
@@ -208,7 +209,7 @@ if __name__ == '__main__':
                             'no_cf_list' : [["return_val exit"]],
                             'rel_kinds'  : set()}
                     }
-        prepare_custom_markup(scenario)
+        graph, mapping = prepare_custom_markup(scenario)
 
     elif (sys.argv[1]=="--test" and sys.argv[2]=="interproc"):
        prepare_interproc_graph()
