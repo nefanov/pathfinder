@@ -3,6 +3,7 @@
 # common imports
 import os
 import sys
+from networkx.generators.social import les_miserables_graph
 import pydot
 
 # API paths
@@ -90,32 +91,44 @@ def specialize_prev_mem_dep(graph, nodes, node_lex_dict, P):
 
         return l_nodes_agg, r_nodes_agg
 
-    p = lexer.glex.Relation(
-        left={'type': "assign*"},right={'type': "assign*"},
-        predicate=check_ref_dep_mem,
-        extra=None,
-        label="DF_dep_from",
-        params={"edge_style": {"color": "#f76d23"}
-    })
+    def spec_edge_label_emit(p, idx, src_fmt, dst_fmt):
+        label=""
+        if "labeling" in p.extra.keys():
+            for token in p.extra['labeling'][idx].split():
+                if token== "$label":
+                    label += p.label
+                elif token.startswith("$"):
+                    tk = token.split(":")
+                    if tk[0][1:]== "src":
+                        label +=" " + src_fmt[tk[1]]
+                    elif tk[0][1:]=="dst":
+                        label +=" " + dst_fmt[tk[1]]
+                else:
+                    label += token
+        else:
+            label=p.label
 
-    l_nodes_agg, r_nodes_agg = collect_nodes(p, nodes)
+        return label
 
-    for _n in l_nodes_agg:
-        n = _n[0]
-        lbl_l = "node", graph.get_node(n)[0].get_attributes()['label']
-        n1s = node_lex_dict[n]['content']
-        for _n2 in r_nodes_agg:
-            n2 = _n2[0]
-            lbl_r = "node2", graph.get_node(n2)[0].get_attributes()['label']
-            n2s = node_lex_dict[n2]['content']
-            if shortest_path_check(graph, n, n2):
-                if p.predicate(n1s['format'], n2s['format'], {'src_type':_n[1]['type'], 'dst_type':_n2[1]['type']}):
-                    #print("Predicate is true, ", lbl_l, lbl_r)
-                    graph.add_edge(pydot.Edge(n,
-                                n2,
-                                color=p.params["edge_style"]["color"],
-                                style='dashed',
-                                label=p.label+"_on_"+n1s['format']['left']))
+    for idx, p in enumerate(P):
+        l_nodes_agg, r_nodes_agg = collect_nodes(p, nodes)
+        for _n in l_nodes_agg:
+            n = _n[0]
+            #lbl_l = "node", graph.get_node(n)[0].get_attributes()['label']
+            n1s = node_lex_dict[n]['content']
+            for _n2 in r_nodes_agg:
+                n2 = _n2[0]
+                #lbl_r = "node2", graph.get_node(n2)[0].get_attributes()['label']
+                n2s = node_lex_dict[n2]['content']
+                if shortest_path_check(graph, n, n2):
+                    if p.predicate(n1s['format'], n2s['format'], {'src_type':_n[1]['type'], 'dst_type':_n2[1]['type']}):
+                        #print("Predicate is true, ", lbl_l, lbl_r)
+                        graph.add_edge(pydot.Edge(n,
+                                    n2,
+                                    color=p.params["edge_style"]["color"],
+                                    style='dashed',
+                                    label=spec_edge_label_emit(p, idx,n1s['format'],n2s['format'])))
+
     return graph
 
 
@@ -178,13 +191,19 @@ if __name__ == '__main__':
         scenario = {
                     'type':'flowlists',
                     'data':{'yes_df_list': [],
-                            'no_df_list' : [[lexer.glex.Relation(
-                                            left={'type': "assign*"},right={'type': "assign*"},
-                                            predicate=check_ref_dep_mem,
-                                            extra=None,
-                                            label="DF_dep_from",
-                                            params={"edge_style": {"color": "#f76d23"}
-                            })]],
+                            'no_df_list' : 
+                            [
+                                            [ # relation
+                                                lexer.glex.Relation(
+                                                left={'type': "assign*"},right={'type': "assign*"}, # src and dst nodes of relation edge
+                                                predicate=check_ref_dep_mem, # function-specializer
+                                                extra={"disable_labeling":
+                                                            ["$label $src:left"] # extra labeling fmt string
+                                                },
+                                                label="DF_dep_from", # default label
+                                                params={"edge_style": {"color": "#f76d23"}})# parameters for edge visualizing
+                                            ] 
+                            ],
                             'yes_cf_list': [["any if_cond", "if_cond any"]], #
                             'no_cf_list' : [["return_val exit"]],
                             'rel_kinds'  : set()}
@@ -205,8 +224,7 @@ if __name__ == '__main__':
                 if idx in colors:
                     line=colors[idx]+line+bcolors.ENDC
                 print(line)
-
-       
+     
         code = read_c()
         highlight(code)
 
