@@ -91,10 +91,10 @@ def specialize_prev_mem_dep(graph, nodes, node_lex_dict, P):
 
         return l_nodes_agg, r_nodes_agg
 
-    def spec_edge_label_emit(p, idx, src_fmt, dst_fmt):
+    def spec_edge_label_emit(p, src_fmt, dst_fmt):
         label=""
         if "labeling" in p.extra.keys():
-            for token in p.extra['labeling'][idx].split():
+            for token in p.extra['labeling'].split():
                 if token== "$label":
                     label += p.label
                 elif token.startswith("$"):
@@ -127,7 +127,7 @@ def specialize_prev_mem_dep(graph, nodes, node_lex_dict, P):
                                     n2,
                                     color=p.params["edge_style"]["color"],
                                     style='dashed',
-                                    label=spec_edge_label_emit(p, idx,n1s['format'],n2s['format'])))
+                                    label=spec_edge_label_emit(p, n1s['format'], n2s['format'])))
 
     return graph
 
@@ -199,7 +199,7 @@ if __name__ == '__main__':
                                                 left={'type': "assign*"},right={'type': "assign*"}, # src and dst nodes of relation edge
                                                 predicate=check_ref_dep_mem, # function-specializer
                                                 extra={"disable_labeling":
-                                                            ["$label $src:left"] # extra labeling fmt string
+                                                            "$label $src:left" # extra labeling fmt string
                                                 },
                                                 label="DF_dep_from", # default label
                                                 params={"edge_style": {"color": "#f76d23"}})# parameters for edge visualizing
