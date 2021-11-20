@@ -268,8 +268,8 @@ def lex_graph(inp_file, verbose=False):
                 elif l == "assign_function_call":
                     r['format'].update({
                         'left': res.group(2),
-                        'func_name': res.group(3),
-                        'arguments': res.group(4)
+                        'func_name': res.group(4),
+                        'arguments': res.group(5)
                     })
 
                 elif l == "assign_aryphmetic_op":
