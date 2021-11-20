@@ -132,11 +132,17 @@ def specialize_prev_mem_dep(graph, nodes, node_lex_dict, P):
     return graph
 
 
-def prepare_custom_markup(scenario=None, spec=specialize_prev_mem_dep):
+def prepare_custom_markup(scenario=None, spec=specialize_prev_mem_dep, need_interproc_pass=True):
     os.chdir("../../front")
     os.system('./get_thin_graph.sh -i 1.c -s m.dot -p pic25.png')
     wdir = os.path.join(current_path, "../front")
     in_graph = os.path.join(wdir, 'm.dot')
+    if need_interproc_pass:
+        g = pydot.graph_from_dot_file(in_graph)
+        ft  = extra_py_utils.func_table("../front/1.c")
+        g[0] = extra_py_utils.prepare_interproc_graph_var_trans(g[0], ft)
+        g[0].write_raw(in_graph)
+
     out_f = os.path.join(wdir, 'processed.dot')
     out_pic = os.path.join(wdir, 'p_cycle_exit_markup.png')
     os.chdir(current_path)
@@ -145,7 +151,6 @@ def prepare_custom_markup(scenario=None, spec=specialize_prev_mem_dep):
                             specializer=specialize_prev_mem_dep,
                             scenario=scenario
                 )
-    
 
 
 def prepare_interproc_graph():
@@ -210,6 +215,30 @@ if __name__ == '__main__':
                             'rel_kinds'  : set()}
                     }
         graph, mapping = prepare_custom_markup(scenario)
+
+    elif (sys.argv[1]=="--test" and sys.argv[2]=="mem_anti"):
+        scenario = {
+                    'type':'flowlists',
+                    'data':{'yes_df_list': [],
+                            'no_df_list' : 
+                            [
+                                            [ # relation
+                                                lexer.glex.Relation(
+                                                left={'type': "assign*"},right={'type': "assign*"}, # src and dst nodes of relation edge
+                                                predicate=check_ref_dep_mem, # function-specializer
+                                                extra={"disable_labeling":
+                                                            "$label $src:left" # extra labeling fmt string
+                                                },
+                                                label="DF_dep_from", # default label
+                                                params={"edge_style": {"color": "#f76d23"}})# parameters for edge visualizing
+                                            ] 
+                            ],
+                            'yes_cf_list': [["any if_cond", "if_cond any"]], #
+                            'no_cf_list' : [["return_val exit"]],
+                            'rel_kinds'  : set()}
+                    }
+        graph, mapping = prepare_custom_markup(scenario)
+
 
     elif (sys.argv[1]=="--test" and sys.argv[2]=="interproc"):
        prepare_interproc_graph()

@@ -100,7 +100,7 @@ def func_table(fn):
 		return def_table
 
 
-def get_interfunc_remap(label, def_table, l, r):
+def get_interfunc_remap(label, def_table, l, r, verbose=False):
 	res = re.search(r['exp'], label)
 	if not res:
 		# not matched
@@ -108,26 +108,29 @@ def get_interfunc_remap(label, def_table, l, r):
 
 	r['format'].update({
                         'left': res.group(2),
-                        'func_name': res.group(3),
-                        'arguments': res.group(4)
+                        'func_name': res.group(4),
+                        'arguments': res.group(5)
                     })
 
 	f_name = r['format']['func_name']
 	caller_args = func_call_var_remap(f_name, def_table, r)
 	switched_caller_args = dict(zip(caller_args.values(), caller_args.keys()))
-	print("Assignment:", caller_args)
-	print("Mnemonic '-->'", switched_caller_args)
+	if verbose:
+		print("Assignment:", caller_args)
+		print("Mnemonic '-->'", switched_caller_args)
 	return caller_args
 
 
-def append_var_chain(g, src, dst, caller_args):
+def append_var_chain(g, src, dst, caller_args, verbose=False):
 	# add and specify the chain of variables assignment: var=arg
 	last = dst
 	current = src
 	for k,v in caller_args.items():
 		next = pydot.Node(label=k +" = "+v+";")
 		next.set_name(k + " = "+v+";")
-		print("Node added:", next, next)
+		g.add_node(next)
+		if verbose:
+			print("Node added:", next)
 		ed = pydot.Edge(current,
                                    next,
                                    color="maroon",
@@ -135,8 +138,8 @@ def append_var_chain(g, src, dst, caller_args):
                                    label="argpass")
 						
 		g.add_edge(ed)
-		
-		print("Edge added:", ed)
+		if verbose:
+			print("Edge added:", ed)
 
 		current = next
 
