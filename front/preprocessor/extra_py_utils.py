@@ -65,10 +65,10 @@ def make_func_def_table(func_names, arg_names):
 	return table
 
 
-
-def extract_func_def_list(fname):
-	print(fname)
+def extract_func_def_list(fname, verbose=False):
 	with open(fname) as f:
+		if verbose:
+			print("Extracting functions list from", fname)
 		lines = f.readlines()
 		res = search_pattern(pattern, lines, fname)
 		return res
@@ -180,9 +180,11 @@ def prepare_interproc_graph_var_trans(g, def_table, verbose=False, rm_direct_cal
 		}
 		
 		if src_match is not None and dst_match is not None:
-			print(src_label,"-->", dst_label)
-			caller_args = get_interfunc_remap(src_label, def_table, l, r) 
-			print(caller_args)
+			if verbose:
+				print(src_label,"-->", dst_label)
+			caller_args = get_interfunc_remap(src_label, def_table, l, r)
+			if verbose:
+				print(caller_args)
 			if len(caller_args) > 0:
 				append_var_chain(g, src, dst, caller_args)
 				if rm_direct_calledge:

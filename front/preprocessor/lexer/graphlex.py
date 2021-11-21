@@ -86,6 +86,11 @@ _exit = re.compile(
     re.VERBOSE
 )
 
+_entry = re.compile(
+    r'.*NTRY.*',
+    re.VERBOSE
+)
+
 goto = re.compile(
     r'oto\s+(\<(bb\s+[0-9]+)\>);.*',
     re.VERBOSE
@@ -188,6 +193,11 @@ lex['return_val'] = {
 
 lex['exit'] = {
     'exp' : _exit,
+    'format':{}
+}
+
+lex['entry'] = {
+    'exp' : _entry,
     'format':{}
 }
 
@@ -319,7 +329,9 @@ def lex_graph(inp_file, verbose=False):
                     })
 
                 elif l == "return_val":
-                    r['format'].update({'retval': 0})
+                    r['format'].update({'retval':0})
+                # check type and save fmt parameters only if need. Ignored for types "exit","entry", etc
+
                 if verbose:
                     print("PATTERN:\n", l)
                     print("FORMAT:\n", r['format'], "\n---------------")
