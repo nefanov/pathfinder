@@ -23,6 +23,7 @@ class Relation:
 identifirer = r'\*?[a-zA-Z_$][a-zA-Z_$0-9]*(\[.*\])*\.*|.*D\.\d+' #r'\*?[a-zA-Z_$][a-zA-Z_$0-9]*|.*D\.\d+'
 numeric_const = r'\d+(\.\d+)?'
 aryphmetical_operation = r'\%|\/|\+|\-|\*'
+typecast = r'\(.*\)'
 # complete common lex patterns
 
 if_cond = re.compile(
@@ -42,6 +43,12 @@ assign_const = re.compile(
 assign_var = re.compile(
     r'('+identifirer+r')\s+='
     r'\s+('+identifirer+r');.*',
+    re.VERBOSE
+)
+
+assign_var_cast = re.compile(
+    r'('+identifirer+r')\s+='
+    r'\s+('+typecast+r')\s+('+identifirer+r');.*',
     re.VERBOSE
 )
 
@@ -114,6 +121,15 @@ lex['assign_var'] = {
     'format': {
         'left': "",
         'right': "",
+    }
+}
+
+lex['assign_var_cast'] = {
+    'exp':assign_var_cast,
+    'format': {
+        'left': "",
+        'right': "",
+        'cast_type':""
     }
 }
 
@@ -257,6 +273,13 @@ def lex_graph(inp_file, verbose=False):
                     r['format'].update({
                         'left': res.group(1),
                         'right': res.group(3),
+                    })
+
+                elif l == "assign_var_cast":
+                    r['format'].update({
+                        'left': res.group(1),
+                        'type_cast': res.group(3),
+                        'right': res.group(4),
                     })
 
                 elif l == "assign_string_const":
