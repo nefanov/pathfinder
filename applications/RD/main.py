@@ -132,19 +132,32 @@ def specialize_prev_mem_dep(graph, nodes, node_lex_dict, P):
     return graph
 
 
-def prepare_custom_markup(scenario=None, spec=specialize_prev_mem_dep, need_interproc_pass=True):
+def prepare_custom_markup(scenario=None, spec=specialize_prev_mem_dep, need_interproc_pass=True, config=None):
+    if config:
+        working_dir = config['working_dir']
+        src = config['src']
+        ir_dotfile = config['ir_dotfile']
+        ir_pic = config['ir_pic']
+        ir_markup = config['ir_markup']
+    else:
+        working_dir = os.path.join(current_path, "../front")
+        src = "1.c"
+        ir_dotfile = "m.dot"
+        ir_pic = "pic25.png"
+        ir_markup = 'p_markup.png'
+
+    wdir = working_dir
     os.chdir("../../front")
-    os.system('./get_thin_graph.sh -i 1.c -s m.dot -p pic25.png')
-    wdir = os.path.join(current_path, "../front")
-    in_graph = os.path.join(wdir, 'm.dot')
+    os.system('./get_thin_graph.sh -i ' + os.path.join(wdir, src) + ' -s '+ os.path.join(wdir, ir_dotfile) + ' -p '+os.path.join(wdir,ir_pic))
+    in_graph = os.path.join(wdir, ir_dotfile)
     if need_interproc_pass:
         g = pydot.graph_from_dot_file(in_graph)
-        ft  = extra_py_utils.func_table("../front/1.c")
+        ft  = extra_py_utils.func_table(os.path.join(wdir, src)) #"../front/1.c")
         g[0] = extra_py_utils.prepare_interproc_graph_var_trans(g[0], ft)
         g[0].write_raw(in_graph)
 
     out_f = os.path.join(wdir, 'processed.dot')
-    out_pic = os.path.join(wdir, 'p_cycle_exit_markup.png')
+    out_pic = os.path.join(wdir, ir_markup)
     os.chdir(current_path)
     return lexer.prepare_graph(in_graph, out_f, out_pic, need_graph_save=True,need_plot=True,
                             pattern_composer=compose_pattern,
@@ -175,6 +188,9 @@ def check_ref_dep_mem(self, l, r, type):
     def depends_from(inst, dependency):
         if inst.find(dependency) != -1:
             return True
+        return False
+
+    if type['src_type'] == "assign_function_call" and l['left'] is None:
         return False
 
     if type['dst_type'] == "assign_aryphmetic_op":

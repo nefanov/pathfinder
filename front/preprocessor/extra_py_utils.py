@@ -57,7 +57,7 @@ def search_pattern(pattern, lines, fname):
 
 
 def make_func_def_table(func_names, arg_names):
-	table=dict()
+	table = dict()
 	fn = [f[0] for f in func_names]
 	for i, name in enumerate(fn):
 		table[name] = arg_names[i]
@@ -67,7 +67,7 @@ def make_func_def_table(func_names, arg_names):
 
 
 def extract_func_def_list(fname):
-	print(os.getcwd())
+	print(fname)
 	with open(fname) as f:
 		lines = f.readlines()
 		res = search_pattern(pattern, lines, fname)
@@ -78,6 +78,7 @@ def func_call_var_remap(func_name, func_arg_table, caller):
 	try:
 		callee_args = func_arg_table[func_name]
 	except KeyError:
+		print(func_arg_table)
 		print(func_name, ": function name not defined in sources")
 		sys.exit(0)
 		return {}
@@ -93,7 +94,7 @@ def func_call_var_remap(func_name, func_arg_table, caller):
 
 #===================================================================================
 def func_table(fn):
-		fl = extract_func_def_list(fn)	
+		fl = extract_func_def_list(fn)
 		arg_names = [parse_function_def_args(it[-1]) for it in [el[-1] for el in [item[-1] for item in fl]]]
 		func_names =[parse_function_def_args(it[-2]) for it in [el[-1] for el in [item[-1] for item in fl]]]
 		def_table = make_func_def_table(func_names, arg_names)
@@ -111,7 +112,6 @@ def get_interfunc_remap(label, def_table, l, r, verbose=False):
                         'func_name': res.group(4),
                         'arguments': res.group(5)
                     })
-
 	f_name = r['format']['func_name']
 	caller_args = func_call_var_remap(f_name, def_table, r)
 	switched_caller_args = dict(zip(caller_args.values(), caller_args.keys()))
