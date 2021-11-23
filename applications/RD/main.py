@@ -256,8 +256,13 @@ if __name__ == '__main__':
                     }
         # phase == frontend
         (graph, mapping), working_dir = prepare_custom_markup(scenario)
-        prep_graph_file = os.path.join(working_dir, "prepr_graph.dot")
-        graph.write_raw(prep_graph_file)
+        prep_graph_file = os.path.join(working_dir, "prepr_graph_input.txt")
+        def emit_txt_graph(path):
+            with open(path,"w+") as f:
+                #TO DO: implement translation
+                pass
+            return path
+        emit_txt_graph(prep_graph_file)
 
         # configure - move it to separate function
         abs_path = os.path.join(os.getcwd(), ".." + os.sep + "front")
