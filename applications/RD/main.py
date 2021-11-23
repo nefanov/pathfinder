@@ -256,9 +256,22 @@ if __name__ == '__main__':
                     }
         # phase == frontend
         (graph, mapping), working_dir = prepare_custom_markup(scenario)
-        prep_graph_file = os.path.join(working_dir, "prepr_graph_input.txt")
+
+        prep_core_inp_file = os.path.join(working_dir, "prepr_core_input.txt")
+
+        def emit_grammar(gr=[['S','z']], path="1.txt"):
+            with open(path, "w") as f:
+                f.write("1\n")
+                f.write(str(len(gr))+"\n")
+                for item in gr:
+                    for i in item:
+                        f.write(i+" ")
+                f.write("\n\n")
+            return
+
+
         def emit_txt_graph(graph, path):
-            with open(path,"w+") as f:
+            with open(path,"a+") as f:
                 #TO DO: implement translation
                 nodes_list = [n. get_name() for n in graph.get_nodes()]
                 adj_list = []
@@ -276,8 +289,8 @@ if __name__ == '__main__':
                     f.write(str(e[0])+ "  " + str(e[1]) + " " + str(e[2]) + "\n")
 
             return path 
-
-        emit_txt_graph(graph, prep_graph_file)
+        emit_grammar(path=prep_core_inp_file)
+        emit_txt_graph(graph, prep_core_inp_file)
 
         # configure - move it to separate function
         abs_path = os.path.join(os.getcwd(), ".." + os.sep + "front")
@@ -287,7 +300,7 @@ if __name__ == '__main__':
         def run_core(core_path, grammar=None):
             print("Running core on file:", core_path)
             result = subprocess.run(
-            [core_path, prep_graph_file, "1"], capture_output=True, text=True)
+            [core_path, prep_core_inp_file], capture_output=True, text=True)
             res_stdout = result.stdout
             res_stderr = result.stderr
             return res_stdout, res_stderr
