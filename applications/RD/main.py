@@ -3,6 +3,7 @@
 # common imports
 import os
 import sys
+import subprocess
 from networkx.generators.social import les_miserables_graph
 import pydot
 
@@ -163,7 +164,7 @@ def prepare_custom_markup(scenario=None, spec=specialize_prev_mem_dep, need_inte
                             pattern_composer=compose_pattern,
                             specializer=specialize_prev_mem_dep,
                             scenario=scenario
-                )
+                ), working_dir
 
 
 def prepare_interproc_graph():
@@ -230,7 +231,7 @@ if __name__ == '__main__':
                             'no_cf_list' : [["return_val exit"]],
                             'rel_kinds'  : set()}
                     }
-        graph, mapping = prepare_custom_markup(scenario)
+        (graph, mapping), _ = prepare_custom_markup(scenario)
 
     elif (sys.argv[1]=="--test" and sys.argv[2]=="mem_anti"):
         scenario = {
@@ -253,8 +254,25 @@ if __name__ == '__main__':
                             'no_cf_list' : [["return_val exit"]],
                             'rel_kinds'  : set()}
                     }
-        graph, mapping = prepare_custom_markup(scenario)
+        # phase == frontend
+        (graph, mapping), working_dir = prepare_custom_markup(scenario)
+        prep_graph_file = os.path.join(working_dir, "prepr_graph.dot")
+        graph.write_raw(prep_graph_file)
 
+        # configure - move it to separate function
+        abs_path = os.path.join(os.getcwd(), ".." + os.sep + "front")
+        abs_path_core = os.path.join(abs_path, "build" + os.sep + "core")
+
+        # phase == core
+        def run_core(core_path, grammar=None):
+            print("Running core on file:", core_path)
+            result = subprocess.run(
+            [core_path, prep_graph_file, "1"], capture_output=True, text=True)
+            res_stdout = result.stdout
+            res_stderr = result.stderr
+            return res_stdout, res_stderr
+
+        print(run_core(abs_path_core))
 
     elif (sys.argv[1]=="--test" and sys.argv[2]=="interproc"):
        prepare_interproc_graph()
