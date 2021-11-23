@@ -257,12 +257,27 @@ if __name__ == '__main__':
         # phase == frontend
         (graph, mapping), working_dir = prepare_custom_markup(scenario)
         prep_graph_file = os.path.join(working_dir, "prepr_graph_input.txt")
-        def emit_txt_graph(path):
+        def emit_txt_graph(graph, path):
             with open(path,"w+") as f:
                 #TO DO: implement translation
-                pass
-            return path
-        emit_txt_graph(prep_graph_file)
+                nodes_list = [n. get_name() for n in graph.get_nodes()]
+                adj_list = []
+                for e in graph.get_edges():
+                    
+                    adj_list.append((nodes_list.index(e.get_source()), 
+                                    nodes_list.index(e.get_destination()), 
+                                    e.get_attributes()['label']))
+
+                f.write(str(len(nodes_list))+ "  " + str(len(adj_list)) +"\n")
+                for n in nodes_list:
+                    f.write(n + " ")
+                f.write("\n")
+                for e in adj_list:
+                    f.write(str(e[0])+ "  " + str(e[1]) + " " + str(e[2]) + "\n")
+
+            return path 
+
+        emit_txt_graph(graph, prep_graph_file)
 
         # configure - move it to separate function
         abs_path = os.path.join(os.getcwd(), ".." + os.sep + "front")
