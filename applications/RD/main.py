@@ -271,14 +271,19 @@ if __name__ == '__main__':
 
 
         def emit_txt_graph(graph, path):
+            def normalize_name(nm):
+                nm = nm.replace(" ", "_")
+                return nm[1:-1] if nm.startswith("\"") and nm.endswith("\"") else nm
+
             with open(path,"a+") as f:
                 #TO DO: implement translation
-                nodes_list = [n. get_name() for n in graph.get_nodes()]
+                nodes_list = [normalize_name(n.get_name()) for n in graph.get_nodes()]
+                
                 adj_list = []
-                for e in graph.get_edges():
-                    
-                    adj_list.append((nodes_list.index(e.get_source()), 
-                                    nodes_list.index(e.get_destination()), 
+                print("nodes:", nodes_list)
+                for e in graph.get_edges():     
+                    adj_list.append((nodes_list.index(normalize_name(e.get_source())), 
+                                    nodes_list.index(normalize_name(e.get_destination())), 
                                     e.get_attributes()['label']))
 
                 f.write(str(len(nodes_list))+ "  " + str(len(adj_list)) +"\n")
