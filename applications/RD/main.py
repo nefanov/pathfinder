@@ -6,6 +6,7 @@ import sys
 import subprocess
 from networkx.generators.social import les_miserables_graph
 import pydot
+from pyparsing.core import Empty
 
 # API paths
 current_path = os.path.dirname(os.path.abspath("."))
@@ -269,16 +270,25 @@ if __name__ == '__main__':
                 f.write("\n\n")
             return
 
+        def normalize_name(nm):
+            nm = nm.replace(" ", "_")
+            return nm[1:-1] if nm.startswith("\"") and nm.endswith("\"") else nm
+
+        def ba_list_text(strlist, nodes):
+            ret_list = []
+            for row in strlist:
+                ret_list.append(
+                    [
+                        normalize_name(nodes[int(row[i])]) for i in range(len(row))
+                    ]
+                    )
+            return ret_list
 
         def emit_txt_graph(graph, path):
-            def normalize_name(nm):
-                nm = nm.replace(" ", "_")
-                return nm[1:-1] if nm.startswith("\"") and nm.endswith("\"") else nm
 
             with open(path,"a+") as f:
                 #TO DO: implement translation
                 nodes_list = [normalize_name(n.get_name()) for n in graph.get_nodes()]
-                
                 adj_list = []
                 print("nodes:", nodes_list)
                 for e in graph.get_edges():     
@@ -293,9 +303,10 @@ if __name__ == '__main__':
                 for e in adj_list:
                     f.write(str(e[0])+ "  " + str(e[1]) + " " + str(e[2]) + "\n")
 
-            return path 
+            return path, nodes_list
+
         emit_grammar(path=prep_core_inp_file)
-        emit_txt_graph(graph, prep_core_inp_file)
+        _, nodes = emit_txt_graph(graph, prep_core_inp_file)
 
         # configure - move it to separate function
         abs_path = os.path.join(os.getcwd(), ".." + os.sep + "front")
@@ -310,7 +321,24 @@ if __name__ == '__main__':
             res_stderr = result.stderr
             return res_stdout, res_stderr
 
-        print(run_core(abs_path_core))
+        res_stdout, res_stderr=run_core(abs_path_core)
+        
+        # graph annotation
+        def process_core_output(s, graph=None):
+            strlist = s.split('\n')
+            strlist = [n.split(" ")[:-1] if n.split(" ")[-1] == "" else n.split(" ") for n in strlist]
+            strlist = [n  for n in strlist if len(n) >= 2]
+            # alternative: strlist = [n.split(" ") if n.split(" ")[-1] != "" for n in strlist]
+            
+            return strlist
+
+        res_out = process_core_output(res_stdout)
+        ba = ba_list_text(res_out, nodes)
+        pprint_path = ""
+        for entry in ba:
+            pprint_path += " --> ".join(entry) + "\n"
+        
+        print(pprint_path)
 
     elif (sys.argv[1]=="--test" and sys.argv[2]=="interproc"):
        prepare_interproc_graph()
