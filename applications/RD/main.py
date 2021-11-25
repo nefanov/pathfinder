@@ -363,7 +363,7 @@ if __name__ == '__main__':
                 except ValueError:
                     return False
                 return True
-
+        # TO DO: rewrite it more light-weightly
         for e in res_graph.get_edges():
             if res_graph.get_node(e.get_source())[0].get_style() == 'filled' and \
             res_graph.get_node(e.get_destination())[0].get_style() == 'filled' and sublist(ba, [normalize_name(e.get_source()),normalize_name(e.get_destination())]):
