@@ -267,7 +267,7 @@ if __name__ == '__main__':
 
         prep_core_inp_file = os.path.join(working_dir, "prepr_core_input.txt")
 
-        def emit_grammar(gr=[['S','z']], path="1.txt"):
+        def emit_grammar(gr=[['S','AB'],['A','b'],['B','c']], path="1.txt"):
             with open(path, "w") as f:
                 f.write("1\n")
                 f.write(str(len(gr))+"\n")
@@ -346,6 +346,32 @@ if __name__ == '__main__':
             pprint_path += " --> ".join(entry) + "\n"
         
         print(pprint_path)
+
+        # optionally: graph painting
+        nodes_set = graph.get_nodes()
+        res_graph = graph
+
+        for n in nodes_set:
+            if (normalize_name(n.get_name()) in [item for sublist in ba for item in sublist]):
+                n.set_color('lavender')
+                n.set_style('filled')
+
+        def sublist(lst1,lst2):
+            for item in lst2:
+                try:
+                    lst1.index(item)
+                except ValueError:
+                    return False
+                return True
+
+        for e in res_graph.get_edges():
+            if res_graph.get_node(e.get_source())[0].get_style() == 'filled' and \
+            res_graph.get_node(e.get_destination())[0].get_style() == 'filled' and sublist(ba, [normalize_name(e.get_source()),normalize_name(e.get_destination())]):
+
+                e.set_color('violet')
+        
+
+        res_graph.write_png(os.path.join (config["working_dir"],"detected_pathes_visualization.png"))
 
     elif (sys.argv[1]=="--test" and sys.argv[2]=="interproc"):
        prepare_interproc_graph()
