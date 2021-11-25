@@ -6,7 +6,6 @@ import sys
 import subprocess
 from networkx.generators.social import les_miserables_graph
 import pydot
-from pyparsing.core import Empty
 
 # API paths
 current_path = os.path.dirname(os.path.abspath("."))
@@ -235,6 +234,14 @@ if __name__ == '__main__':
         (graph, mapping), _ = prepare_custom_markup(scenario)
 
     elif (sys.argv[1]=="--test" and sys.argv[2]=="mem_anti"):
+        config = {
+            "working_dir" : os.path.join(current_path, "../front"),
+            "src" : "1.c",
+            "ir_dotfile" : "m.dot",
+            "ir_pic" : "pic25.png",
+            "ir_markup" : 'p_markup.png',
+        }
+
         scenario = {
                     'type':'flowlists',
                     'data':{'yes_df_list': [],
@@ -256,7 +263,7 @@ if __name__ == '__main__':
                             'rel_kinds'  : set()}
                     }
         # phase == frontend
-        (graph, mapping), working_dir = prepare_custom_markup(scenario)
+        (graph, mapping), working_dir = prepare_custom_markup(scenario, config)
 
         prep_core_inp_file = os.path.join(working_dir, "prepr_core_input.txt")
 
