@@ -4,7 +4,7 @@ from predicates import *
 import gram as gr
 
 
-def prepare_graph(graph_fn, outp_graph_fn, outp_plot, need_graph_save=False, need_plot=False, pattern_composer=None, specializer=None, verbose=True, scenario=None):
+def prepare_graph(graph_fn, outp_graph_fn, outp_plot, need_graph_save=False, need_plot=False, pattern_composer=None, specializer=None, verbose=False, scenario=None):
     inp_file = graph_fn if graph_fn else "mem.c.012t.cfg.dot"
     outp_pic = outp_plot if outp_plot else "g_out.png"
     outp_graph = outp_graph_fn if outp_graph_fn else "g_out.dot"
@@ -27,6 +27,8 @@ def prepare_graph(graph_fn, outp_graph_fn, outp_plot, need_graph_save=False, nee
     l_1 = list(set([p.label for p in flatten(P['yes_df_list']) + flatten(P['no_df_list'])]))
     l_2 = list(set([p for p in flatten(P['yes_cf_list'])]))
     l_3 = list(set([p for p in flatten(P['no_cf_list'])]))
+    if verbose:
+        print("DEBUG: function", __name__, "l 1-3", l_1,l_2,l_3)
     mapping = gr.make_gram_map(sorted
                                (l_1
                                 +

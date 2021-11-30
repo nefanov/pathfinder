@@ -197,7 +197,7 @@ def check_ref_dep_mem(self, l, r, type):
     if type['dst_type'] == "assign_aryphmetic_op":
         return l['left'] in [r['r_operand1'], r['r_operand2']]
     elif type['dst_type'] == "assign_function_call":
-        return False # now it is intraproc
+        return False   # now it is intraproc
 
     return depends_from(r['right'], l['left'])
 
@@ -258,7 +258,7 @@ if __name__ == '__main__':
                                                 params={"edge_style": {"color": "#f76d23"}})# parameters for edge visualizing
                                             ] 
                             ],
-                            'yes_cf_list': [["any if_cond", "if_cond any"]], #
+                            'yes_cf_list': [["any if_cond", "if_cond any",  "assign_function_call any", "any assign_function_call"]], #
                             'no_cf_list' : [["return_val exit"]],
                             'rel_kinds'  : set()}
                     }

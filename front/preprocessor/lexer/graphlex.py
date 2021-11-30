@@ -408,6 +408,8 @@ def markup_graph(graph, nodes, nld, pattern_composer=default_pattern_composer, s
 
 def markup_edges(graph=pydot.Graph(), mapping={}, verbose=False):
     edges = graph.get_edges()
+    if verbose:
+        print("DEBUG: function",__name__, ", mapping:", mapping)
     for e in edges:
         attr = e.get_attributes()
         previous_label = attr['label']
