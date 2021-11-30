@@ -203,8 +203,7 @@ def check_ref_dep_mem(self, l, r, type):
 
 # == predicate ==
 def check_dup_func(self, l, r, type):
-    print(l,r)
-    if type['src_type'] == type['dst_type'] == "assign_function_call" and l['func_name'] == r['func_name']:
+    if type['src_type'] == type['dst_type'] == "assign_function_call" and l['func_name'] == r['func_name'] and l['arguments'] == r['arguments']:
         if l['left'] != r['left']:
             return True
             # rewrite it more carefully (for certain nodes)
