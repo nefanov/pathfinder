@@ -111,7 +111,7 @@ def specialize_prev_mem_dep(graph, nodes, node_lex_dict, P):
 
         return label
 
-    for idx, p in enumerate(P):
+    for p in P:
         l_nodes_agg, r_nodes_agg = collect_nodes(p, nodes)
         for _n in l_nodes_agg:
             n = _n[0]
@@ -201,8 +201,14 @@ def check_ref_dep_mem(self, l, r, type):
 
     return depends_from(r['right'], l['left'])
 
-
-    return G
+# == predicate ==
+def check_dup_func(self, l, r, type):
+    print(l,r)
+    if type['src_type'] == type['dst_type'] == "assign_function_call" and l['func_name'] == r['func_name']:
+        if l['left'] != r['left']:
+            return True
+            # rewrite it more carefully (for certain nodes)
+    return False
 
 if __name__ == '__main__':
     if (len(sys.argv)<2 or (sys.argv[1] =="--test" and sys.argv[2]=="empty_labeling")):
@@ -226,6 +232,7 @@ if __name__ == '__main__':
                                                 label="DF_dep_from", # default label
                                                 params={"edge_style": {"color": "#f76d23"}})# parameters for edge visualizing
                                             ] 
+                                             
                             ],
                             'yes_cf_list': [["any if_cond", "if_cond any"]], #
                             'no_cf_list' : [["return_val exit"]],
@@ -244,10 +251,13 @@ if __name__ == '__main__':
 
         scenario = {
                     'type':'flowlists',
-                    'data':{'yes_df_list': [],
+                    'data':{'yes_df_list': [
+                                                
+                                            ],
                             'no_df_list' : 
                             [
-                                            [ # relation
+                                [ # relations for df no pattern #i
+                                             # relation
                                                 lexer.glex.Relation(
                                                 left={'type': "assign*"},right={'type': "assign*"}, # src and dst nodes of relation edge
                                                 predicate=check_ref_dep_mem, # function-specializer
@@ -256,7 +266,17 @@ if __name__ == '__main__':
                                                 },
                                                 label="DF_dep_from", # default label
                                                 params={"edge_style": {"color": "#f76d23"}})# parameters for edge visualizing
-                                            ] 
+                                                ,
+                                                lexer.glex.Relation(
+                                                left={'type': "assign_function_call"},right={'type': "assign_function_call"}, # src and dst nodes of relation edge
+                                                predicate = check_dup_func, # function-specializer
+                                                extra={"disable_labeling":
+                                                            "$label $src:left" # extra labeling fmt string
+                                                },
+                                                label="DF_dep_free", # default label
+                                                params={"edge_style": {"color": "#f00083"}})# parameters for edge visualizing
+                                ]
+                                             
                             ],
                             'yes_cf_list': [["any if_cond", "if_cond any",  "assign_function_call any", "any assign_function_call"]], #
                             'no_cf_list' : [["return_val exit"]],
