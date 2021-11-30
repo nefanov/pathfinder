@@ -264,6 +264,7 @@ if __name__ == '__main__':
                     }
         # phase == frontend
         (graph, mapping), working_dir = prepare_custom_markup(scenario, config)
+        print("Mapping:", mapping)
 
         prep_core_inp_file = os.path.join(working_dir, "prepr_core_input.txt")
 
