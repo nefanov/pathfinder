@@ -122,7 +122,7 @@ def specialize_prev_mem_dep(graph, nodes, node_lex_dict, P):
                 #lbl_r = "node2", graph.get_node(n2)[0].get_attributes()['label']
                 n2s = node_lex_dict[n2]['content']
                 if shortest_path_check(graph, n, n2):
-                    if p.predicate(n1s['format'], n2s['format'], {'src_type':_n[1]['type'], 'dst_type':_n2[1]['type']}):
+                    if p.predicate(n1s['format'], n2s['format'], {'src_type':_n[1]['type'], 'dst_type':_n2[1]['type']}) and n != n2:
                         #print("Predicate is true, ", lbl_l, lbl_r)
                         graph.add_edge(pydot.Edge(n,
                                     n2,
@@ -204,8 +204,8 @@ def check_ref_dep_mem(self, l, r, type):
 # == predicate ==
 def check_dup_func(self, l, r, type):
     if type['src_type'] == type['dst_type'] == "assign_function_call" and l['func_name'] == r['func_name'] and l['arguments'] == r['arguments']:
-        if l['left'] != r['left']:
-            return True
+        #if l['left'] != r['left']:
+        return True
             # rewrite it more carefully (for certain nodes)
     return False
 
