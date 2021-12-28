@@ -3,6 +3,10 @@ CFL-R-based software analysis tool
 # ResearchGate:
 1) [Modern formal languages theory based methods for software static analysis](https://www.researchgate.net/project/Modern-formal-languages-theory-based-methods-for-software-static-analysis)
 
+# Reference:
+If you use Pathfinder, please, cite this article:
+Н. Н. Ефанов, А. Р. Федоров, Э. В. Шамбер, А. А. Щербаков, А. П. Елесина Pathfinder: статический анализатор программ на базе решения задач достижимости на графах в КС-ограничениях // Труды МФТИ, Том 13,  №4, 2021, сс 14-29.
+
 # Requirements
 * GCC 9.3.0
 * CMAKE 3.16.3
