@@ -15,8 +15,6 @@ N. Efanov, S.Efimov // Pathfinder: overview of the tool, approach & applications
 ## ResearchGate:
 1) [Modern formal languages theory based methods for software static analysis](https://www.researchgate.net/project/Modern-formal-languages-theory-based-methods-for-software-static-analysis)
 
-https://drive.google.com/file/d/1bEjzNo4M-ER4jznoXGKloXfuwJeKLXC2/view
-
 # Requirements
 * GCC 9.3.0
 * CMAKE 3.16.3
