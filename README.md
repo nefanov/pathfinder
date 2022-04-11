@@ -9,6 +9,7 @@ If you use Pathfinder, please, cite this article:
 ## Reports, talks:
 
 Apr. 2022:
+
 N. Efanov, S.Efimov // Pathfinder: overview of the tool, approach & applications. YC Seminar, SPbSU: https://drive.google.com/file/d/1bEjzNo4M-ER4jznoXGKloXfuwJeKLXC2/view
 
 ## ResearchGate:
