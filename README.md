@@ -12,6 +12,9 @@ Apr. 2022:
 
 N. Efanov, S.Efimov // Pathfinder: overview of the tool, approach & applications. YC Seminar, SPbSU: https://drive.google.com/file/d/1bEjzNo4M-ER4jznoXGKloXfuwJeKLXC2/view
 
+N. Efanov, S.Efimov // CFL-R approach for code static analysis. Techtalk on KMTT Seminar, MIPT: 
+https://youtu.be/EDp_dERI1GM
+
 ## ResearchGate:
 1) [Modern formal languages theory based methods for software static analysis](https://www.researchgate.net/project/Modern-formal-languages-theory-based-methods-for-software-static-analysis)
 
