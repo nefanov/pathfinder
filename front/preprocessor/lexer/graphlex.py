@@ -262,7 +262,9 @@ def lex_graph(inp_file, verbose=False):
     tr_file = inp_file
     graph = load_graph(tr_file)
     node_lex_dict = {}
-
+    #
+    ''' nodes lexicalizing: '''
+    #
     def make_lex_node(n):
         if n.get_name() in node_lex_dict.keys():
             return node_lex_dict[n.get_name()]
@@ -344,7 +346,7 @@ def lex_graph(inp_file, verbose=False):
                 # check type and save fmt parameters only if need. Ignored for types "exit","entry", etc
 
                 if verbose:
-                    print("PATTERN:\n", l)
+                    print("Node token:", l)
                     print("FORMAT:\n", r['format'], "\n---------------")
                 node_lex_dict.update({n.get_name():{'pattern':l,'content':r}})
                 pass
@@ -356,12 +358,14 @@ def lex_graph(inp_file, verbose=False):
                 node_lex_dict.update({n.get_name(): {'pattern': "none", 'content': None}})
 
         return node_lex_dict[n.get_name()], nodes
-
+    #
+    ''' edges lexicalizing: '''
+    #
     for e in graph.get_edges():
         src, dst = edge_get_nodes(graph, e)
         make_lex_node(src)
         make_lex_node(dst)
-        e.set('label', node_lex_dict[src.get_name()]['pattern']+" "+node_lex_dict[dst.get_name()]['pattern'])
+        e.set('label', node_lex_dict[src.get_name()]['pattern']+" "+node_lex_dict[dst.get_name()]['pattern']) # <EDGE TOKEN> = <SRC TOKEN> _SPACE_ <DST TOKEN>
     return graph, nodes, node_lex_dict
 
 #=======================================GRAPH LEXICALIZING: END===========================================
