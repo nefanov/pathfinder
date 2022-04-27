@@ -16,7 +16,7 @@ class Relation:
         self.params = copy.deepcopy(params)
 
 
-#===================================================================================
+#===============================REGEXPS_FOR_TOKENS_GETTING====================================
 
 # simple entities:
 
@@ -24,6 +24,7 @@ identifirer = r'\*?[a-zA-Z_$][a-zA-Z_$0-9]*(\[.*\])*\.*|.*D\.\d+' #r'\*?[a-zA-Z_
 numeric_const = r'\d+(\.\d+)?'
 aryphmetical_operation = r'\%|\/|\+|\-|\*'
 typecast = r'\(.*\)'
+
 # complete common lex patterns
 
 if_cond = re.compile(
@@ -58,7 +59,10 @@ assign_string_const = re.compile(
     re.VERBOSE
 )
 
-assign_function_call = re.compile(r'(('+identifirer+r')\s?=?\s+)?([a-zA-Z_{1}][a-zA-Z0-9_]*)\s*\((.*?)\);.*', re.VERBOSE)
+assign_function_call = re.compile(
+    r'(('+identifirer+r')\s?=?\s+)?([a-zA-Z_{1}][a-zA-Z0-9_]*)\s*\((.*?)\);.*',
+    re.VERBOSE
+)
 
 assign_aryphmetic_op = re.compile(
     r'('+identifirer+r')\s+='
@@ -96,7 +100,9 @@ goto = re.compile(
     re.VERBOSE
 )
 
-#===================================================================================
+#===============================REGEXPS_FOR_TOKENS_GETTING: END====================================
+
+#===============================LEXEM ATTRIBUTES DICTIONARIES======================================
 
 lex = dict()
 
@@ -201,8 +207,8 @@ lex['entry'] = {
     'format':{}
 }
 
-#===================================================================================
-
+#===============================LEXEM ATTRIBUTES DICTIONARIES: END===================================
+#=========================================GRAPH UTILITIES============================================
 nodes = {}
 for k in lex.keys():
     nodes.update({k:[]})
@@ -224,12 +230,16 @@ def edge_get_nodes_labels(G, e):
     dst_label = G.get_node(e.get_destination())[0].get_attributes()['label']
     return src_label, dst_label
 
-
 def edge_get_nodes(G, e):
     src = G.get_node(e.get_source())[0]
     dst = G.get_node(e.get_destination())[0]
     return src, dst
 
+def shortest_path_check(graph, src, dst):
+    nx_graph = nx.nx_pydot.from_pydot(graph)
+    if nx.shortest_path(nx_graph, src, dst):
+        return True
+    return False
 
 def trim_prefix(fn):
     file1 = open(fn, 'r')
@@ -245,7 +255,8 @@ def trim_prefix(fn):
     file2.close()
     file1.close()
     return fn + "_prefix_trimmed"
-
+#=========================================GRAPH UTILITIES: END============================================
+#==========================================GRAPH LEXICALIZING=============================================
 
 def lex_graph(inp_file, verbose=False):
     tr_file = inp_file
@@ -353,14 +364,9 @@ def lex_graph(inp_file, verbose=False):
         e.set('label', node_lex_dict[src.get_name()]['pattern']+" "+node_lex_dict[dst.get_name()]['pattern'])
     return graph, nodes, node_lex_dict
 
+#=======================================GRAPH LEXICALIZING: END===========================================
 
-def shortest_path_check(graph, src, dst):
-    nx_graph = nx.nx_pydot.from_pydot(graph)
-    if nx.shortest_path(nx_graph, src, dst):
-        return True
-    return False
-
-
+#==========================PATTERNS COMPOSER, GRAPH SPECIALIZER, MARKUP EDGES=============================
 '''
 default_pattern_composer-- now only fill fields, no specialize (or maybe later)
 P - specializing by and for some pattern
@@ -392,8 +398,6 @@ def specialize_Dflow(graph, nodes, node_lex_dict, P):
                                     style='dashed',
                                     label=p.label))
     return graph
-
-
 
 
 def markup_graph(graph, nodes, nld, pattern_composer=default_pattern_composer, scenario=None, specializer=default_specializer):
@@ -428,3 +432,5 @@ def markup_edges(graph=pydot.Graph(), mapping={}, verbose=False):
             print("Edge remap:", e.get_source(), e.get_destination, previous_label, e.get_attributes()['label'])
 
     return graph
+
+#===============================PATTERNS COMPOSER, GRAPH SPECIALIZER, MARKUP EDGES: END======================================
