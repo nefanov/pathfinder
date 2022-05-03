@@ -27,14 +27,8 @@ def prepare_graph(graph_fn, outp_graph_fn, outp_plot, need_graph_save=False, nee
     l_2 = list(set([p for p in flatten(P['yes_cf_list'])]))
     l_3 = list(set([p for p in flatten(P['no_cf_list'])]))
     if verbose:
-        print("DEBUG: function", __name__, "l 1-3", l_1,l_2,l_3)
-    mapping = gr.make_gram_map(sorted
-                               (l_1
-                                +
-                                l_2
-                                +
-                                l_3
-                                ))
+        print("DEBUG: function", __name__, "l 1-3", l_1, l_2, l_3)
+    mapping = gr.make_gram_map(sorted(l_1 + l_2 + l_3))
     # markup edges by terminal alphabet
     graph = glex.markup_edges(graph, mapping)
     if verbose:
@@ -64,6 +58,12 @@ def prepare_grammar_files(graph, G_list=[], verbose=False, file_name_prefix="gra
     if verbose:
         print("Generated grammar input files for core:\n", files_list)
     return
+
+
+def add_manual_node_token(token_name, regexp, handler):
+    glex.manual_lex_tokens += [token_name]
+    glex.lex.update({token_name:
+                         {'exp': regexp, 'format': handler}})
 
 
 def test_1():
