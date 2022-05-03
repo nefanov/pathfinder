@@ -26,6 +26,9 @@ aryphmetical_operation = r'\%|\/|\+|\-|\*'
 typecast = r'\(.*\)'
 
 # complete common lex patterns
+'''
+default lexer expressions
+'''
 
 if_cond = re.compile(
     r'.*if\s+\(\s*('+identifirer+r')' # left side of header
@@ -105,8 +108,6 @@ goto = re.compile(
 #===============================LEXEM ATTRIBUTES DICTIONARIES======================================
 
 lex = dict()
-
-
 
 lex['if_cond'] = {
     'exp':if_cond,
@@ -258,6 +259,8 @@ def trim_prefix(fn):
 #=========================================GRAPH UTILITIES: END============================================
 #==========================================GRAPH LEXICALIZING=============================================
 
+manual_lex_tokens = []
+
 def lex_graph(inp_file, verbose=False):
     tr_file = inp_file
     graph = load_graph(tr_file)
@@ -277,7 +280,10 @@ def lex_graph(inp_file, verbose=False):
 
             res = re.search(r['exp'], label)
             if res:
-                if l == "if_cond":
+                if l in manual_lex_tokens:
+                    r['format'].update(lex[l]['format'](res))
+
+                elif l == "if_cond":
                     r['format'].update({
                         'left': res.group(1),
                         'comp_op': res.group(2),
@@ -343,6 +349,7 @@ def lex_graph(inp_file, verbose=False):
 
                 elif l == "return_val":
                     r['format'].update({'retval':0})
+
                 # check type and save fmt parameters only if need. Ignored for types "exit","entry", etc
 
                 if verbose:

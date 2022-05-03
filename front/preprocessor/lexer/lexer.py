@@ -1,6 +1,5 @@
-import json
+import re
 import graphlex as glex
-from predicates import *
 import gram as gr
 
 
@@ -65,3 +64,25 @@ def prepare_grammar_files(graph, G_list=[], verbose=False, file_name_prefix="gra
     if verbose:
         print("Generated grammar input files for core:\n", files_list)
     return
+
+
+def test_1():
+    print("Lexer Test 1: add custom lex token")
+    t_name = "Extra"
+
+    def func(res):
+        return {'left': res.group(1),'right': res.group(3),}
+
+    reg = re.compile(
+    r'('+glex.identifirer+r')\s+='
+    r'\s+('+glex.numeric_const+r');.*',
+    re.VERBOSE)
+    glex.manual_lex_tokens += [t_name]
+    glex.lex.update({t_name:
+                         {'exp':reg, 'format':func}})
+    teststr = "A = 5;"
+    print(t_name, glex.lex[t_name]["format"](re.search(reg, teststr)))
+
+
+if __name__ == '__main__':
+    test_1()
