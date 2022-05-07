@@ -46,7 +46,7 @@ from os import path, access, R_OK
 from networkx.drawing.nx_pydot import read_dot
 
 
-def detect(fn=sys.argv[1], only_shortest=True, print_labels=True):
+def detect(fn=sys.argv[1] if len(sys.argv)>1 else "1.dot", only_shortest=True, print_labels=True):
     # read in the specified file, create a networkx DiGraph
     G = nx.DiGraph(read_dot(fn))
     C = nx.simple_cycles(G)

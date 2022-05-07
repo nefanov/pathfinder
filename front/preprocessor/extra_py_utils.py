@@ -2,7 +2,7 @@ import re
 import os, sys
 import pydot
 
-import lexer
+from lexer import graphlex
 
 def highlight_node_seq(G, seq, color='black'):
 	for idx, n in enumerate(seq[:-1]):
@@ -28,7 +28,7 @@ def get_function_args(arg_str):
 
 
 def parse_function_call_args(item):
-    if item['exp'] == lexer.glex.assign_function_call:
+    if item['exp'] == graphlex.assign_function_call:
         arg_list = get_function_args(item['format']['arguments'])
         return arg_list
     return None
@@ -160,7 +160,7 @@ def prepare_interproc_graph_var_trans(g, def_table, verbose=False, rm_direct_cal
 		dst = g.get_node(dst_n)[0]
 		src_label = src.get_attributes()['label'].replace("\\", "")[2:]
 		dst_label = dst.get_attributes()['label'].replace("\\", "")[2:]
-		src_match = re.search(lexer.glex.assign_function_call, src_label)
+		src_match = re.search(graphlex.assign_function_call, src_label)
 		dst_match = re.search(r'.*NTRY.*', dst_label)
 
 
@@ -172,7 +172,7 @@ def prepare_interproc_graph_var_trans(g, def_table, verbose=False, rm_direct_cal
 
 		l = 'assign_function_call'
 		r = {
-			'exp': lexer.glex.assign_function_call,'format': {
+			'exp': graphlex.assign_function_call,'format': {
 				'left': "",
 				'func_name': "",
 				'arguments': "",
@@ -201,7 +201,6 @@ if __name__ == '__main__':
 	current_path = os.path.dirname(os.path.abspath("."))
 	sys.path.append(os.path.join(current_path, "./preprocessor/lexer"))
 
-	import lexer
 	import pydot
 
 	def_table = func_table(sys.argv[1])
