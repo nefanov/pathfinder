@@ -24,9 +24,11 @@ def editor_loop(cmd):
                 r_pedantic = re.split(r'\.', r)
                 if 'repeatable' in r_pedantic:
                     rargs[i]['repeatable'] = True
-                    right[i] = r_pedantic[0]
+                if 'optional' in r_pedantic:
+                    rargs[i]['optional'] = True
+                right[i] = r_pedantic[0]
             rl = Rule(Term(left),
-                         [Term(x, repeatable=rargs[i]['repeatable']) for i, x in enumerate(right)],
+                         [Term(x, repeatable=rargs[i]['repeatable'], optional=rargs[i]['optional']) for i, x in enumerate(right)],
                       tag="manual").make_repeatable()
             print(rl)
             G.P += rl

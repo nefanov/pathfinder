@@ -60,7 +60,7 @@ class Rule:
             if rule.rhs[idx].name == orig_name and last_initial_rule_idx >= i:
               rule.rhs[idx].name = new_term_name
               if term.repeat_limit == -1:
-                if optional:
+                if optional and term.optional:
                   rl.append(Rule(t,[t,Term(orig_name)]))
                   rl.append(Rule(t,[Term("any any")]))
                 else:
@@ -73,7 +73,7 @@ class Rule:
                   rl.append(Rule(t2,[Term("any any")]))
                   rl.append(Rule(t3,[Term("any any")]))
               else:
-                if optional:
+                if optional and term.optional:
                   last_term = rule.rhs[idx]
                   temp_name = rule.rhs[idx]
                   for i in range(term.repeat_limit):
