@@ -4,6 +4,19 @@ import pydot
 
 from lexer import graphlex
 
+
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+
 def highlight_node_seq(G, seq, color='black'):
 	for idx, n in enumerate(seq[:-1]):
 		N1 = G.get_node(n)
