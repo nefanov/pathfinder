@@ -20,21 +20,29 @@ def editor_loop(cmd):
             left, right = (parsed[arrow-1], parsed[arrow+1:])
             rargs = []
             for i, r in enumerate(right):
-                rargs += [{'repeatable':False, 'optional':False}]
-                r_pedantic = re.split(r'\.', r)
+                rargs += [{'repeatable': False, 'optional': False, 'repeat_limit': -1}]
+                r_pedantic = re.split(r'\.|=', r)
                 if 'repeatable' in r_pedantic:
                     rargs[i]['repeatable'] = True
                 if 'optional' in r_pedantic:
                     rargs[i]['optional'] = True
+                try:
+                    rargs[i]['repeat_limit'] = int(r_pedantic[r_pedantic.index("repeat_limit")+1])
+                except:
+                    pass
+
                 right[i] = r_pedantic[0]
             rl = Rule(Term(left),
-                         [Term(x, repeatable=rargs[i]['repeatable'], optional=rargs[i]['optional']) for i, x in enumerate(right)],
+                         [Term(x, repeatable=rargs[i]['repeatable'],
+                               optional=rargs[i]['optional'],
+                               repeat_limit=rargs[i]['repeat_limit']) for i, x in enumerate(right)],
                       tag="manual").make_repeatable()
-            print(rl)
             G.P += rl
             G.print()
         elif parsed[0] == "pr" or (parsed[0] == "print"):
             G.print()
+        elif parsed[0] in ["exit","q"]:
+            return
         else:
             print(cmd, ": unrecognized command")
 

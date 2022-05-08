@@ -73,19 +73,17 @@ class Rule:
                   rl.append(Rule(t2,[Term("any any")]))
                   rl.append(Rule(t3,[Term("any any")]))
               else:
-                if optional and term.optional:
-                  last_term = rule.rhs[idx]
-                  temp_name = rule.rhs[idx]
-                  for i in range(term.repeat_limit):
-                    temp_name = term.name + '_' + inc_unique_suffix()
-                    temp_t = Term(temp_name)
-                    rl.append(Rule(last_term, [temp_t, Term(orig_name)]))
-                    last_term = temp_t
-                  rl.append(Rule(last_term, [Term("any any")]))
-                else:
-                  pass
-                  #TODO: non-optional [1,n]
-          except:
+                if term.optional:
+                  rl.append(Rule(Term(new_term_name),[Term("any any")]))
+                last_term = rule.rhs[idx]
+                for i in range(term.repeat_limit):
+                  temp_name = term.name + '_' + inc_unique_suffix()
+                  temp_t = Term(temp_name)
+                  rl.append(Rule(last_term, [temp_t, Term(orig_name)]))
+                  last_term = temp_t
+                rl.append(Rule(last_term, [Term("any any")]))
+
+          except Exception as e:
             pass
         term.repeatable = False
     return rl
