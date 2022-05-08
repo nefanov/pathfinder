@@ -12,6 +12,7 @@ current_path = os.path.dirname(os.path.abspath("."))
 sys.path.append(os.path.join(current_path, "preprocessor"))
 sys.path.append(os.path.join(current_path, (".." + os.sep)*2 + "third-party"))
 
+
 def prepare_custom_markup(scenario=None,
                           spec=mem_spec.specialize_prev_mem_dep,
                           need_interproc_pass=True,
@@ -51,9 +52,8 @@ def prepare_custom_markup(scenario=None,
     os.system("sed -i '$ d' " + ir_dotfile +" && sync "+ ir_dotfile)
     os.system("rm " + src + ".*t.*")
     os.system("echo Picture generating from dotfile " + ir_dotfile + ", saving to: " + ir_pic)
-
     os.system("dot -Tpng " + ir_dotfile + " -o " + ir_pic)
-    # os.system('mv ' + 'front' + os.sep + src + '.\\* '+ wdir)
+
     in_graph = os.path.join(wdir, ir_dotfile)
     if need_interproc_pass:
         g = pydot.graph_from_dot_file(in_graph)
@@ -73,16 +73,20 @@ def prepare_custom_markup(scenario=None,
                             scenario=scenario), working_dir
 
 
-def preprocess_test1():
+def emit_txt_grammar(gr=[['S', 'AB'], ['A', 'b'], ['B', 'c']], path="1.txt"):
+    with open(path, "w+") as f:
+        f.write("1\n")
+        f.write(str(len(gr)) + "\n")
+        for item in gr:
+            for i in item:
+                f.write(i + " ")
+            f.write("\n")
+    return
+
+
+def preprocess_test1(conf):
     print("Preprocessor test #1: default markup")
-    conf = {
-            "working_dir" : os.path.join(current_path, ".." + os.sep + "front" + os.sep + "tmp"),
-            "src" : "1.c",
-            "ir_dotfile" : "m.dot",
-            "ir_pic" : "pic_ir_test_1.png",
-            "ir_markup" : 'p_markup.png',
-            "SSA_MODE" : "Y",
-        }
+
     if not os.path.exists(conf["working_dir"]):
         os.makedirs(conf["working_dir"])
         f = open(conf["working_dir"]+ os.sep + "1.c","w+")
@@ -93,5 +97,21 @@ def preprocess_test1():
     print(mapping, working_dir)
 
 
+def preprocess_test2(conf):
+    print("preprocess_test2")
+    emit_txt_grammar(path=conf["working_dir"] + os.sep + "gramm_test1.txt")
+    with open(conf["working_dir"] + os.sep + "gramm_test1.txt", "r") as f:
+        print(f.readlines())
+
+
 if __name__ == '__main__':
-    preprocess_test1()
+    conf = {
+        "working_dir": os.path.join(current_path, ".." + os.sep + "front" + os.sep + "tmp"),
+        "src": "1.c",
+        "ir_dotfile": "m.dot",
+        "ir_pic": "pic_ir_test_1.png",
+        "ir_markup": 'p_markup.png',
+        "SSA_MODE": "Y",
+    }
+    preprocess_test1(conf)
+    preprocess_test2(conf)
