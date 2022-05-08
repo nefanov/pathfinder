@@ -84,6 +84,27 @@ def emit_txt_grammar(gr=[['S', 'AB'], ['A', 'b'], ['B', 'c']], path="1.txt"):
     return
 
 
+def emit_txt_graph(graph, path):
+    with open(path, "a+") as f:
+        # TO DO: implement translation
+        nodes_list = [extra_py_utils.normalize_name(n.get_name()) for n in graph.get_nodes()]
+        adj_list = []
+        print("nodes:", nodes_list)
+        for e in graph.get_edges():
+            adj_list.append((nodes_list.index(extra_py_utils.normalize_name(e.get_source())),
+                             nodes_list.index(extra_py_utils.normalize_name(e.get_destination())),
+                             e.get_attributes()['label']))
+
+        f.write(str(len(nodes_list)) + "  " + str(len(adj_list)) + "\n")
+        for n in nodes_list:
+            f.write(n + " ")
+        f.write("\n")
+        for e in adj_list:
+            f.write(str(e[0]) + "  " + str(e[1]) + " " + str(e[2]) + "\n")
+
+    return path, nodes_list
+
+
 def preprocess_test1(conf):
     print("Preprocessor test #1: default markup")
 
@@ -94,6 +115,9 @@ def preprocess_test1(conf):
         f.close()
 
     (graph, mapping), working_dir = prepare_custom_markup(config=conf)
+    emit_txt_graph(graph,conf["working_dir"]+ os.sep + "textgraph.txt")
+    with open(conf["working_dir"]+ os.sep + "textgraph.txt", "r") as f:
+        print(f.readlines())
     print(mapping, working_dir)
 
 

@@ -22,6 +22,12 @@ def highlight_node_seq(G, seq, color='black'):
 		#G.set_node_style(N2[0], style='bold')
 	return G
 
+
+def normalize_name(nm):
+	nm = nm.replace(" ", "_")
+	return nm[1:-1] if nm.startswith("\"") and nm.endswith("\"") else nm
+
+
 def get_function_args(arg_str):
     spl = arg_str.split(",")
     return spl
