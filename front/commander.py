@@ -9,13 +9,27 @@ def editor_loop(cmd):
     while cmd != "exit":
         cmd = input("\N{ESC}[32mpathfinder:\N{ESC}[33mgrammar editor\u001b[0m>>")
         parsed = re.split(r'[\s,]+', cmd)
-        print(parsed)
         if parsed in ["help", "h"]:
             print("Grammar editor help: TO DO")
-        elif parsed[0]=="ar" or (parsed[0] == "add" and parsed[1] == "rule"):
-            arrow = parsed.index("->")
-            left , right = (parsed[arrow-1], parsed[arrow+1:])
-            G.P += [Rule(Term(left), [Term(x) for x in right], tag="manual")]
+        elif parsed[0] == "ar" or (parsed[0] == "add" and parsed[1] == "rule"):
+            try:
+                arrow = parsed.index("->")
+            except:
+                print(cmd, "cmd wrong format")
+                continue
+            left, right = (parsed[arrow-1], parsed[arrow+1:])
+            rargs = []
+            for i, r in enumerate(right):
+                rargs += [{'repeatable':False, 'optional':False}]
+                r_pedantic = re.split(r'\.', r)
+                if 'repeatable' in r_pedantic:
+                    rargs[i]['repeatable'] = True
+                    right[i] = r_pedantic[0]
+            rl = Rule(Term(left),
+                         [Term(x, repeatable=rargs[i]['repeatable']) for i, x in enumerate(right)],
+                      tag="manual").make_repeatable()
+            print(rl)
+            G.P += rl
             G.print()
         elif parsed[0] == "pr" or (parsed[0] == "print"):
             G.print()
@@ -58,7 +72,7 @@ def main_loop(cmd):
                 pass
             elif "dump" in cmd:
                 print("lol")
-        elif cmd.startswith("editor"):
+        elif cmd in ["editor","e"]:
             editor_loop(cmd)
         elif cmd.startswith("preprocessor"):
             preprocessor_loop(cmd)
