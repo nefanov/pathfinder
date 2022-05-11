@@ -1,4 +1,6 @@
 from tabulate import tabulate
+import copy
+
 TOKEN_LIST = ["any any","any assign_const"]
 
 index = 0;
@@ -6,6 +8,25 @@ def inc_unique_suffix():
   global index
   index += 1
   return str(index)
+
+class Ckpt:
+  def __init__(self, stack_limit=5):
+    self.stack=[]
+    self.limit=stack_limit
+
+  def push(self, item):
+    self.stack.append(copy.deepcopy(item))
+    if len(self.stack) >= self.limit:
+      self.stack = self.stack[1:]
+
+  def pop(self):
+    if len(self.stack) > 0:
+      return self.stack.pop()
+    return None
+
+  def set_limit(self, l):
+    self.limit=l
+
 
 class Term: # for terminal and non-terminal symbols
   def __init__(self, N="A", repeatable=False, optional=False, repeat_limit=-1):
@@ -96,6 +117,7 @@ class Grammar:
   def __init__(self, from_list=[]):
     self.P = list() + from_list
     pass
+
   
   def new_sync_term_rule(self, left_part=Term("A"), lbr=Term("a"), rbr=Term("b"),
                          interrelation="==", optional=True, between=[

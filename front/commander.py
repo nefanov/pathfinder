@@ -6,6 +6,7 @@ import re
 
 def editor_loop(cmd):
     G = Grammar()
+    ckpt_storage = Ckpt()
     while cmd != "exit":
         cmd = input("\N{ESC}[32mpathfinder:\N{ESC}[33mgrammar editor\u001b[0m>>")
         parsed = re.split(r'[\s,]+', cmd)
@@ -43,6 +44,15 @@ def editor_loop(cmd):
             G.print()
         elif parsed[0] in ["exit","q"]:
             return
+        elif parsed[0] in ['ckpt', 'checkpoint']:
+            ckpt_storage.push(G)
+        elif parsed[0] in ['rstr', 'restore']:
+            gt = ckpt_storage.pop()
+            if gt:
+                G = gt
+                G.print()
+        elif parsed[0] in ['pg', 'print']:
+            G.print()
         else:
             print(cmd, ": unrecognized command")
 
