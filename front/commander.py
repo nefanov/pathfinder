@@ -40,22 +40,37 @@ def editor_loop(cmd):
                       tag="manual").make_repeatable()
             G.P += rl
             G.print()
+            ckpt_storage.push(G)
         elif parsed[0] == "pr" or (parsed[0] == "print"):
             G.print()
+        elif parsed[0] in ["rm", "remove"]:
+            G.P.pop(int(parsed[1]))
+            G.print()
+            ckpt_storage.push(G)
         elif parsed[0] in ["exit","q"]:
             return
         elif parsed[0] in ['ckpt', 'checkpoint']:
             ckpt_storage.push(G)
-        elif parsed[0] in ['rstr', 'restore']:
+        elif parsed[0] in ['rstr', 'restore', 'undo', 'u']:
             gt = ckpt_storage.pop()
             if gt:
                 G = gt
                 G.print()
+        elif parsed[0] in ['u', 'undo']:
+            _ = ckpt_storage.pop()
+            gt = ckpt_storage.pop()
+            if gt:
+                G = gt
+                G.print()
+        elif parsed[0] in ['dcs']:
+            for i, item in enumerate(ckpt_storage.stack):
+                print("----------- Grammar checkpoint", i, "-----------")
+                item.print()
+            print("------ Grammar checkpoint stack bottom -------")
         elif parsed[0] in ['pg', 'print']:
             G.print()
         else:
             print(cmd, ": unrecognized command")
-
 
 def preprocessor_loop(cmd):
     while cmd != "exit":
