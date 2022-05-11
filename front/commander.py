@@ -10,8 +10,19 @@ def editor_loop(cmd):
     while cmd != "exit":
         cmd = input("\N{ESC}[32mpathfinder:\N{ESC}[33mgrammar editor\u001b[0m>>")
         parsed = re.split(r'[\s,]+', cmd)
-        if parsed in ["help", "h"]:
-            print("Grammar editor help: TO DO")
+        if parsed[0] in ["help", "h"]:
+            print("Grammar editor help: InProgress")
+            print("Commands:")
+            print("\t(ar)\tadd rule LEFTSIDE -> RIGHTSIDE -- add rule")
+            print("\t(rm)\tremove N -- remove grammar rule number N")
+            print("\t(u)\tundo -- backtrack to previous grammar snapshot")
+            print("\t(dcs)\t -- dump grammar checkpoints")
+            print("\t(ckpt)\tcheckpoint -- forcely make grammar checkpoint")
+            print("\t(rstr)\trestore -- forcely pop grammar checkpoint")
+            print("\t(f,fin)\tfinalize RULENUM1 RULENUM2 .. RULENUMK -- finalize grammar as grammar for derivation of"
+                  " sentencial form 'RULENUM1,RULENUM2,...,RULENUMK'")
+            print("\t(q)\texit -- exit")
+
         elif parsed[0] == "ar" or (parsed[0] == "add" and parsed[1] == "rule"):
             try:
                 arrow = parsed.index("->")
@@ -47,6 +58,11 @@ def editor_loop(cmd):
             G.P.pop(int(parsed[1]))
             G.print()
             ckpt_storage.push(G)
+        elif parsed[0] in ["finalize", "fin", "f"]:
+            bottom = [G.P[(int)(p)] for p in parsed[1:]]
+            G.finalize(sequence=bottom)
+            print("------- Finalized Grammar for bottom-up from", " ".join([str(x) for x in bottom]) + " -------")
+            G.print()
         elif parsed[0] in ["exit","q"]:
             return
         elif parsed[0] in ['ckpt', 'checkpoint']:
