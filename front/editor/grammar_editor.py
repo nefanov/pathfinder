@@ -118,6 +118,13 @@ class Grammar:
     self.P = list() + from_list
     pass
 
+  def save(self, path, replace_spaces=False):
+    with open(path, 'w+') as f:
+      strings = []
+      for r in self.P:
+        strings.append(r.lhs.name + " " + " ".join([rs.name.replace(" ", "_") if replace_spaces else rs.name for
+                                                    rs in r.rhs ])+"\n")
+      f.writelines(strings)
   
   def new_sync_term_rule(self, left_part=Term("A"), lbr=Term("a"), rbr=Term("b"),
                          interrelation="==", optional=True, between=[

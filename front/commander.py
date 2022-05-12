@@ -88,6 +88,14 @@ def editor_loop(cmd, ex_list=None):
             print("------ Grammar checkpoint stack bottom -------")
         elif parsed[0] in ['pg', 'print']:
             G.print()
+        elif parsed[0] in ['sg', 'save']:
+            replace_spaces = False
+            try:
+                replace_spaces = True if parsed[2] == "spaces-fix" else False
+            except:
+                pass
+            G.save(parsed[1], replace_spaces=replace_spaces)
+
         else:
             print(cmd, ": unrecognized command")
 
