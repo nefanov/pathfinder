@@ -3,6 +3,7 @@ from preprocessor import *
 from editor.grammar_editor import *
 import re
 
+config = {}
 
 def editor_loop(cmd, ex_list=None):
     G = Grammar()
@@ -132,11 +133,17 @@ def main_loop(cmd, ex_list=None):
             cmd = input("\N{ESC}[32mpathfinder\u001b[0m>>")
         else:
             cmd = ex_list.pop(0)
+
         if cmd.startswith("config"):
-            if "load" in cmd:
+            parsed = re.split(r'[\s,]+', cmd)
+            print(parsed)
+            if "load" in parsed:
                 pass
-            elif "dump" in cmd:
-                print("lol")
+            elif "dump" in parsed:
+                print("------- Config ------\n", config)
+            elif parsed[1] == "var":
+                spl_parsed = parsed[2].split('=')
+                config[spl_parsed[0]] = spl_parsed[1]
         elif cmd in ["editor","e"]:
             editor_loop(cmd, ex_list)
         elif cmd.startswith("preprocessor"):

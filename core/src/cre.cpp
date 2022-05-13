@@ -14,16 +14,18 @@ int check(int& initial, std::vector<std::string>& a, std::string b)
     return a.size();
 }
 
-int input_rules(int& initial, std::vector <rule>& eps_rules, std::vector <std::vector<int>>& lol, std::ifstream& fin, std::vector <std::string>& nonterminals, std::vector <rule>& rules)
-{
+int input_rules(int& initial, std::vector <rule>& eps_rules, std::vector <std::vector<int>>& lol,
+                std::ifstream& fin,
+                std::vector <std::string>& nonterminals,
+                std::vector <rule>& rules) {
     std::string left, right;
     fin >> left >> right;
-    int num = right.size();
+    int r_size = right.size();
     if (right.size() != 2 && right.size() != 1) {
         std::cout << "right.size() != 2 && right.size() != 1" << std::endl;
         return -1;
     }
-    if (num == 1) {
+    if (r_size == 1) {
         int FLAG = check(initial, nonterminals, left);
         if (FLAG == nonterminals.size())
             nonterminals.push_back(left);
@@ -32,9 +34,7 @@ int input_rules(int& initial, std::vector <rule>& eps_rules, std::vector <std::v
         else
             lol[0].push_back(FLAG), eps_rules.push_back({0, FLAG, {0, 0}, right});
         rules.push_back({0, FLAG, {0, 0}, right});
-
-    } 
-    else {
+    } else {
         std::string a_2, a_3;//, a_2(right[0]), a_3(right[1]);
         a_2 = right[0], a_3 = right[1];
         int FLAG1 = check(initial, nonterminals, left), FLAG2, FLAG3;
