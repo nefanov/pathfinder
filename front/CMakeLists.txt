@@ -15,7 +15,7 @@ else()
     FetchContent_MakeAvailable(Catch2)
 endif()
 
-set(CMAKE_CXX_FLAGS "-std=c++17")
+set(CMAKE_CXX_FLAGS "-g -std=c++17")
 #set(CMAKE_CXX_COMPILER g++-9)
 set(EXECUTABLE_OUTPUT_PATH build)
 set(LIBRARY_OUTPUT_PATH build)
