@@ -1,72 +1,107 @@
 #include "core.h"
 
-int check(int& initial, std::vector<std::string>& a, std::string b)
+
+int check_presence(int& initial, std::vector<std::string>& nonterm, std::string b)
 {
-    for (int i = 0; i < a.size(); i++) {
-        if (a[i] == b) {
+    for (int i = 0; i < nonterm.size(); i++) {
+        if (nonterm[i] == b) {
             if (b == "S")
                 initial = i;
             return i;
         }
     }
     if (b == "S")
-        initial = a.size();
-    return a.size();
+        initial = nonterm.size();
+    return nonterm.size();
 }
 
-int input_rules(int& initial, std::vector <rule>& eps_rules, std::vector <std::vector<int>>& lol,
+int input_rule(int& initial,
+                std::vector <Rule>& eps_rules,
+                std::unordered_map <std::string, std::vector<int>>& terminal_symbol_table,
                 std::ifstream& fin,
                 std::vector <std::string>& nonterminals,
-                std::vector <rule>& rules) {
-    std::string left, right;
-    fin >> left >> right;
-    int r_size = right.size();
-    if (right.size() != 2 && right.size() != 1) {
-        std::cout << "right.size() != 2 && right.size() != 1" << std::endl;
-        return -1;
-    }
-    if (r_size == 1) {
-        int FLAG = check(initial, nonterminals, left);
-        if (FLAG == nonterminals.size())
-            nonterminals.push_back(left);
-        if (right != "0")
-            lol[right[0] - 'a' + 1].push_back(FLAG); //if rules can be raped..
-        else
-            lol[0].push_back(FLAG), eps_rules.push_back({0, FLAG, {0, 0}, right});
-        rules.push_back({0, FLAG, {0, 0}, right});
+                std::vector <Rule>& rules,
+                bool spaced_rhs=true) {
+    std::string left;
+    std::vector<std::string> right;
+    int r_size;
+    if (!spaced_rhs) {
+        std::string _right;
+        fin >> left >> _right;
+        int r_size = _right.size();
+        for (char c:_right)
+            right.push_back(std::string(1, c));
     } else {
-        std::string a_2, a_3;//, a_2(right[0]), a_3(right[1]);
-        a_2 = right[0], a_3 = right[1];
-        int FLAG1 = check(initial, nonterminals, left), FLAG2, FLAG3;
-        if (FLAG1 == nonterminals.size())
+        std::vector<std::string> _right;
+        std::string raw_str;
+        std::getline(fin, raw_str);
+        std::istringstream iss(raw_str);
+        iss >> left;
+        std::string tmp_str;
+        while(iss >> tmp_str)
+            right.push_back(tmp_str);
+    }
+    r_size = right.size();
+    if (r_size != 2 && r_size != 1) {
+        std::cout << "Wrong size of rule rhs" << std::endl;
+        return -1;
+    } else if (r_size == 1) {
+        int term_index = check_presence(initial, nonterminals, left);
+        if (term_index == nonterminals.size())
             nonterminals.push_back(left);
-        FLAG2 = check(initial, nonterminals, a_2);
-        if (FLAG2 == nonterminals.size())
-            nonterminals.push_back(a_2);
-        FLAG3 = check(initial, nonterminals, a_3);
-        if (FLAG3 == nonterminals.size())
-            nonterminals.push_back(a_3);
-        rules.push_back({1, FLAG1, {FLAG2, FLAG3}, {0, 0}});
+        if (right[0] != "0")
+            terminal_symbol_table[right[0]].push_back(term_index); //if rules can be raped..
+        else {
+            terminal_symbol_table["0"].push_back(term_index); 
+            eps_rules.push_back({0, term_index, {0, 0}, right[0]});
+        }  
+        rules.push_back({type_term_rhs,
+                         term_index,
+                        {0, 0},
+                        right[0]});
+    } else {
+        std::string rhs_1, rhs_2;//, a_2(right[0]), a_3(right[1]);
+        rhs_1 = right[0], rhs_2 = right[1];
+        int term_index_lhs = check_presence(initial, nonterminals, left); 
+        int term_index_rhs_1, term_index_rhs_2;
+        if (term_index_lhs == nonterminals.size())
+            nonterminals.push_back(left);
+        term_index_rhs_1 = check_presence(initial, nonterminals, rhs_1);
+        if (term_index_rhs_1 == nonterminals.size())
+            nonterminals.push_back(rhs_1);
+        term_index_rhs_2 = check_presence(initial, nonterminals, rhs_2);
+        if (term_index_rhs_2 == nonterminals.size())
+            nonterminals.push_back(rhs_2);
+        rules.push_back({type_non_term_rhs,
+                         term_index_lhs,
+                        {term_index_rhs_1, term_index_rhs_2},
+                        {0, 0}
+                        });
     }
     return 0;
 }
 
-int filling_loops(int j, int P, rule& i, std::deque <std::vector<int>>& W, std::vector <std::vector <std::vector <unsigned int> > >& H1v, std::vector <std::vector <std::vector <unsigned int> > >& H2v, std::vector <std::vector <std::unordered_set <int> > >& H1u, std::vector <std::vector <std::unordered_set <int> > >& H2u, void (*add_value)(std::unordered_set<int>& u, std::vector<unsigned int>& v, int a, int P))
-{
+int filling_loops(int j, int P, Rule& i, std::deque <std::vector<int>>& W, std::vector <std::vector <std::vector <unsigned int> > >& H1v, std::vector <std::vector <std::vector <unsigned int> > >& H2v, std::vector <std::vector <std::unordered_set <int> > >& H1u, std::vector <std::vector <std::unordered_set <int> > >& H2u, void (*add_value)(std::unordered_set<int>& u, std::vector<unsigned int>& v, int a, int P)) {
     W.push_back({j, i.left, j});
     add_value(H1u[i.left][j], H1v[i.left][j], j, P);
     add_value(H2u[i.left][j], H2v[i.left][j], j, P);
     return 0;
 }
 
-int filling_edge_matrices(int P, std::ifstream& fin, std::vector <std::vector<int>>& lol, std::deque <std::vector<int>>& W, std::vector <std::vector <std::vector <unsigned int> > >& H1v, std::vector <std::vector <std::vector <unsigned int> > >& H2v, std::vector <std::vector <std::unordered_set <int> > >& H1u, std::vector <std::vector <std::unordered_set <int> > >& H2u, void (*add_value)(std::unordered_set<int>& u, std::vector<unsigned int>& v, int a, int P))
-{
-    int u1, u2, s = 0;
-    std::string str;
-    fin >> u1 >> u2 >> str;
-    if (str != "0")
-        s = str[0] - 'a' + 1;
-    for (auto j: lol[s]) {
+int filling_edge_matrices(int P, std::ifstream& fin, 
+                          std::unordered_map <std::string, std::vector<int>>& terminal_symbol_table,
+                          std::deque <std::vector<int>>& W,
+                          std::vector <std::vector <std::vector <unsigned int> > >& H1v, 
+                          std::vector <std::vector <std::vector <unsigned int> > >& H2v, 
+                          std::vector <std::vector <std::unordered_set <int> > >& H1u, 
+                          std::vector <std::vector <std::unordered_set <int> > >& H2u, 
+                          void (*add_value)(std::unordered_set<int>& u, 
+                          std::vector<unsigned int>& v, int a, int P)) {
+    int u1, u2 = 0;
+    std::string s;
+    fin >> u1 >> u2 >> s;
+    
+    for (auto j: terminal_symbol_table[s]) {
         W.push_back({u1, j, u2});
         add_value(H1u[j][u1], H1v[j][u1], u2, P);
         add_value(H2u[j][u2], H2v[j][u2], u1, P);
@@ -74,8 +109,7 @@ int filling_edge_matrices(int P, std::ifstream& fin, std::vector <std::vector<in
     return 0;
 }
 
-std::vector<int> path_find(int i, int j, int nonterm, std::vector<std::vector<std::vector<std::vector<int> > > >& prev)
-{
+std::vector<int> path_find(int i, int j, int nonterm, std::vector<std::vector<std::vector<std::vector<int> > > >& prev) {
     std::vector<int> u = prev[i][nonterm][j];
     if (u[0] == -1)
         return {i, j};
@@ -86,8 +120,7 @@ std::vector<int> path_find(int i, int j, int nonterm, std::vector<std::vector<st
     return way;
 }
 
-int baseline_cfl(bool is_fast, int flag, int i2, int i3, std::vector <std::vector <std::vector <unsigned int> > >& Hiv, std::vector <std::vector <std::unordered_set <int> > >& Hiu, std::vector<std::vector<int>> side_rules, int B, int P, int V, std::vector <rule>& rules, std::vector<std::vector<std::vector<std::vector<int>> > >& prev, std::deque <std::vector<int>>& W, std::vector <std::vector <std::vector <unsigned int> > >& H1v, std::vector <std::vector <std::vector <unsigned int> > >& H2v, std::vector <std::vector <std::unordered_set <int> > >& H1u, std::vector <std::vector <std::unordered_set <int> > >& H2u, void (*add_value)(std::unordered_set<int>& u, std::vector<unsigned int>& v, int a, int P), std::vector<int> (*create_wv)(int P, int V, std::vector<unsigned int>& v1, std::vector<unsigned int>& v2, std::unordered_set<int>& u1, std::unordered_set<int>& u2), std::unordered_set<int> (*create_wu)(int P, int V, std::vector<unsigned int>& v1, std::vector<unsigned int>& v2, std::unordered_set<int>& u1, std::unordered_set<int>& u2))
-{
+int baseline_cfl(bool is_fast, int flag, int i2, int i3, std::vector <std::vector <std::vector <unsigned int> > >& Hiv, std::vector <std::vector <std::unordered_set <int> > >& Hiu, std::vector<std::vector<int>> side_rules, int B, int P, int V, std::vector <Rule>& rules, std::vector<std::vector<std::vector<std::vector<int>> > >& prev, std::deque <std::vector<int>>& W, std::vector <std::vector <std::vector <unsigned int> > >& H1v, std::vector <std::vector <std::vector <unsigned int> > >& H2v, std::vector <std::vector <std::unordered_set <int> > >& H1u, std::vector <std::vector <std::unordered_set <int> > >& H2u, void (*add_value)(std::unordered_set<int>& u, std::vector<unsigned int>& v, int a, int P), std::vector<int> (*create_wv)(int P, int V, std::vector<unsigned int>& v1, std::vector<unsigned int>& v2, std::unordered_set<int>& u1, std::unordered_set<int>& u2), std::unordered_set<int> (*create_wu)(int P, int V, std::vector<unsigned int>& v1, std::vector<unsigned int>& v2, std::unordered_set<int>& u1, std::unordered_set<int>& u2)) {
     for (auto i:side_rules[B]) {
         int C = rules[i].right1[flag], A = rules[i].left, i4, i5;
         std::vector<int> wv = create_wv(P, V, Hiv[C][i2], Hiv[A][i3], Hiu[C][i2], Hiu[A][i3]);

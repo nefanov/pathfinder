@@ -106,11 +106,11 @@ TEST_CASE("check") {
     std::vector<std::string> a = {"A", "S", "B"}, a3 = {"A", "B", "S"};
     std::string b1 = "A", b2 = "R", b3 = "S";
     int check1 = 0, check2 = 3, check3 = 2; 
-    REQUIRE(check1 == check(initial, a, b1));
+    REQUIRE(check1 == check_presence(initial, a, b1));
     REQUIRE(initial == 0);
-    REQUIRE(check2 == check(initial, a, b2));
+    REQUIRE(check2 == check_presence(initial, a, b2));
     REQUIRE(initial == 0);
-    REQUIRE(check3 == check(initial, a3, b3));
+    REQUIRE(check3 == check_presence(initial, a3, b3));
     REQUIRE(initial == 2);
 }
 
