@@ -20,6 +20,11 @@ int main(int argc, char* argv[]) {
     }
     
     fin >> number >> m;
+    if (is_spaced_rhs) {
+        // preventive read of input to the end of line
+        std::string prev_read_str;
+        std::getline(fin, prev_read_str);
+    }
     for (int i = 0; i < m; i++)
         input_rule(initial, eps_rules, terminal_symbol_table, fin, nonterminals, rules, is_spaced_rhs);
 
