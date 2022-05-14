@@ -1,0 +1,4 @@
+spaced/test_graph1 test_output1
+spaced/test_graph2 test_output2
+spaced/test_graph3 test_output3
+spaced/test_graph4 test_output4
