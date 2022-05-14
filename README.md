@@ -29,7 +29,7 @@ https://youtu.be/EDp_dERI1GM
 	cd front
 	cmake ./
 	make
-# Run
+# Run [in demo mode, with simplified grammar rules]
 In [path to file] you need to specify the path to the file pre-compiled<br>with `gcc file_name -fdump-tree-cfg-graph`<br>
 If you omit it, the program will ask you to specify it via stdin<br><br>
 
@@ -80,6 +80,10 @@ To use it write:
 		S a
 		a a b b a a a
 *		bash run.sh -file gcc-cfg-utils/input/example.in
+
+# Run [in general mode]
+<br>The terms in grammar rules can be spaced strings. For example:
+*	StrTerm StrTermRhs1 StrTermRhs2
 
 # LLVM IR
 
