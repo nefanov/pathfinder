@@ -1,7 +1,8 @@
 #include "core.h"
-int main(int argc, char* argv[]) 
-{
+
+int main(int argc, char* argv[]) {
     bool is_fast = (find_arg(argc, argv, "-fast") > 0) ? true : false;
+    bool is_spaced_rhs =(find_arg(argc, argv, "-spaced_rhs") > 0) ? true : false;
     void* sl = dlopen((is_fast == true) ? "libfst.so" : "libslw.so", RTLD_LAZY);
     std::cout << ((is_fast == true) ? "libfst.so" : "libslw.so") << std::endl;
     funcs func(sl);
@@ -9,8 +10,8 @@ int main(int argc, char* argv[])
         return -1;
     int m, number, E, initial, P, V;
     std::vector <std::string> nonterminals;
-    std::vector <std::vector<int>> lol(NUMBER_OF_LETTERS_WITH_OVERFLOW);
-    std::vector <rule> eps_rules, rules;
+    std::unordered_map <std::string, std::vector<int>> terminal_symbol_table;
+    std::vector <Rule> eps_rules, rules;
     std::string path_to_graph = argv[1];
     std::ifstream fin(path_to_graph);
     if (!fin.is_open()) {
@@ -20,7 +21,7 @@ int main(int argc, char* argv[])
     
     fin >> number >> m;
     for (int i = 0; i < m; i++)
-        input_rules(initial, eps_rules, lol, fin, nonterminals, rules);
+        input_rule(initial, eps_rules, terminal_symbol_table, fin, nonterminals, rules, is_spaced_rhs);
 
     std::vector <std::vector<int>> left_rules(nonterminals.size()), right_rules(nonterminals.size());
     for (int i = 0; i < rules.size(); i++)
@@ -39,7 +40,7 @@ int main(int argc, char* argv[])
     std::vector<std::vector<std::unordered_set<int>>>H1u = func.create_Hu(nonterminals.size(), V, P), H2u = H1u;
     std::vector<std::vector<std::vector<std::vector<int>> > > prev(V, std::vector<std::vector<std::vector<int > > > (nonterminals.size(), std::vector<std::vector<int>>  (V, {-1, -1, -1})));
     for (int i = 0; i < E; i++)
-        filling_edge_matrices(P, fin, lol, W, H1v, H2v, H1u, H2u, func.add_value);
+        filling_edge_matrices(P, fin, terminal_symbol_table, W, H1v, H2v, H1u, H2u, func.add_value);
     for (auto i: eps_rules)
         for (int j = 0; j < V; j++)
             filling_loops(j, P, i, W, H1v, H2v, H1u, H2u, func.add_value); //if word is empty

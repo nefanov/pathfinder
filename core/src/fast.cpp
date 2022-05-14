@@ -4,9 +4,12 @@ int main(int argc, char* argv[])
 {
     int m, number, E, initial, P, V;
     std::vector <std::string> nonterminals;
-    std::vector <std::vector<int>> lol(NUMBER_OF_LETTERS_WITH_OVERFLOW);
-    std::vector <rule> eps_rules, rules;
+    std::unordered_map <std::string, std::vector<int>> terminal_symbol_table;
+    std::vector <Rule> eps_rules, rules;
     std::string bin_path = argv[1];
+    bool spaced_rhs=false;
+    if (argc > 2)
+        spaced_rhs = (argv[2] == "-spaced_rhs") ? true : false;
     std::ifstream fin(bin_path + "../data/graph");
     if (!fin.is_open()) {
         std::cout << bin_path + "../data/graph" << " was not opened" << std::endl;
@@ -15,7 +18,7 @@ int main(int argc, char* argv[])
     
     fin >> number >> m;
     for (int i = 0; i < m; i++)
-        input_rules(initial, eps_rules, lol, fin, nonterminals, rules);
+        input_rule(initial, eps_rules, terminal_symbol_table, fin, nonterminals, rules, false);
 
     std::vector <std::vector<int>> left_rules(nonterminals.size()), right_rules(nonterminals.size());
     for (int i = 0; i < rules.size(); i++)
