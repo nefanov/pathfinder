@@ -82,7 +82,7 @@ To use it write:
 *		bash run.sh -file gcc-cfg-utils/input/example.in
 
 # Run [in general mode]
-<br>The terms in grammar rules can be spaced strings. For example:
+<br>The terms in grammar rules can be spaced strings, just pass -spaced_rhs as option for core. For example:
 *	StrTerm StrTermRhs1 StrTermRhs2
 
 # LLVM IR
