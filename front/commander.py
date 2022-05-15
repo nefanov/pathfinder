@@ -1,9 +1,11 @@
-import os, sys
+import sys
+import subprocess
 from preprocessor import *
 from editor.grammar_editor import *
 import re
 
 config = {}
+
 
 def editor_loop(cmd, ex_list=None):
     G = Grammar()
@@ -100,6 +102,7 @@ def editor_loop(cmd, ex_list=None):
         else:
             print(cmd, ": unrecognized command")
 
+
 def preprocessor_loop(cmd, ex_list=None):
     while cmd != "exit":
         cmd = input("\N{ESC}[32mpathfinder:\N{ESC}[34mgraph preprocessor\u001b[0m>>")
@@ -109,13 +112,36 @@ def preprocessor_loop(cmd, ex_list=None):
             print(cmd, ": unrecognized command")
 
 
-def backend_loop(cmd):
+def backend_loop(cmd, ex_list=None):
     while cmd != "exit":
-        cmd = input("\N{ESC}[32mpathfinder:\N{ESC}[35mbackend\u001b[0m>>")
+        if not ex_list:
+            cmd = input("\N{ESC}[32mpathfinder:\N{ESC}[35mbackend\u001b[0m>>")
+        else:
+            cmd = ex_list.pop(0)
+        parsed = re.split(r'[\s,]+', cmd)
         if cmd.startswith("help"):
             print("Backend help: TO DO")
+        if parsed[0] in ["run","r"]:
+            exec_seq = ["build/core"]
+            f_name = ""
+            cmd_arg = ["-spaced_rhs"]
+            if parsed[1] in ["-fast", "fast", "-fst", "fst"]:
+                f_name = parsed[2]
+                cmd_arg += ["-fast"]
+            elif parsed[1] in ["slow", "slw", "-slow", "-slw"]:
+                f_name = parsed[2]
+                cmd_arg += ["-slow"]
+            exec_seq +=[f_name] + cmd_arg
+            result = subprocess.run(
+                exec_seq, capture_output=True, text=True)
+            res_stdout = result.stdout
+            res_stderr = result.stderr
+            print(res_stdout, res_stderr)
+
         else:
             print(cmd, ": unrecognized command")
+
+
 
 
 def postprocessor_loop(cmd):
@@ -148,8 +174,8 @@ def main_loop(cmd, ex_list=None):
             editor_loop(cmd, ex_list)
         elif cmd.startswith("preprocessor"):
             preprocessor_loop(cmd)
-        elif cmd.startswith("backend"):
-            backend_loop(cmd)
+        elif cmd in ["backend","be","b"]:
+            backend_loop(cmd, ex_list)
         elif cmd.startswith("postprocessor"):
             postprocessor_loop(cmd)
         elif cmd.startswith("exit"):

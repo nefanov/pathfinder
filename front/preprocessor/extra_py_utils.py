@@ -1,5 +1,6 @@
 import re
 import os, sys
+import subprocess
 import pydot
 
 from lexer import graphlex
@@ -211,7 +212,27 @@ def prepare_interproc_graph_var_trans(g, def_table, verbose=False, rm_direct_cal
 	return g
 
 
+#=============================== Extra core util ====================================
+
+def run_core(core_path, prep_core_inp_file, args=[]):
+	print("Running core on file:", core_path)
+	result = subprocess.run(
+		[core_path, prep_core_inp_file] + args, capture_output=True, text=True)
+	res_stdout = result.stdout
+	res_stderr = result.stderr
+	return res_stdout, res_stderr
+
+
 #===================================================================================
+
+# graph annotation
+def process_core_output(s, graph=None):
+	strlist = s.split('\n')
+	strlist = [n.split(" ")[:-1] if n.split(" ")[-1] == "" else n.split(" ") for n in strlist]
+	strlist = [n for n in strlist if len(n) >= 2]
+	# alternative: strlist = [n.split(" ") if n.split(" ")[-1] != "" for n in strlist]
+
+	return strlist
 
 if __name__ == '__main__':
 	"""
