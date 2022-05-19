@@ -6,6 +6,10 @@ If you use Pathfinder, please, cite this article:
 
 Н. Н. Ефанов, А. Р. Федоров, Э. В. Шамбер, А. А. Щербаков, А. П. Елесина Pathfinder: статический анализатор программ на базе решения задач достижимости на графах в КС-ограничениях // Труды МФТИ, Том 13,  №4, 2021, сс 14-29. DOI:10.53815/20726759_2021_13_4_14
 
+Or:
+
+Efanov, N., Fedorov, A.R., Shamber, E.V., Shcherbakov, A.A., & Elesina, A.P. (2021). Pathfinder: software static analyzer based on solving the graph reachability problem with CF constraints. Proceedings of Moscow Institute of Physics and Technology. Vol. 13, 4 pp. 14-29. (In Russian) DOI:10.53815/20726759_2021_13_4_14 
+
 ## Reports, talks:
 
 Apr. 2022:
