@@ -87,6 +87,7 @@ To use it write:
 
 # Run [in general mode]
 <br>The terms in grammar rules can be spaced strings, just pass -spaced_rhs as option for core. For example:
+
 *	StrTerm StrTermRhs1 StrTermRhs2
 
 # LLVM IR
