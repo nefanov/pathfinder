@@ -1,6 +1,11 @@
 #include "core.h"
 
 int main(int argc, char* argv[]) {
+    bool is_iguana = (find_arg(argc, argv, "-iguana") > 0) ? true : false;
+    if (is_iguana) {
+	std::cout << "Iguana backend is not implemented yet" << std::endl;
+	return 0;
+    }
     bool is_fast = (find_arg(argc, argv, "-fast") > 0) ? true : false;
     bool is_spaced_rhs =(find_arg(argc, argv, "-spaced_rhs") > 0) ? true : false;
     void* sl = dlopen((is_fast == true) ? "libfst.so" : "libslw.so", RTLD_LAZY);
@@ -43,7 +48,8 @@ int main(int argc, char* argv[]) {
     std::deque<std::vector<int> > W;
     std::vector<std::vector<std::vector<unsigned int>>>H1v = func.create_Hv(nonterminals.size(), V, P), H2v = H1v;
     std::vector<std::vector<std::unordered_set<int>>>H1u = func.create_Hu(nonterminals.size(), V, P), H2u = H1u;
-    std::vector<std::vector<std::vector<std::vector<int>> > > prev(V, std::vector<std::vector<std::vector<int > > > (nonterminals.size(), std::vector<std::vector<int>>  (V, {-1, -1, -1})));
+    std::vector<std::vector<std::vector<std::vector<int>> > > prev(V, std::vector<std::vector<std::vector<int > > > (nonterminals.size(), 
+			    std::vector<std::vector<int>>  (V, {-1, -1, -1})));
     for (int i = 0; i < E; i++)
         filling_edge_matrices(P, fin, terminal_symbol_table, W, H1v, H2v, H1u, H2u, func.add_value);
     for (auto i: eps_rules)
@@ -57,4 +63,5 @@ int main(int argc, char* argv[]) {
     }
     output(is_fast, P, V, initial, prev, H1v, H1u, func.create_q);
     fin.close();
+    return 0;
 }

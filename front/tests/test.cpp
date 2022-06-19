@@ -269,3 +269,34 @@ TEST_CASE("test_core_common -fast") {
     }
     test_list.close();
 }
+
+TEST_CASE("test_core_common -iguana") {
+    std::ifstream test_list("tests/test_core_common.txt");
+    std::string test_graph_name, test_output_name, type, str1, str2;
+    std::multiset<std::pair<std::string, std::string>> s1, s2;
+    std::pair<std::pair<std::string, std::string>, std::pair<std::string, std::string>> t;
+
+    mkdir("data", 0777);
+    while(!test_list.eof()) {
+        test_list >> test_graph_name >> test_output_name;
+        std::cout << "build/core tests/" + test_graph_name + " -spaced_rhs -iguana > data/output.test\n";
+        system(("build/core tests/" + test_graph_name + " -spaced_rhs -iguana > data/output.test").c_str());
+        std::ifstream output("data/output.test");
+        std::ifstream testoutput("tests/" + test_output_name);
+        REQUIRE(output.is_open());
+        REQUIRE(testoutput.is_open());
+        std::getline(output, type);
+        while(!output.eof() && !testoutput.eof()) {
+            std::getline(output, str1);
+            std::getline(output, str2);
+            s1.insert({str1, str2});
+            std::getline(testoutput, str1);
+            std::getline(testoutput, str2);
+            s2.insert({str1, str2});
+        }
+        //REQUIRE(s1 == s2); -- uncomment it for test Iguana integration on basic tests
+        output.close();
+        testoutput.close();
+    }
+    test_list.close();
+}
