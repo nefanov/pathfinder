@@ -21,7 +21,7 @@ https://youtu.be/EDp_dERI1GM
 
 Jun. 2022:
 
-S. Efimov // Static analysis of cycles vectorization based on CF-reachability. Bachelor degree defence, MIPT.
+S. Efimov // Static analysis of cycles vectorization based on CF-reachability. Bachelor degree defence, MIPT, KMTT Dept.
 
 ## ResearchGate:
 1) [Modern formal languages theory based methods for software static analysis](https://www.researchgate.net/project/Modern-formal-languages-theory-based-methods-for-software-static-analysis)
