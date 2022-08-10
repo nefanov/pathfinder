@@ -1,9 +1,42 @@
 #include "core.h"
+#include <unistd.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 int main(int argc, char* argv[]) {
     bool is_iguana = (find_arg(argc, argv, "-iguana") > 0) ? true : false;
+    int infd[2], outfd[2], pid;
+    char buf;
+    char* const arg[] = {(char*)"mvn", (char*)"exec:java", (char*)"-Dexec.mainClass=benchmark.Neo4jBenchmark", (char*)"-Dexec.args=st 1323 2 5 /home/aleksandra/GLL4Graph/data/core/ test/resources/grammars/graph/g1/grammar.json core g1", NULL};
+    int fd = open("/home/aleksandra/test.txt", O_RDWR);//это для exec, у меня сейчас 2 способа запуска: через exec (закомментирован) и через system
     if (is_iguana) {
-	std::cout << "Iguana backend is not implemented yet" << std::endl;
+    	pipe(infd);
+    	pipe(outfd);
+    	pid = fork();
+    	if (pid == 0) {
+    		close(outfd[0]);
+    		//dup2
+    		chdir("/home/aleksandra/GLL4Graph/");
+    		//execvp(arg[0], arg);
+    		dup2(outfd[1], 1);
+    		system("mvn exec:java -Dexec.mainClass=\"benchmark.Neo4jBenchmark\" -Dexec.args=\"st 1323 2 5 /home/aleksandra/GLL4Graph/data/core/ test/resources/grammars/graph/g1/grammar.json core g1\"");//ввод пока не сделан по-нормальному, сделаю, когда буду писать преобразователь исходного теста в вид, нужный GLL4Graph, могу сделать раньше, если скажете, какой у него должен быть промежуточный вид
+    		close(outfd[1]);
+    	}
+    	else {
+    		sleep(40);
+    		close(outfd[1]);
+    		while (read(outfd[0], &buf, 1) > 0) {
+    			write(fd, &buf, 1);//это проверка, что на дескрипторе результаты доступны
+    		}
+    		close(outfd[0]);
+    		wait(NULL);
+    	}
+    	close(fd);
+	//std::cout << "Iguana backend is not implemented yet" << std::endl;
 	return 0;
     }
     bool is_fast = (find_arg(argc, argv, "-fast") > 0) ? true : false;
