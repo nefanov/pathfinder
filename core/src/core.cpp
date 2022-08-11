@@ -6,13 +6,34 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include<iostream>
+#include <fstream> 
+#include<limits.h>
+using namespace std;
 
 int main(int argc, char* argv[]) {
     bool is_iguana = (find_arg(argc, argv, "-iguana") > 0) ? true : false;
     int infd[2], outfd[2], pid;
     char buf;
-    char* const arg[] = {(char*)"mvn", (char*)"exec:java", (char*)"-Dexec.mainClass=benchmark.Neo4jBenchmark", (char*)"-Dexec.args=st 1323 2 5 /home/aleksandra/GLL4Graph/data/core/ test/resources/grammars/graph/g1/grammar.json core g1", NULL};
-    int fd = open("/home/aleksandra/test.txt", O_RDWR);//это для exec, у меня сейчас 2 способа запуска: через exec (закомментирован) и через system
+    char* pwd = new char[PATH_MAX];
+    string s;
+    int numgr, numv, numr;
+    //char* const arg[] = {(char*)"mvn", (char*)"exec:java", (char*)"-Dexec.mainClass=benchmark.Neo4jBenchmark", (char*)"-Dexec.args=st 1323 2 5 ABS_PATH/data/core/ test/resources/grammars/graph/g1/grammar.json core g1", NULL};
+    //int fd = open("/home/aleksandra/test.txt", O_RDWR);
+    /*//преобр теста
+    ifstream file(argv[1]);
+    file.is_open();
+    file >> numgr;
+    file >> numgr;
+    std::cout << numgr;
+    for (int i = 0; i < numgr; i++) {
+    	file >> s;
+    	std::cout << s << "\n";
+    }
+    file >> s;
+    file >> numv >> numr;
+    std::cout << numv << "*" << numr;
+    //конец преобр теста*/
     if (is_iguana) {
     	pipe(infd);
     	pipe(outfd);
@@ -20,22 +41,29 @@ int main(int argc, char* argv[]) {
     	if (pid == 0) {
     		close(outfd[0]);
     		//dup2
-    		chdir("/home/aleksandra/GLL4Graph/");
+    		chdir("../third-party/GLL4Graph/");
     		//execvp(arg[0], arg);
+    		getwd(pwd);
     		dup2(outfd[1], 1);
-    		system("mvn exec:java -Dexec.mainClass=\"benchmark.Neo4jBenchmark\" -Dexec.args=\"st 1323 2 5 /home/aleksandra/GLL4Graph/data/core/ test/resources/grammars/graph/g1/grammar.json core g1\"");//ввод пока не сделан по-нормальному, сделаю, когда буду писать преобразователь исходного теста в вид, нужный GLL4Graph, могу сделать раньше, если скажете, какой у него должен быть промежуточный вид
+    		char* syst = 
+    		new char[strlen("mvn exec:java -Dexec.mainClass=\"benchmark.Neo4jBenchmark\" -Dexec.args=\"st 1323 2 5 ")
+    		 + strlen("/data/core/ test/resources/grammars/graph/g1/grammar.json core g1\"") + 1 + strlen(pwd)];
+    		strcat(syst, "mvn exec:java -Dexec.mainClass=\"benchmark.Neo4jBenchmark\" -Dexec.args=\"st 1323 2 5 ");
+    		strcat(syst, pwd);
+    		strcat(syst, "/data/core/ test/resources/grammars/graph/g1/grammar.json core g1\"");
+    		system(syst);
     		close(outfd[1]);
     	}
     	else {
-    		sleep(40);
+    		//sleep(40);
     		close(outfd[1]);
     		while (read(outfd[0], &buf, 1) > 0) {
-    			write(fd, &buf, 1);//это проверка, что на дескрипторе результаты доступны
+    			write(1, &buf, 1);//это проверка, что на дескрипторе результаты доступны
     		}
     		close(outfd[0]);
     		wait(NULL);
     	}
-    	close(fd);
+    	//close(fd);
 	//std::cout << "Iguana backend is not implemented yet" << std::endl;
 	return 0;
     }
