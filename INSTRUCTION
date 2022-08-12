@@ -1,0 +1,8 @@
+После скачивания GLL4Graph расположите папку с ним (она обязательно должна быть названа GLL4Graph) в папке third-party.
+Возможные ошибки:
+1) java.io.FileNotFoundException: results/core_st_time_reachabilities.csv (Нет такого файла или каталога)
+ - перейдите в папку GLL4Graph и пропишите mkdir results.
+2) [ERROR] Failed to execute goal org.codehaus.mojo:exec-maven-plugin:3.0.0:java (default-cli) on project iguana: An
+ exception occured while executing the Java class. benchmark/Neo4jBenchmark has been compiled by a more recent version
+  of the Java Runtime (class file version 59.0), this version of the Java Runtime only recognizes class file versions
+   up to 52.0 -> [Help 1] - пропишите export JAVA_HOME='/usr/lib/jvm/jdk-15.0.2'

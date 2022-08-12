@@ -18,7 +18,6 @@ int main(int argc, char* argv[]) {
     char* pwd = new char[PATH_MAX];
     string s;
     int numgr, numv, numr;
-    //char* const arg[] = {(char*)"mvn", (char*)"exec:java", (char*)"-Dexec.mainClass=benchmark.Neo4jBenchmark", (char*)"-Dexec.args=st 1323 2 5 ABS_PATH/data/core/ test/resources/grammars/graph/g1/grammar.json core g1", NULL};
     //int fd = open("/home/aleksandra/test.txt", O_RDWR);
     /*//преобр теста
     ifstream file(argv[1]);
