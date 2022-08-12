@@ -16,22 +16,6 @@ int main(int argc, char* argv[]) {
     int infd[2], outfd[2], pid;
     char buf;
     char* pwd = new char[PATH_MAX];
-    string s;
-    int numgr, numv, numr;
-    /*//преобр теста
-    ifstream file(argv[1]);
-    file.is_open();
-    file >> numgr;
-    file >> numgr;
-    std::cout << numgr;
-    for (int i = 0; i < numgr; i++) {
-    	file >> s;
-    	std::cout << s << "\n";
-    }
-    file >> s;
-    file >> numv >> numr;
-    std::cout << numv << "*" << numr;
-    //конец преобр теста*/
     if (is_iguana) {
     	pipe(infd);
     	pipe(outfd);
