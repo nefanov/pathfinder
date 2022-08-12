@@ -1,9 +1,9 @@
 name: "Deploy"
 on:
 	push:
-		branches: [main]
+		branches: [iguana]
 	pull_request:
-		branches: [main]
+		branches: [iguana]
 jobs:
 	deploy:
 		name: Deploy
