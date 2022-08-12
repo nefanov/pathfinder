@@ -1,9 +1,63 @@
 #include "core.h"
+#include <unistd.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include<iostream>
+#include <fstream> 
+#include<limits.h>
+using namespace std;
 
 int main(int argc, char* argv[]) {
     bool is_iguana = (find_arg(argc, argv, "-iguana") > 0) ? true : false;
+    int infd[2], outfd[2], pid;
+    char buf;
+    char* pwd = new char[PATH_MAX];
+    string s;
+    int numgr, numv, numr;
+    /*//преобр теста
+    ifstream file(argv[1]);
+    file.is_open();
+    file >> numgr;
+    file >> numgr;
+    std::cout << numgr;
+    for (int i = 0; i < numgr; i++) {
+    	file >> s;
+    	std::cout << s << "\n";
+    }
+    file >> s;
+    file >> numv >> numr;
+    std::cout << numv << "*" << numr;
+    //конец преобр теста*/
     if (is_iguana) {
-	std::cout << "Iguana backend is not implemented yet" << std::endl;
+    	pipe(infd);
+    	pipe(outfd);
+    	pid = fork();
+    	if (pid == 0) {
+    		close(outfd[0]);
+    		chdir("../third-party/GLL4Graph/");
+    		getwd(pwd);
+    		dup2(outfd[1], 1);
+    		char* syst = 
+    		new char[strlen("mvn exec:java -Dexec.mainClass=\"benchmark.Neo4jBenchmark\" -Dexec.args=\"st 1323 2 5 ")
+    		 + strlen("/data/core/ test/resources/grammars/graph/g1/grammar.json core g1\"") + 1 + strlen(pwd)];
+    		strcat(syst, "mvn exec:java -Dexec.mainClass=\"benchmark.Neo4jBenchmark\" -Dexec.args=\"st 1323 2 5 ");
+    		strcat(syst, pwd);
+    		strcat(syst, "/data/core/ test/resources/grammars/graph/g1/grammar.json core g1\"");
+    		system(syst);
+    		close(outfd[1]);
+    	}
+    	else {
+    		close(outfd[1]);
+    		while (read(outfd[0], &buf, 1) > 0) {
+    			write(1, &buf, 1);
+    		}
+    		close(outfd[0]);
+    		wait(NULL);
+    	}
 	return 0;
     }
     bool is_fast = (find_arg(argc, argv, "-fast") > 0) ? true : false;
