@@ -1,5 +1,0 @@
-Инструкция для GLL4Graph
-cd pathfinder
-sh deploy.sh
-cd front
-build/core tests/spaced/<name_of_test> -spaced_rhs -iguana

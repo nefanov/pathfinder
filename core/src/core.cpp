@@ -144,7 +144,17 @@ int main(int argc, char* argv[]) {
     		results.is_open();
     		getline(results, s);
     		getline(results, s);
-    		std::cout << s << endl;
+    		string numb;
+    		int counter = 0;
+    		for (int k = 0; k < s.size(); k++) {
+    			char nn = s[k];
+    			if (nn == ',') {
+    				counter += 1;
+    			} else if (counter == 2) {
+    				numb += nn;
+    			}
+    		}
+    		std::cout << numb << endl;
     		results.close();
     		path = pwd;
     		path += "/AllPaths.txt";
