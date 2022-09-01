@@ -14,6 +14,7 @@ using namespace std;
 
 int main(int argc, char* argv[]) {
     bool is_iguana = (find_arg(argc, argv, "-iguana") > 0) ? true : false;
+    bool is_time = (find_arg(argc, argv, "-time") > 0) ? true : false;
     int infd[2], outfd[2], pid;
     char buf;
     if (is_iguana) {
@@ -128,11 +129,11 @@ int main(int argc, char* argv[]) {
     		syst += "/data/grammar.json -gp ";
     		syst += pwd;
     		syst += "/data/ -gs IN_MEMORY -m ";
-    		syst += conf[0];
+    		syst += conf[1];
     		syst += " -p ALL_PATHS -S s=ALL_PAIRS -S a=";
     		syst += numver;
     		syst += " -w ";
-    		syst += conf[1];
+    		syst += conf[0];
     		syst += "\"";
     		FILE* r = fopen("AllPaths.txt", "a");
     		fclose(r);
@@ -140,6 +141,16 @@ int main(int argc, char* argv[]) {
       		system(syst.c_str());
     		string path = pwd;
     		path += "/results/graph_AP_SPPF_INMEM.csv";
+    		if (is_time) {
+    			int rt = 0;
+    			ifstream rs(path);
+    			rs.is_open();
+    			while (getline(rs, s))  {
+    				if (rt != 0) std::cout << "№" << rt << ": ";
+    				rt += 1;
+    				std::cout << s << endl;
+    			}
+    		}
     		ifstream results(path);
     		results.is_open();
     		getline(results, s);
