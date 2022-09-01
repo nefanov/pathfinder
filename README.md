@@ -102,7 +102,8 @@ To analyze LLVM IR bitcode you should switch to LLVM branch:
 	git checkout llvm
 	
 # Backends
-
-- slow
-- fast
-- iguana: See in documentation_GLL4Graph document
+- Melski-Reps, CYK -- based: 
+-- "slow" mode
+-- "fast" mode
+-GLL-based:
+-- iguana: See in documentation_GLL4Graph document
