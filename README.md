@@ -100,3 +100,9 @@ Also it is supported llvm compilers<br>
 To analyze LLVM IR bitcode you should switch to LLVM branch:
 
 	git checkout llvm
+	
+# Backends
+
+- slow
+- fast
+- iguana: See in documentation_GLL4Graph document
