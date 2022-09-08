@@ -10,6 +10,7 @@
 #include <fstream> 
 #include <limits.h>
 #include <vector>
+#include <ctime>
 using namespace std;
 
 int main(int argc, char* argv[]) {
@@ -236,6 +237,7 @@ int main(int argc, char* argv[]) {
     std::vector<std::vector<std::unordered_set<int>>>H1u = func.create_Hu(nonterminals.size(), V, P), H2u = H1u;
     std::vector<std::vector<std::vector<std::vector<int>> > > prev(V, std::vector<std::vector<std::vector<int > > > (nonterminals.size(), 
 			    std::vector<std::vector<int>>  (V, {-1, -1, -1})));
+    unsigned int start_time =  clock();
     for (int i = 0; i < E; i++)
         filling_edge_matrices(P, fin, terminal_symbol_table, W, H1v, H2v, H1u, H2u, func.add_value);
     for (auto i: eps_rules)
@@ -248,6 +250,10 @@ int main(int argc, char* argv[]) {
         baseline_cfl(is_fast, 1, q[2], q[0], H1v, H1u, left_rules, q[1], P, V, rules, prev, W, H1v, H2v, H1u, H2u, func.add_value, func.create_wv, func.create_wu);
     }
     output(is_fast, P, V, initial, prev, H1v, H1u, func.create_q);
+    unsigned int end_time = clock();
     fin.close();
+    if (is_time) {
+    	std::cout << "run_time = " << (end_time - start_time)/1000.0 << " sec" << endl;
+    }
     return 0;
 }
