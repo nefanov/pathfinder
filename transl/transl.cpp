@@ -270,8 +270,6 @@ int main(int argc, char* argv[]) {
 			e = st.find_first_of("( ", b);
 			str = st.substr(b + 1, e - b - 1);
 			while ((str != l[i]) && (i < index.size())) i += 1;
-			if (i != index.size()) 
-				f << st.substr(0, st.find_first_of(": ")) + " -> " + index[i] + " [style = dotted];" << endl;
 			i = 0;
 		}	
 	}
@@ -285,6 +283,5 @@ int main(int argc, char* argv[]) {
 	f.close();
 	
 	system("dot -Tps .main.dot -o outfile.ps");
-	remove(".main.dot");
 	remove("main");
 }

@@ -3,5 +3,5 @@ cd transl
 sh deploy.sh
 ./transl <НАЗВАНИЕ ФАЙЛА>.c
 At the moment, it is possible to work only with C code.
-In the file outfile.ps there is a result.
+In the files outfile.ps and .main.dot there is a result.
 The links between the functions and the main function are shown by dotted arrows.
