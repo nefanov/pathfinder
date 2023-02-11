@@ -36,6 +36,8 @@ add_executable(speed tests/speed_tests/test_speed.cpp)
 add_executable(core ../core/src/core.cpp)
 add_executable(code2graph gcc-cfg-utils/code/code2graph.cpp)
 add_executable(test tests/test.cpp)
+add_executable(transl transl/transl.cpp)
+add_executable(to_core transl/transl_to_core.cpp)
 
 target_link_libraries(core PRIVATE cre dl)
 target_link_libraries(code2graph PRIVATE c2g orc dl)

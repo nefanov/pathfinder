@@ -1,0 +1,56 @@
+digraph "CFG for 'main' function" {
+	label="CFG for 'main' function";
+
+	Node0x205cd40 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{%2:\l  %3 = alloca i32, align 4\l  br label %4\l}"];
+	Node0x205cd40 -> Node0x205ce30;
+	Node0x205ce30 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{%4:\l4:                                                \l  %5 = alloca i32, align 4\l  br label %6\l}"];
+	Node0x205ce30 -> Node0x205cfb0;
+	Node0x205cfb0 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{%6:\l6:                                                \l  %7 = alloca i8**, align 8\l  br label %8\l}"];
+	Node0x205cfb0 -> Node0x205d0e0;
+	Node0x205d0e0 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{%8:\l8:                                                \l  %9 = alloca i32, align 4\l  br label %10\l}"];
+	Node0x205d0e0 -> Node0x205cef0;
+	Node0x205cef0 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{%10:\l10:                                               \l  %11 = alloca i32, align 4\l  br label %12\l}"];
+	Node0x205cef0 -> Node0x205d2f0;
+	Node0x205d2f0 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{%12:\l12:                                               \l  %13 = alloca i32, align 4\l  br label %14\l}"];
+	Node0x205d2f0 -> Node0x205d420;
+	Node0x205d420 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{%14:\l14:                                               \l  store i32 0, i32* %3, align 4\l  br label %15\l}"];
+	Node0x205d420 -> Node0x205d4e0;
+	Node0x205d4e0 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{%15:\l15:                                               \l  store i32 %0, i32* %5, align 4\l  br label %16\l}"];
+	Node0x205d4e0 -> Node0x205d630;
+	Node0x205d630 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{%16:\l16:                                               \l  store i8** %1, i8*** %7, align 8\l  br label %17\l}"];
+	Node0x205d630 -> Node0x205d6f0;
+	Node0x205d6f0 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{%17:\l17:                                               \l  store i32 5, i32* %9, align 4\l  br label %18\l}"];
+	Node0x205d6f0 -> Node0x205d870;
+	Node0x205d870 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{%18:\l18:                                               \l  store i32 6, i32* %11, align 4\l  br label %19\l}"];
+	Node0x205d870 -> Node0x205d9f0;
+	Node0x205d9f0 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{%19:\l19:                                               \l  %20 = load i32, i32* %9, align 4\l  br label %21\l}"];
+	Node0x205d9f0 -> Node0x205db20;
+	Node0x205db20 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{%21:\l21:                                               \l  %22 = load i32, i32* %11, align 4\l  br label %23\l}"];
+	Node0x205db20 -> Node0x205dc50;
+	Node0x205dc50 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{%23:\l23:                                               \l  %24 = call i32 @f(i32 noundef %20, i32 noundef %22)\l  br label %25\l}"];
+	Node0x205dc50 -> 	Node0x205bde0 [style = dotted];
+	Node0x205dc50 -> Node0x205de20;
+	Node0x205de20 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{%25:\l25:                                               \l  store i32 %24, i32* %13, align 4\l  br label %26\l}"];
+	Node0x205de20 -> Node0x205df70;
+	Node0x205df70 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{%26:\l26:                                               \l  ret i32 0\l}"];
+	subgraph cluster_f {
+		label = "CFG for 'f' function";
+		graph[style=filled, bgcolor=white];
+	
+		Node0x205bde0 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{%2:\l  %3 = alloca i32, align 4\l  br label %4\l}"];
+		Node0x205bde0 -> Node0x205c550;
+		Node0x205c550 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{%4:\l4:                                                \l  %5 = alloca i32, align 4\l  br label %6\l}"];
+		Node0x205c550 -> Node0x205c6d0;
+		Node0x205c6d0 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{%6:\l6:                                                \l  store i32 %0, i32* %3, align 4\l  br label %7\l}"];
+		Node0x205c6d0 -> Node0x205c790;
+		Node0x205c790 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{%7:\l7:                                                \l  store i32 %1, i32* %5, align 4\l  br label %8\l}"];
+		Node0x205c790 -> Node0x205c850;
+		Node0x205c850 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{%8:\l8:                                                \l  %9 = load i32, i32* %3, align 4\l  br label %10\l}"];
+		Node0x205c850 -> Node0x205c610;
+		Node0x205c610 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{%10:\l10:                                               \l  %11 = load i32, i32* %5, align 4\l  br label %12\l}"];
+		Node0x205c610 -> Node0x205ca60;
+		Node0x205ca60 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{%12:\l12:                                               \l  %13 = add nsw i32 %9, %11\l  br label %14\l}"];
+		Node0x205ca60 -> Node0x205cb20;
+		Node0x205cb20 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{%14:\l14:                                               \l  ret i32 %13\l}"];
+	}
+}
