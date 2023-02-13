@@ -30,9 +30,10 @@ S. Efimov // Static analysis of cycles vectorization based on CFL-reachability. 
 * GCC 9.3.0
 * CMAKE 3.16.3
 * PYTHON 3.7 *(only for Lexer and Callgrind-front analysis)*
-* CLANG 10.0.0 *(only for llvm analysis)*
-* LLVM 10.0.0 *(only for llvm analysis)*
+* CLANG 14.0.0 *(only for llvm analysis)*
+* LLVM 14.0.0 *(only for llvm analysis)*
 * PYTHON 2.7.18 *(only for llvm analysis)*
+* GRAPHVIZ 2.43.0 *(only for llvm analysis)*
 # Build
 	cd front
 	cmake ./
