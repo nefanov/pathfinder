@@ -270,6 +270,33 @@ TEST_CASE("test_core_common -fast") {
     test_list.close();
 }
 
+TEST_CASE("test_transl") {
+    std::ifstream test_list("tests/test_transl/test_transl.txt");
+    std::string test_graph_name;
+
+    mkdir("data", 0777);
+    while(!test_list.eof()) {
+        test_list >> test_graph_name;
+        system(("build/transl tests/test_transl/" + test_graph_name).c_str());
+    }
+    test_list.close();
+}
+
+TEST_CASE("test_transl_core") {
+    std::ifstream test_list("tests/test_transl_core/test_transl.txt");
+    std::string test_graph_name, s;
+
+    mkdir("data", 0777);
+    while(!test_list.eof()) {
+        test_list >> test_graph_name;
+        system(("build/transl tests/test_transl_core/" + test_graph_name).c_str());
+	s = test_graph_name.substr(0, test_graph_name.rfind("."));
+	system(("build/to_core tests/test_transl_core/.main" + s + ".dot").c_str());
+	system(("build/core tests/test_transl_core/graph" + s + " -spaced_rhs -fast > tests/test_transl_core/output" + s).c_str());
+    }
+    test_list.close();
+}
+
 TEST_CASE("test_core_common -iguana") {
     std::ifstream test_list("tests/test_core_common.txt");
     std::string test_graph_name, test_output_name, type, str1, str2;

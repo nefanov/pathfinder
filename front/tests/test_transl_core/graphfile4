@@ -1,0 +1,38 @@
+1
+1
+S a
+
+30 32
+Node0x1be7ea Node0x1be860 Node0x1be876 Node0x1be882 Node0x1be88e Node0x1be8a1 Node0x1be8c2 Node0x1be8d5 Node0x1be8e1 Node0x1be8ed Node0x1be900 Node0x1be94d Node0x1be959 Node0x1be95e Node0x1be979 Node0x1be985 Node0x1be991 Node0x1be996 Node0x1be9aa Node0x1be9bd Node0x1be9c9 Node0x1be9de Node0x1bea19 Node0x1bea2e Node0x1bea3a Node0x1bea3f Node0x1bea56 Node0x1bea69 Node0x1bea7e Node0x1bea98 
+0 1 b
+1 2 b
+2 3 b
+3 4 a
+4 5 
+5 6 
+6 7 
+7 8 
+8 9 a
+9 10 
+10 11 
+11 12 b
+11 18 a
+12 13 b
+13 14 
+14 15 b
+14 17 a
+15 16 b
+16 17 
+17 21 b
+18 19 b
+19 20 
+20 21 b
+21 22 b
+22 23 
+23 24 
+23 28 
+24 25 
+25 26 
+26 27 b
+27 28 
+28 29 a
