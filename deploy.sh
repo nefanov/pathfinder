@@ -1,3 +1,3 @@
 #!/bin/sh
-sh deploy1.sh
+sh install_jdk.sh
 sh deploy2.sh
