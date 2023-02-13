@@ -1,6 +1,6 @@
 Как запустить:
 cd pathfinder
-sh deploy.sh
+sh deploy.sh # скрипт установит нужную версию Java и GLL4Graph (клон репозитория)
 cd front
 build/core tests/spaced/<name_of_test> -spaced_rhs -iguana
 
