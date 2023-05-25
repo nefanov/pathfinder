@@ -6,15 +6,18 @@
 using namespace std;
 
 int main(int argc, char* argv[]) {
-	int n = 0;
-	vector <string> l;
-	std::stringstream v;
-	vector <int> begin;
-	vector <int> num;
-	vector <int> phi;
-	vector <int> phinum;
-	int i = 0, b = 0, e = 0, pr = 0, k = 0, q = 0, c = 0, r = 0, sw = 0, u = 0, d = 0;
-	std::string s, s0, s1, st, stt, str, pred, predpred;
+	int n = 0;//n - показывает, строка внутри функции или снаружи
+	vector <string> l;//хранит названия функций
+	vector <int> begin;//хранит все номера
+	vector <int> num;//хранит, какие номера соответствуют какой функции в begin
+	vector <int> phi;//хранит номер тонкого блока, где есть phi
+	vector <int> phinum;//хранит, какие phi в какой функции
+	int i = 0, b = 0, e = 0, pr = 0, k = 0, q = 0, c = 0, r = 0, sw = 0, u = 0, j = 0;
+	//b, e - начало и конец подстрок; i - номера блоков/операций вообще до разбиения на тонкие блоки; q - номера блоков/операций внутри каждой функции; 
+	//pr - проверяет, соответствовует ли строка началу блока до разбиения на тонкие блоки; k - показывает, первый ли это встретившийся номер в функции;
+	//r - количество функций; sw - есть ли switch в строке; u - количество phi-функций в каждой функции; 
+	//j - просто нужна для хранения того, что ей присвоили, особенного смысла не имеет; c - номер строки.
+	std::string s, s0, s1, st, str, pred, predpred;
 	s = "clang -S -emit-llvm ";
 	s += argv[1];
 	system(s.c_str());
@@ -29,7 +32,7 @@ int main(int argc, char* argv[]) {
 	ofstream f (s.c_str());
 	num.push_back(0);
 	phinum.push_back(0);
-	while (getline(file, st)) {
+	while (getline(file, st)) {//1ый проход по .ll файлу, разбиение на тонкие блоки, присвоение каждому блоку и каждой операции нового номера, также учет частных случаев (switch, phi и т д)
 		if (st.find("define") != -1) {
 			b = st.find_first_of("@");
 			e = st.find_first_of("( ", b);
@@ -49,10 +52,7 @@ int main(int argc, char* argv[]) {
 		 			b = st.find_first_of(":");
 		 			str = st.substr(0, b);
 		 			begin.push_back(q);
-		 			v << q;
-					st.replace(0, str.size(), v.str());
-					v.clear();
-       				v.str("");
+		 			st.replace(0, str.size(), std::to_string(q));
 		 			q += 1;
 		 			i += 1;
 		 		}
@@ -71,10 +71,7 @@ int main(int argc, char* argv[]) {
 						if (b == 2) {
 							if (k == 1) q = atoi(str.c_str());
 							begin.push_back(q);
-							v << q;
-							st.replace(b + 1, str.size(), v.str());
-							v.clear();
-       						v.str("");
+							st.replace(b + 1, str.size(), std::to_string(q));
 							q += 1;
 							i += 1;
 						}
@@ -83,8 +80,7 @@ int main(int argc, char* argv[]) {
 						b = st.find_first_of("%", e + 1);
 						e = st.find_first_of(",) ", b);
 						if (b != -1) {
-							if (e != -1) str = st.substr(b + 1, e - b - 1);
-							else str = st.substr(b + 1);
+							str = st.substr(b + 1, e - b - 1);
 							if (str.find("struct") == -1) {
 								k += 1;
 							}
@@ -125,59 +121,54 @@ int main(int argc, char* argv[]) {
 	vector <string> phi1(phi.size() + 1);
 	vector <string> phi2(phi.size() + 1);
 	u = 0;
-	while (getline(f1, stt)) {
-		if (stt.find("define") != -1) { 
+	while (getline(f1, st)) {//2ой проход по .ll файлу, замена всех номеров на новые номера, также работа с phi
+		if (st.find("define") != -1) { 
 			n = 1;
 			r += 1;
 		}
-		else if ((n == 1) && ((stt.find("br label") == -1) || ((stt.find("br label") != -1) && (pred.find(":") != -1)))) {
-			if (stt != "}") {
-				if (stt.find("preds") != -1) {
-					b = stt.find_first_of(";");
-					stt = stt.substr(0, b);
+		else if ((n == 1) && ((st.find("br label") == -1) || ((st.find("br label") != -1) && (pred.find(":") != -1)))) {
+			if (st != "}") {
+				if (st.find("preds") != -1) {
+					b = st.find_first_of(";");
+					st = st.substr(0, b);
 				}
-				b = stt.find_first_of("%");
-				e = stt.find_first_of(",) ]", b);
+				b = st.find_first_of("%");
+				e = st.find_first_of(",) ]", b);
 				if (b != -1) {
-					if (e != -1) str = stt.substr(b + 1, e - b - 1);
-					else str = stt.substr(b + 1);
+					if (e != -1) str = st.substr(b + 1, e - b - 1);
+					else str = st.substr(b + 1);
 					if (str.find("struct") == -1) {
 						k += 1;
-						if ((b == 2) && (stt.find("phi") != -1)) {
+						if ((b == 2) && (st.find("phi") != -1)) {
 							for (int j = phinum[r - 1]; j < phinum[r]; j++) {
 								if (str == to_string(phi[j])) u = j;
 							}
 						}
 						if ((b > 2) && (str.find("struct") == -1)) {
-							if (atoi(str.c_str()) < begin[num[r - 1]]) v << atoi(str.c_str());
-							else v << begin[num[r - 1] + atoi(str.c_str()) - begin[num[r - 1]]];
-							if ((stt.find("phi") != -1) && (stt.find("]", b) == e + 1)) {
+							if (atoi(str.c_str()) < begin[num[r - 1]]) j = atoi(str.c_str());
+							else j = begin[num[r - 1] + atoi(str.c_str()) - begin[num[r - 1]]];
+							if ((st.find("phi") != -1) && (st.find("]", b) == e + 1)) {
 								if (phi1[u] != "!") {
-									stt.replace(b + 1, (phi1[u]).size(), phi1[u]);
+									st.replace(b + 1, (phi1[u]).size(), phi1[u]);
 									phi1[u] = "!";
-								} else stt.replace(b + 1, (phi2[u]).size(), phi2[u]);
-							} else stt.replace(b + 1, str.size(), v.str());
-							v.clear();
-       						v.str("");
+								} else st.replace(b + 1, (phi2[u]).size(), phi2[u]);
+							} else st.replace(b + 1, str.size(), to_string(j));
 						}
 					}
-					while ((stt.find_first_of("%", e + 1) != -1) && (e != -1)) {
-						b = stt.find_first_of("%", e + 1);
-						e = stt.find_first_of(",) ]", b);
+					while ((st.find_first_of("%", e + 1) != -1) && (e != -1)) {
+						b = st.find_first_of("%", e + 1);
+						e = st.find_first_of(",) ]", b);
 						if (b != -1) {
-							if (e != -1) str = stt.substr(b + 1, e - b - 1);
-							else str = stt.substr(b + 1);
+							str = st.substr(b + 1, e - b - 1);
 							if (str.find("struct") == -1) {
-								if (atoi(str.c_str()) < begin[num[r - 1]]) v << atoi(str.c_str());
-								else v << begin[num[r - 1] + atoi(str.c_str()) - begin[num[r - 1]]];
-								if ((stt.find("phi") != -1) && (stt.find("]", b) == e + 1)) {
+								if (atoi(str.c_str()) < begin[num[r - 1]]) j = atoi(str.c_str());
+								else j = begin[num[r - 1] + atoi(str.c_str()) - begin[num[r - 1]]];
+								if ((st.find("phi") != -1) && (st.find("]", b) == e + 1)) {
 									if (phi1[u] != "!") {
-										stt.replace(b + 1, (phi1[u]).size(), phi1[u]);
+										st.replace(b + 1, (phi1[u]).size(), phi1[u]);
 										phi1[u] = "!";
-									} else stt.replace(b + 1, (phi2[u]).size(), phi2[u]);
-								} else stt.replace(b + 1, str.size(), v.str());
-								v.clear();
-       							v.str("");
+									} else st.replace(b + 1, (phi2[u]).size(), phi2[u]);
+								} else st.replace(b + 1, str.size(), to_string(j));
 							}
 						}
 					}
@@ -186,11 +177,11 @@ int main(int argc, char* argv[]) {
 				n = 0;
 			}
 		}
-		f2 << stt << endl;
+		f2 << st << endl;
 		for (int j = phinum[r - 1]; j < phinum[r]; j++) {
 			s = "%";
 			s += to_string(phi[j] - 1);
-			if ((stt.find("br") != -1) && (stt.find(s) != -1)) {
+			if ((st.find("br") != -1) && (st.find(s) != -1)) {
 				if (pred.find(":") != -1) {
 					b = pred.find_first_of(":");
 					str = pred.substr(0, b);
@@ -203,10 +194,12 @@ int main(int argc, char* argv[]) {
 			}
 		}
 		predpred = pred;
-		pred = stt;
+		pred = st;
 	}
 	f1.close();
 	f2.close();
+	//конец работы с .ll файлами
+	//начало работы с dot файлами: их создание, сшивка в 1 файл, также удаление .ll файлов
 	s = "opt -dot-cfg ";
 	s += s0;
 	s += "1.ll";
@@ -230,12 +223,12 @@ int main(int argc, char* argv[]) {
 	f.close();
 	file.open("main");
 	f.open(".main.dot");
-	while (getline(file, st)) f << st << endl;
+	while (getline(file, st)) f << st << endl;//добавляется содержимое dot файла функции main
 	file.close();
 	f.close();
 	fstream ODOT (".main.dot", std::ofstream::app);
 	vector <string> index;
-	for (int i = 0; i < l.size(); i++) {
+	for (int i = 0; i < l.size(); i++) {//сшивка - добавление содержимого dot файлов других функций (не main)
 		s = ".";
 		s += l[i];
 		s += ".dot";
@@ -248,7 +241,7 @@ int main(int argc, char* argv[]) {
 			while (getline(file, st)) {
 				if ((st.find("\"CFG ") == -1) && (st.find("Node") != -1)) n += 1;
 				if (n == 1) {
-					index.push_back(st.substr(0, st.find_first_of(": ")));
+					index.push_back(st.substr(st.find("Node"), st.find_first_of(": ") - 1));
 				}	
 				if ((st.find("label=\"CFG") == -1) && (st.find("digraph") == -1) && 
 				((st.find("}\"") != -1) || (st.find("}") == -1))) 
@@ -264,8 +257,9 @@ int main(int argc, char* argv[]) {
 	file.open(".main.dot");
 	f.open("main");
 	i = 0;
-	while (getline(file, st)) {
+	while (getline(file, st)) {//отрисовка стрелочек между функциями
 		f << st << endl;
+		f2 << st << endl;
 		if (st.find("@") != -1) {
 			b = st.find_first_of("@");
 			e = st.find_first_of("( ", b);
@@ -278,14 +272,13 @@ int main(int argc, char* argv[]) {
 	}
 	file.close();
 	f.close();
-	
 	file.open("main");
-	f.open((s1 + ".main" + s0 + ".dot").c_str());
+	f.open((s1 + ".main" + s0 + ".dot").c_str());//создается окончательный dot файл
 	while (getline(file, st)) f << st << endl;
 	file.close();
 	f.close();
 	
-	system(("dot -Tps .main.dot -o " + s1 + "outfile" + s0 + ".ps").c_str());
+	system(("dot -Tps " + s1 + ".main" + s0 + ".dot -o " + s1 + "outfile" + s0 + ".ps").c_str());//визуализация графа
 	remove((s1 + ".main.dot").c_str());
 	remove(".main.dot");
 	remove("main");

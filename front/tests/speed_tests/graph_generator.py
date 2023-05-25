@@ -1,8 +1,8 @@
 import random
 import sys
-fout = open("graph_generator.output", "w")
+fout = open("tests/speed_tests/graph_generator", "w")
 fout.write("1\n5\n")
-fout.write("S AB \nS AR \nR SB \nA a \nB b\n")
+fout.write("S A B \nS A R \nR S B \nA a \nB b\n")
 type = int(sys.argv[1]) #type of graph by density
 n = int(sys.argv[2])    #number of vertices
 if type == 0:
@@ -10,7 +10,7 @@ if type == 0:
 if type == 1:
     m = int(n**1.5)
 if type == 2:
-    m = n**2/4
+    m = int(n**2/4)
 if type == 3:
     m = n*(n-1)
 fout.write("\n")

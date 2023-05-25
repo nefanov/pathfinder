@@ -292,7 +292,7 @@ TEST_CASE("test_transl_core") {
         system(("build/transl tests/test_transl_core/" + test_graph_name).c_str());
 	s = test_graph_name.substr(0, test_graph_name.rfind("."));
 	system(("build/to_core tests/test_transl_core/.main" + s + ".dot").c_str());
-	system(("build/core tests/test_transl_core/graph" + s + " -spaced_rhs -fast > tests/test_transl_core/output" + s).c_str());
+	system(("build/core tests/test_transl_core/graph" + s + " -spaced_rhs -iguana > tests/test_transl_core/output" + s).c_str());
     }
     test_list.close();
 }
