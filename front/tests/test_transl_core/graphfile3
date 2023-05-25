@@ -3,32 +3,32 @@
 S a
 
 26 28
-Node0x16178b Node0x161801 Node0x161817 Node0x161823 Node0x161828 Node0x161834 Node0x16187e Node0x161895 Node0x16189a Node0x1618b5 Node0x1618d9 Node0x161911 Node0x161a03 Node0x161a0f Node0x161a1b Node0x161a27 Node0x161a33 Node0x161a48 Node0x161a5d Node0x161a71 Node0x161a84 Node0x161a97 Node0x161aac Node0x161ac7 Node0x161ad3 Node0x161aeb 
-0 1 b
-1 2 a
-2 3 a
-3 4 
-4 5 b
-5 6 
-6 7 a
-6 11 b
-7 8 a
-8 12 
-8 9 a
-9 10 b
-10 4 
-12 13 
-13 14 b
+Node0xbeb8b Node0xbec01 Node0xbec17 Node0xbec23 Node0xbec28 Node0xbec34 Node0xbec7e Node0xbec95 Node0xbec9a Node0xbecb5 Node0xbecd9 Node0xbed11 Node0xbee03 Node0xbee0f Node0xbee1b Node0xbee27 Node0xbee33 Node0xbee48 Node0xbee5d Node0xbee71 Node0xbee84 Node0xbee97 Node0xbeeac Node0xbeec7 Node0xbeed3 Node0xbeeeb 
+0 1 
+1 2 
+2 3 b
+3 4 b
+4 5 
+5 6 b
+6 7 
+6 11 
+7 8 
+8 12 a
+8 9 b
+9 10 
+10 4 a
+12 13 b
+13 14 a
 14 15 b
-15 16 
-16 17 b
+15 16 b
+16 17 a
 16 18 a
-17 24 b
-18 19 b
-19 20 
-20 21 b
+17 24 a
+18 19 a
+19 20 a
+20 21 a
 21 12 
 21 22 
-22 23 b
+22 23 a
 23 24 
-24 25 
+24 25 a

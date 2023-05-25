@@ -138,7 +138,7 @@ int main(int argc, char* argv[]) {
     		syst += "\"";
     		FILE* r = fopen("AllPaths.txt", "a");
     		fclose(r);
-    		setenv("JAVA_HOME", "/usr/lib/jvm/jdk-15.0.2", true);
+    		setenv("JAVA_HOME", "/usr/lib/jvm/jdk-15", true);
       		system(syst.c_str());
     		string path = pwd;
     		path += "/results/graph_AP_SPPF_INMEM.csv";
